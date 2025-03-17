@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Permainan Drag and Drop - Taman Kanak-Kanak</title>
+        <link rel="icon" href="../../assets/images/cartoonpfpcircle.png" type="image/x-icon">
+        <script src="../../../../assets/js/script.js"></script>
+        <link rel="stylesheet" href="../../../../assets/css/main.css" type="text/css">
+        <link rel="stylesheet" href="../../../../assets/css/color.css" type="text/css">
+        <link rel="stylesheet" href="../../../../assets/css/section.css" type="text/css">
+        <link rel="stylesheet" href="../../../../assets/css/margin.css" type="text/css">
+        <link rel="stylesheet" href="../../../../assets/css/navbar.css" type="text/css">
+        <link rel="stylesheet" href="../../../../assets/css/footer.css" type="text/css">
+        <style>
+            body {
+                font-family: 'Comic Sans MS', sans-serif;
+                background-color: #a2d8f3;
+                text-align: center;
+                padding: 20px;
+                overflow: hidden;
+            }
+
+            h1 {
+                color: #ff6347;
+            }
+
+            #game-container {
+                margin-top: 30px;
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                position: relative;
+            }
+
+            .color-box {
+                width: 100px;
+                height: 100px;
+                display: inline-block;
+                margin: 10px;
+                cursor: pointer;
+                border-radius: 10px;
+                transition: transform 0.3s ease;
+                animation: bounce 1s infinite;
+            }
+
+            @keyframes bounce {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            .drag-target {
+                width: 100px;
+                height: 100px;
+                margin: 10px;
+                border: 3px solid #000;
+                display: inline-block;
+                border-radius: 10px;
+                position: relative;
+                background-color: #fff;
+            }
+
+            #message {
+                font-size: 24px;
+                color: #32cd32;
+                margin-top: 20px;
+            }
+
+            #reset-button {
+                background-color: #ff6347;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                margin-top: 20px;
+            }
+
+            #reset-button:hover {
+                background-color: #e55347;
+            }
+
+            /* Background Animasi untuk Anak-Anak */
+            .clouds {
+                position: absolute;
+                top: 10%;
+                left: 20%;
+                width: 20%;
+                height: 15%;
+                background: url('https://img.icons8.com/ios/452/cloud.png') no-repeat center center;
+                background-size: contain;
+                animation: moveClouds 10s linear infinite;
+            }
+
+            .clouds:nth-child(2) {
+                top: 20%;
+                left: 60%;
+                animation: moveClouds 12s linear infinite;
+            }
+
+            .clouds:nth-child(3) {
+                top: 5%;
+                left: 10%;
+                animation: moveClouds 8s linear infinite;
+            }
+
+            .sun {
+                position: absolute;
+                top: 10%;
+                right: 10%;
+                width: 100px;
+                height: 100px;
+                background: url('https://img.icons8.com/ios/452/sun.png') no-repeat center center;
+                background-size: contain;
+                animation: rotateSun 15s linear infinite;
+            }
+
+            .bird {
+                position: absolute;
+                top: 50%;
+                left: -100px;
+                width: 50px;
+                height: 50px;
+                background: url('https://img.icons8.com/ios/452/bird.png') no-repeat center center;
+                background-size: contain;
+                animation: flyBird 12s linear infinite;
+            }
+
+            @keyframes moveClouds {
+                0% {
+                    transform: translateX(-50%);
+                }
+                100% {
+                    transform: translateX(100%);
+                }
+            }
+
+            @keyframes rotateSun {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes flyBird {
+                0% {
+                    transform: translateX(-100px);
+                }
+                100% {
+                    transform: translateX(100vw);
+                }
+            }
+
+        </style>
+    </head>
+    <body>
+        <main>
+            <section class="section-category">
+                <h1>Selamat Datang di Permainan Drag and Drop!</h1>
+                <p>Seret warna ke tempat yang sesuai.</p>
+            
+                <div id="game-container">
+                    <div id="red-box" class="color-box" style="background-color: red;" draggable="true" ondragstart="drag(event)"></div>
+                    <div id="blue-box" class="color-box" style="background-color: blue;" draggable="true" ondragstart="drag(event)"></div>
+                    <div id="yellow-box" class="color-box" style="background-color: yellow;" draggable="true" ondragstart="drag(event)"></div>
+                    <div id="green-box" class="color-box" style="background-color: green;" draggable="true" ondragstart="drag(event)"></div>
+                </div>
+            
+                <div id="targets">
+                    <div id="target-1" class="drag-target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <div id="target-2" class="drag-target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <div id="target-3" class="drag-target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <div id="target-4" class="drag-target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+            
+                <p id="message"></p>
+                <button id="reset-button" onclick="startGame()">Mulai Lagi</button>
+                <a class="btn-primary" href="../../home.html">Kembali</a>   
+                <!-- Background Elements -->
+                <div class="clouds"></div>
+                <div class="clouds"></div>
+                <div class="clouds"></div>
+                <div class="sun"></div>
+                <div class="bird"></div>
+            </section>
+            
+        </main>
+    </body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permainan Kinestetik - Taman Kanak-Kanak</title>
+    <link rel="icon" href="../../assets/images/cartoonpfpcircle.png" type="image/x-icon">
+    
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="../../../../assets/css/main.css">
+    <link rel="stylesheet" href="../../../../assets/css/color.css">
+    <link rel="stylesheet" href="../../../../assets/css/section.css">
+    <link rel="stylesheet" href="../../../../assets/css/margin.css">
+    <link rel="stylesheet" href="../../../../assets/css/navbar.css">
+    <link rel="stylesheet" href="../../../../assets/css/footer.css">
+    
+    <!-- External Script -->
+    <script src="../../../../assets/js/script.js"></script>
+    
+    <!-- Internal Styles -->
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #ffecb3;
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #ff6347;
+        }
+
+        #instruction {
+            font-size: 20px;
+            color: #32cd32;
+            margin-top: 20px;
+        }
+
+        .action-button, #reset-button {
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 18px;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            background-color: #ff6347;
+        }
+
+        .action-button:hover {
+            background-color: #e55347;
+        }
+
+        #reset-button {
+            background-color: #32cd32;
+        }
+
+        #reset-button:hover {
+            background-color: #28a745;
+        }
+
+        .zoom {
+            font-size: 25px;
+            color: #ff6347;
+            animation: zoomInOut 3s ease-in-out infinite;
+        }
+
+        @keyframes zoomInOut {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section class="section-category">           
+            <h1>Selamat! Kamu Sukses Menyelesaikan Permainan!</h1>
+            <p>Sekarang waktunya untuk meningkatkan kemampuan kinestetikmu!</p>
+            <p id="instruction">Tunggu sebentar... akan ada perintah gerakan yang harus kamu ikuti.</p>
+            <div id="motion-text" class="zoom"></div>
+            
+            <button id="start-button" class="action-button" onclick="startKinestheticGame()">Mulai Permainan Kinestetik</button>
+            <p id="message"></p>
+            <button id="reset-button" onclick="startKinestheticGame()">Mulai Lagi</button>
+            <a class="btn-primary" href="../../home.html">Kembali</a>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,37 @@
+name: vak_app
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  carousel_slider: ^5.0.0
+  flutter_onboarding_slider: ^1.0.11
+  google_fonts: ^6.2.1
+  audioplayers: ^6.2.0
+  timezone: ^0.10.0
+  flutter_localization: ^0.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/images/background/
+  - assets/images/component/
+  - assets/audio/
+
+  fonts:
+  - family: OpenSans
+    fonts:
+      - asset: assets/fonts/opensans/OpenSans-Regular.ttf
+        weight: 400 
+      - asset: assets/fonts/opensans/OpenSans-Bold.ttf
+        weight: 700

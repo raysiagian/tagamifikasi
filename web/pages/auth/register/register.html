@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang ="en">
+
+    <!-- Head berfungsi menyimpan metadata -->
+    <!-- Menyimpan link relation seperti css dan javascript -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Ray Siagian">
+        <meta name="description" content="Saya sedang belajar html">
+        <title>
+            Learning Web
+        </title>
+        <link rel="icon" href="../../../assets/images/cartoonpfpcircle.png" type="image/x-icon"> 
+        <script src="../../../assets/js/script.js"></script>
+        <!-- memanggil css dari file lain -->
+        <!-- ada beberapa cara untuk membuat css -->
+        <!-- inline stylesheet -->
+        <!-- internal stylesheet -->
+        <!-- external stylesheet -->
+        <!-- apa yg ditampilkan adalah apa yang dibaca oleh browser terakhir -->
+        <!-- jadi ketika kamu membuat css internal dibawah link ini maka yg dibaca terakhir adalah link tersebut -->
+        <!-- hindari inline css sebisamu untuk meningkatkan keterbacaan -->
+        <link rel="stylesheet" href="../../../assets/css/main.css" type="text/css">
+        <link rel="stylesheet" href="../../../assets/css/color.css" type="text/css">
+        <link rel="stylesheet" href="../../../assets/css/section.css" type="text/css">
+        <link rel="stylesheet" href="../../../assets/css/margin.css" type="text/css">
+        <link rel="stylesheet" href="../../../assets/css/navbar.css" type="text/css">
+        <link rel="stylesheet" href="../../../assets/css/footer.css" type="text/css">
+    </head>
+
+    <!-- body menyimpan data yg ditampilkan -->
+    <!-- Webpage sejatinya seperti koran atapun media berbasis text -->
+    <body>
+        <header>
+            <nav id="nav-header">
+                <div class="auth-menu">
+                    <ul>
+                        <li class="btn-white">
+                            <a class="" href="../login/login.html">Masuk</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <section class="authsection mrgn-vertical-1">
+                <h2>Daftar</h2>
+            </section>
+            <!-- form login -->
+            <section class="authsection mrgn-vertical-1">
+                <!-- Name -->
+                <section>
+                    <input type="name" name="name" id="name" placeholder="Nama"autocomplete="off" required>
+                </section>
+
+                 <!-- Email -->
+                <section>
+                    <input type="email" name="email" id="email" placeholder="Email"autocomplete="off" required>
+                </section>
+
+                <!-- Password -->
+                <section>
+                    <input type="password" name="password" id="password" placeholder="Kata Sandi"autocomplete="off" required>
+                </section>
+
+                <section>
+                    <div id="error" class="hidden" style="color: red; margin-top: 10px;"></div>
+                </section>
+
+                <!-- button -->
+                <section>
+                    <button class="btn-primary" type="submit" formmethod="post"onclick="validateRegister()">Buat Akun</button>
+                </section>
+                <section>
+                    <button class="btn-white"><a href="">Masuk</a></button>
+                </section>
+                <p class="txt-small">
+                    Pastikan ada pembimbingan dari orang dewasa, awasi anak dalam menggunakan gadget.
+                </p>
+            </section>
+        </main>
+    </body>
+</html>
