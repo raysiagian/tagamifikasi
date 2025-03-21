@@ -7,16 +7,60 @@ use App\Models\Level;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller; // Pastikan ini sudah benar
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
 class SoalController extends Controller
 {
     /**
      * Menampilkan semua data soal.
      */
-    public function index()
-    {
-        $soals = Soal::all();
-        return response()->json($soals);
+  // Menampilkan semua soal
+  public function index()
+  {
+      $soal = Soal::all();
+      return response()->json([
+          'success' => true,
+          'message' => 'List semua soal',
+          'data' => $soal
+      ], 200);
+  }
+
+  // Menampilkan soal berdasarkan matapelajaran dan level   
+  public function getByMataPelajaranAndLevel($id_mataPelajaran, $id_level)
+{
+    // Ambil level berdasarkan id_mataPelajaran dan id_level
+    $level = Level::where('id_mataPelajaran', $id_mataPelajaran)
+                  ->where('id_level', $id_level)
+                  ->first();
+
+    // Jika level tidak ditemukan, return error
+    if (!$level) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Level tidak ditemukan untuk mata pelajaran ini'
+        ], 404);
     }
+
+    // Ambil soal berdasarkan level yang ditemukan
+    $soal = Soal::where('id_level', $id_level)->get();
+
+    // Jika tidak ada soal, return error
+    if ($soal->isEmpty()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Tidak ada soal untuk level ini'
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'mataPelajaran' => $level->mataPelajaran->nama_mataPelajaran,
+        'level' => $level->penjelasan_level,
+        'soal' => $soal
+    ], 200);
+}
+
+
+  //
 
     /**
      * Menyimpan soal baru dengan media dan audio ke Cloudinary.

@@ -58,4 +58,14 @@ class WebLevelController extends Controller
 
         return redirect()->route('admin.levels.index')->with('success', 'Level berhasil dihapus.');
     }
+
+    public function getLevelsByMataPelajaran($id_mataPelajaran)
+    {
+        $levels = Level::where('id_mataPelajaran', $id_mataPelajaran)
+                       ->with('mataPelajaran')
+                       ->get();
+    
+        return response()->json(['levels' => $levels]); // Bungkus dalam array levels
+    }
+    
 }

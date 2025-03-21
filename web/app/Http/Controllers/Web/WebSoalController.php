@@ -13,18 +13,7 @@ class WebSoalController extends Controller
 {
     public function index()
     {
-        // $matapelajaran = MataPelajaran::all();  
-
-        // $soals = Soal::with('level')->get();
-        // $levels = Level::all(); // Ambil data level dari database
-    
-        // return view('admin.soal.index', [
-        //     'title' => 'Manajemen Soal',
-        //     'soals' => $soals,
-        //     'levels' => $levels,
-        //     'matapelajaran' => $matapelajaran,
-
-        // ]);
+        
 
         $matapelajaran = MataPelajaran::all();  
         return view('admin.soal.index', [
@@ -34,58 +23,60 @@ class WebSoalController extends Controller
     }
     
     public function store(Request $request)
-    {
-        $request->validate([
-            'id_level' => 'required|exists:level,id_level',
-            'tipeSoal' => 'required|in:visual,auditori,kinestetik',
-            'pertanyaan' => 'required|string',
-            'audioPertanyaan' => 'nullable|file', // Bisa semua jenis file
-            'media' => 'nullable|file', // Bisa semua jenis file
-            'opsiA' => 'required|string',
-            'opsiB' => 'required|string',
-            'opsiC' => 'required|string',
-            'opsiD' => 'required|string',
-            'jawabanBenar' => 'required|in:A,B,C,D'
-        ]);
-    
-        try {
-            // Upload media ke Cloudinary jika ada
-            $uploadedMedia = null;
-            if ($request->hasFile('media')) {
-                $uploadedMedia = Cloudinary::upload($request->file('media')->getRealPath(), [
-                    'folder' => 'soal_media',
-                    'resource_type' => 'auto' // Bisa gambar, video, PDF, dll.
-                ])->getSecurePath();
-            }
-    
-            // Upload audio ke Cloudinary jika ada
-            $uploadedAudio = null;
-            if ($request->hasFile('audioPertanyaan')) {
-                $uploadedAudio = Cloudinary::upload($request->file('audioPertanyaan')->getRealPath(), [
-                    'folder' => 'soal_audio',
-                    'resource_type' => 'auto' // Bisa semua tipe audio
-                ])->getSecurePath();
-            }
-    
-            // Simpan ke database
-            $soal = Soal::create([
-                'id_level' => $request->id_level,
-                'tipeSoal' => $request->tipeSoal,
-                'pertanyaan' => $request->pertanyaan,
-                'audioPertanyaan' => $uploadedAudio,
-                'media' => $uploadedMedia,
-                'opsiA' => $request->opsiA,
-                'opsiB' => $request->opsiB,
-                'opsiC' => $request->opsiC,
-                'opsiD' => $request->opsiD,
-                'jawabanBenar' => $request->jawabanBenar,
-            ]);
-    
-            return redirect()->back()->with('success', 'Soal berhasil ditambahkan!');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal menambahkan soal: ' . $e->getMessage());
+{
+    $request->validate([
+        'id_level' => 'required|exists:level,id_level',
+        'tipeSoal' => 'required|in:visual,auditori,kinestetik',
+        'pertanyaan' => 'required|string',
+        'audioPertanyaan' => 'nullable|file',
+        'media' => 'nullable|file',
+        'opsiA' => 'required|string',
+        'opsiB' => 'required|string',
+        'opsiC' => 'required|string',
+        'opsiD' => 'required|string',
+        'jawabanBenar' => 'required|in:A,B,C,D'
+    ]);
+
+    try {
+        // Upload media ke Cloudinary jika ada
+        $uploadedMedia = null;
+        if ($request->hasFile('media')) {
+            $uploadedMedia = Cloudinary::upload($request->file('media')->getRealPath(), [
+                'folder' => 'soal_media',
+                'resource_type' => 'auto'
+            ])->getSecurePath();
         }
+
+        // Upload audio ke Cloudinary jika ada
+        $uploadedAudio = null;
+        if ($request->hasFile('audioPertanyaan')) {
+            $uploadedAudio = Cloudinary::upload($request->file('audioPertanyaan')->getRealPath(), [
+                'folder' => 'soal_audio',
+                'resource_type' => 'auto'
+            ])->getSecurePath();
+        }
+
+        // Simpan ke database
+        Soal::create([
+            'id_level' => $request->id_level,
+            'tipeSoal' => $request->tipeSoal,
+            'pertanyaan' => $request->pertanyaan,
+            'audioPertanyaan' => $uploadedAudio,
+            'media' => $uploadedMedia,
+            'opsiA' => $request->opsiA,
+            'opsiB' => $request->opsiB,
+            'opsiC' => $request->opsiC,
+            'opsiD' => $request->opsiD,
+            'jawabanBenar' => $request->jawabanBenar,
+        ]);
+
+        // Redirect ke halaman daftar soal berdasarkan level
+        return redirect()->route('admin.level.show_soal', ['id' => $request->id_level])
+            ->with('success', 'Soal berhasil ditambahkan!');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Gagal menambahkan soal: ' . $e->getMessage());
     }
+}
 
 
     public function update(Request $request, $id)
@@ -141,16 +132,15 @@ class WebSoalController extends Controller
 public function showSoal($id)
 {
     $level = Level::findOrFail($id);
-    $soals = Soal::where('id_level', $id)->get();
-    $soals = Soal::where('id_level', $id)->paginate(1); // 1 soal per halaman
+    $soals = Soal::where('id_level', $id)->get(); // Ambil semua soal tanpa pagination
 
     return view('admin.soal.list_soal', [
-        // 'title' => 'Soal - Level ' . $level->id_level,
-        'title' => 'Soal - Level ' ,
+        'title' => 'Soal - Level ' . $level->id_level,
         'level' => $level,
         'soals' => $soals
     ]);
 }
+
 
 public function create($id_level)
 {

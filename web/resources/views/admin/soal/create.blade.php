@@ -5,7 +5,7 @@
     <div class="min-height-300 bg-dark position-absolute w-100"></div>
     <main class="main-content position-relative border-radius-lg">
         <div class="container-fluid py-4">
-            <h4 class="text-white">Tambah Soal untuk Level {{ $level->id_level }}</h4>
+            {{-- <h4 class="text-white">Tambah Soal untuk Level {{ $level->id_level }}</h4> --}}
 
             <div class="card p-4">
                 <form action="{{ route('soal.store') }}" method="POST" enctype="multipart/form-data">

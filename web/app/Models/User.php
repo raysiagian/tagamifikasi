@@ -25,4 +25,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function rekapSkorPengguna()
+{
+    return $this->hasMany(RekapSkorPengguna::class, 'id_user', 'id_user');
+}
+
 }
