@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:vak_app/models/level.dart';
 import 'package:vak_app/routes/appRouteConstant.dart';
 import 'package:vak_app/screen/auth/loginScreen/main/loginScreen.dart';
 import 'package:vak_app/screen/auth/registrationScreen/main/registrationScreen.dart';
 import 'package:vak_app/screen/homeScreen/main/homeScreen.dart';
 import 'package:vak_app/screen/onboardingScreen/main/onboardingScreen.dart';
 import 'package:vak_app/screen/splashScreen/main/splashScreen.dart';
+import 'package:vak_app/screen/stageScreen/main/afterLevelScreen.dart';
+import 'package:vak_app/screen/stageScreen/main/kinestetikScreen.dart';
+import 'package:vak_app/screen/stageScreen/main/levelScreen.dart';
+import 'package:vak_app/screen/stageScreen/main/stageScreen.dart';
+import 'package:vak_app/screen/statisticScreen/main/statisticPage.dart';
 import 'package:vak_app/screen/wrapper/main/wrapperScreen.dart';
 
 class AppRouter{
@@ -24,6 +30,24 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       //Perbaiki Konstruktor ketika sudah ada logika yg tepat 
       case AppRouteConstant.wrapperScreen:
         return MaterialPageRoute(builder: (_) => WrapperScreen());
+      case AppRouteConstant.afterLevelScreen:
+        return MaterialPageRoute(builder: (_) => AfterLevelScreen());
+      case AppRouteConstant.statisticScreen:
+        return MaterialPageRoute(builder: (_) =>StatisticScreen());
+      case AppRouteConstant.stageScreen:
+        return MaterialPageRoute(builder: (_) =>StageScreen());
+      // case AppRouteConstant.levelScreen:
+      //   return MaterialPageRoute(builder: (_) =>LevelScreen());
+      case AppRouteConstant.levelScreen:
+        if (settings.arguments is Level) {
+          final level = settings.arguments as Level;
+          return MaterialPageRoute(
+            builder: (_) => LevelScreen(level: level),
+          );
+        }
+        
+      // case AppRouteConstant.kinesteticScreen:
+      //   return MaterialPageRoute(builder: (_) =>KinestetikScreen());
 
       default:
       return MaterialPageRoute(
@@ -33,4 +57,4 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       );
     }
   }
-}
+}  

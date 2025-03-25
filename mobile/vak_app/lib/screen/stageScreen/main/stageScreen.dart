@@ -19,7 +19,7 @@ class _StageScreenState extends State<StageScreen> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/background/homebackground.png"),
+                image: AssetImage("assets/images/background/HiFi-Stage Background.png"),
                 fit: BoxFit.cover,
               ),
             ),

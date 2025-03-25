@@ -1,8 +1,12 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:vak_app/models/soal.dart';
 import 'package:vak_app/style/localColor.dart';
 
 class AudioScreen extends StatefulWidget {
+  final Soal soal;
+  const AudioScreen({Key? key, required this.soal}) : super(key: key);
+
   @override
   _AudioScreenState createState() => _AudioScreenState();
 }
@@ -10,96 +14,79 @@ class AudioScreen extends StatefulWidget {
 class _AudioScreenState extends State<AudioScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool isPlaying = false;
-  Duration _duration = Duration.zero;
-  Duration _position = Duration.zero;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _audioPlayer.onDurationChanged.listen((d) {
-      setState(() {
-        _duration = d;
-      });
-    });
-
-    _audioPlayer.onPositionChanged.listen((p) {
-      setState(() {
-        _position = p;
-      });
-    });
-
-    _audioPlayer.onPlayerComplete.listen((_) {
-      setState(() {
-        isPlaying = false;
-        _position = Duration.zero;
-      });
-    });
-  }
-
-  void _playPause() async {
-    if (isPlaying) {
-      await _audioPlayer.pause();
-    } else {
-      await _audioPlayer.play(AssetSource('audio/anjing.mp3'));
-    }
-    setState(() {
-      isPlaying = !isPlaying;
-    });
-  }
-
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    return "${twoDigits(duration.inMinutes)}:${twoDigits(duration.inSeconds.remainder(60))}";
-  }
-
+  bool isPressed = false;
+  
   @override
   void dispose() {
     _audioPlayer.dispose();
     super.dispose();
   }
 
+  Future<void> _playPause() async {
+    if (widget.soal.audioPertanyaan == null) return;
+    if (isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(AssetSource(widget.soal.audioPertanyaan!));
+    }
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Pertanyaan")),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Center(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(20),
-                backgroundColor: isPlaying ? Colors.redAccent : Colors.green,
-                shadowColor: Colors.black,
-                elevation: 10,
-              ),
-              onPressed: _playPause,
-              child: Icon(
-                isPlaying ? Icons.pause : Icons.play_arrow,
-                size: 50,
-                color: Colors.white,
+            child: Listener(
+              onPointerDown: (_) => setState(() => isPressed = true),
+              onPointerUp: (_) => setState(() => isPressed = false),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 100),
+                transform: isPressed ? Matrix4.translationValues(0, 4, 0) : Matrix4.identity(),
+                child: SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(30),
+                      backgroundColor: isPlaying ? Colors.redAccent : Colors.green,
+                      shadowColor: Colors.black,
+                      elevation: isPressed ? 5 : 15,
+                    ),
+                    onPressed: _playPause,
+                    child: Icon(
+                      isPlaying ? Icons.pause : Icons.play_arrow,
+                      size: 60,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
-            "Suara hewan apakah ini?",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            widget.soal.pertanyaan ?? "Pertanyaan tidak tersedia",
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 10,
             runSpacing: 10,
             children: [
-              _buildAnswerButton(context, "A. Anjing", true),
-              _buildAnswerButton(context, "B. Kucing", false),
-              _buildAnswerButton(context, "C. Kambing", false),
-              _buildAnswerButton(context, "D. Sapi", false),
+              if (widget.soal.opsiA != null) _buildAnswerButton(widget.soal.opsiA!),
+              if (widget.soal.opsiB != null) _buildAnswerButton(widget.soal.opsiB!),
+              if (widget.soal.opsiC != null) _buildAnswerButton(widget.soal.opsiC!),
+              if (widget.soal.opsiD != null) _buildAnswerButton(widget.soal.opsiD!),
             ],
           ),
         ],
@@ -107,7 +94,8 @@ class _AudioScreenState extends State<AudioScreen> {
     );
   }
 
-  Widget _buildAnswerButton(BuildContext context, String text, bool isCorrect) {
+  Widget _buildAnswerButton(String text) {
+    bool isCorrect = text == widget.soal.jawabanBenar;
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.4,
       child: ElevatedButton(
@@ -115,7 +103,7 @@ class _AudioScreenState extends State<AudioScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(isCorrect ? "Jawaban Benar! 🎉" : "Jawaban Salah, coba lagi! ❌"),
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               backgroundColor: isCorrect ? Colors.green : Colors.red,
             ),
           );
@@ -123,14 +111,14 @@ class _AudioScreenState extends State<AudioScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: LocalColor.primary,
           foregroundColor: Colors.white,
-          padding: EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
         child: Text(
           text,
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         ),
       ),
     );
