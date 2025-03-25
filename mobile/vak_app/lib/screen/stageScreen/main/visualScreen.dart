@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:vak_app/models/soal.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
+
 class VisualScreen extends StatefulWidget {
+  final Soal soal;
+  VisualScreen({Key? key, required this.soal}) : super(key: key);
+
   @override
   State<VisualScreen> createState() => _VisualScreenState();
 }
@@ -9,91 +14,104 @@ class VisualScreen extends StatefulWidget {
 class _VisualScreenState extends State<VisualScreen> {
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Colors.white,
-    appBar: AppBar(title: Text("Pertanyaan")),
-    body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 16),
-      child: Column(
-        children: [
-          Container(
-            height: 250,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              // ganti dengan data api
-              image: DecorationImage(
-                image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-                fit: BoxFit.cover,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          children: [
+            // Gambar dari soal
+            Container(
+              height: 250,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: NetworkImage(widget.soal.media ?? 
+                      "assets/images/component/HiFi Dummy.png"), // Fallback jika media null
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20,),
-          Container(
-            width: double.infinity,
-            height: 102,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: LocalColor.primary, width: 1),
-              borderRadius: BorderRadius.circular(8)
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
-              child: Row(
-                children: [
-                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: LocalColor.primary, // Warna latar tombol
-                      minimumSize: Size(40, 40),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // Sudut tombol persegi
+            const SizedBox(height: 20),
+
+            // Kotak pertanyaan
+            Container(
+              width: double.infinity,
+              height: 102,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: LocalColor.primary, width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: LocalColor.primary,
+                        minimumSize: Size(40, 40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.all(16),
                       ),
-                      padding: EdgeInsets.all(16), // Beri padding agar gambar tidak terlalu besar
-                    ),
-                    onPressed: () {
-                      print("Button ditekan!");
-                    },
-                    child: Image.asset(
-                      "assets/images/component/HiFi-Speaker.png", // Ganti dengan path gambarmu
-                      width: 40, // Ukuran gambar
-                      height: 40,
-                    ),
-                  ),
-                  const SizedBox(width: 21),
-                  Expanded( // 🔹 Membuat teks bisa turun ke bawah jika melebihi lebar
-                    child: Text(
-                      "Hewan apa kah yang ada pada gambar",
-                      style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
-                        color: LocalColor.primary,
+                      onPressed: () {
+                        print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+                      },
+                      child: Image.asset(
+                        "assets/images/component/HiFi-Speaker.png",
+                        width: 40,
+                        height: 40,
                       ),
-                      softWrap: true, // 🔹 Memastikan teks bisa pindah baris
-                      overflow: TextOverflow.visible, // 🔹 Mencegah teks terpotong
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 21),
+                    Expanded(
+                      child: Text(
+                        widget.soal.pertanyaan ?? "Pertanyaan tidak tersedia",
+                        style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
+                          color: LocalColor.primary,
+                        ),
+                        softWrap: true,
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-           SizedBox(height: 20),
+            const SizedBox(height: 20),
+
+            // Opsi jawaban
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 10,
               runSpacing: 10,
-              children: [
-                _buildAnswerButton(context, "A. Burung Hantu", true),
-                _buildAnswerButton(context, "B. Kucing", false),
-                _buildAnswerButton(context, "C. Kambing", false),
-                _buildAnswerButton(context, "D. Sapi", false),
-              ],
+              children: _buildAnswerButtons(context),
             ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
-}
 
- Widget _buildAnswerButton(BuildContext context, String text, bool isCorrect) {
+  // Fungsi untuk membuat tombol jawaban dari data soal
+  List<Widget> _buildAnswerButtons(BuildContext context) {
+    List<String?> options = [
+      widget.soal.opsiA,
+      widget.soal.opsiB,
+      widget.soal.opsiC,
+      widget.soal.opsiD
+    ];
+
+    return options.where((option) => option != null).map((option) {
+      bool isCorrect = option == widget.soal.jawabanBenar;
+      return _buildAnswerButton(context, option!, isCorrect);
+    }).toList();
+  }
+
+  Widget _buildAnswerButton(BuildContext context, String text, bool isCorrect) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.4,
       child: ElevatedButton(
@@ -121,4 +139,4 @@ class _VisualScreenState extends State<VisualScreen> {
       ),
     );
   }
-
+}

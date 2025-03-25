@@ -27,7 +27,7 @@ class _WrapperScreenState extends State<WrapperScreen> {
         },
         children: [
           HomeScreen(),
-          StatisticPage(),
+          StatisticScreen(),
           ProfileScreen(),
         ],
       ),
