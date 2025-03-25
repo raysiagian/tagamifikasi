@@ -18,6 +18,7 @@ class AuthController extends Controller
             'username' => 'required|string|unique:users,username',
             'password' => 'required|string|min:6',
             'gender' => 'required|in:laki-laki,perempuan',
+            'tanggal_lahir' => 'required|date_format:Y-m-d', 
         ]);
     
         $user = User::create([
@@ -26,24 +27,23 @@ class AuthController extends Controller
             'username' => $request->username,
             'password' => Hash::make($request->password),
             'gender' => $request->gender,
+            'tanggal_lahir' => $request->tanggal_lahir, // Simpan tanggal lahir
         ]);
     
         $token = $user->createToken('auth_token')->plainTextToken;
     
         return response()->json([
             'access_token' => $token,
-            // 'token_type' => 'Bearer',
             'user' => [
                 'id_user' => $user->id_user,
                 'role' => $user->role,
-                'password' => $user->password,
                 'name' => $user->name,
                 'username' => $user->username,
                 'gender' => $user->gender,
+                'tanggal_lahir' => $user->tanggal_lahir, // Kirim tanggal lahir dalam response
             ]
         ], 201);
     }
-    
 
     // Login User
     public function login(Request $request)
@@ -72,17 +72,8 @@ class AuthController extends Controller
                 'name' => $user->name,
                 'username' => $user->username,
                 'gender' => $user->gender,
+                'tanggal_lahir' => $user->tanggal_lahir, // Kirim tanggal lahir saat login
             ]
-        ]);
-    }
-
-    // Logout User
-    public function logout(Request $request)
-    {
-        $request->user()->tokens()->delete();
-
-        return response()->json([
-            'message' => 'Berhasil logout',
         ]);
     }
 
@@ -95,6 +86,7 @@ class AuthController extends Controller
             'name' => $request->user()->name,
             'username' => $request->user()->username,
             'gender' => $request->user()->gender,
+            'tanggal_lahir' => $request->user()->tanggal_lahir, // Kirim tanggal lahir dalam data user
         ]);
     }
 }
