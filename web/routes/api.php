@@ -26,13 +26,11 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     Route::get('/matapelajaran/{id}', [MataPelajaranController::class, 'show']);
     Route::put('/matapelajaran/{id}', [MataPelajaranController::class, 'update']);
     Route::delete('/matapelajaran/{id}', [MataPelajaranController::class, 'destroy']);
-
-
 });
 
 //level
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
-    Route::get('/levels', [LevelController::class, 'index']);
+    // Route::get('/levels', [LevelController::class, 'index']);
     Route::post('/levels', [LevelController::class, 'store']);
     Route::delete('/levels/{id}', [LevelController::class, 'destroy']);
     Route::put('/levels/{id}', [LevelController::class, 'update']); 
@@ -56,6 +54,15 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
 
 Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban'])
          ->middleware('auth:sanctum');
+
+
+         Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
+            Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
+            Route::get('/levels', [LevelController::class, 'index']);
+            Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
+            Route::get('/matapelajaran/{id_mataPelajaran}/levels', [LevelController::class, 'getLevelsByMataPelajaran']);
+
+        });
 
 });
  
