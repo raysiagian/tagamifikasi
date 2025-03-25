@@ -59,7 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     _buildPage(
                         "assets/images/component/HiFI-Dummy.png",
                         "Bermain Dan Belajar",
-                        "Belajar dengan cara yang asik dan menyenangkan"),
+                      "Belajar dengan cara yang asik dan menyenangkan"),
                     _buildPage(
                         "assets/images/component/HiFI-Dummy.png",
                         "Metode yang sempurna",

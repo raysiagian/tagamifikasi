@@ -1,32 +1,28 @@
 class Users {
-  final int id_user;
+  final int idUser;
   final String role;
   final String name;
   final String username;
   final String gender;
-  final String created_at;
-  final String updated_at;
+  final String tanggalLahir; // Tambahkan ini
 
   Users({
-    required this.id_user,
+    required this.idUser,
     required this.role,
     required this.name,
     required this.username,
     required this.gender,
-    required this.created_at,
-    required this.updated_at,
+    required this.tanggalLahir, // Tambahkan ini
   });
 
-  factory Users.fromJson(Map<String,dynamic>json){
+  factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
-      id_user: json['id_user'] as int, 
-      role: json['role'] as String, 
-      name: json['name'] as String, 
-      username: json['username'] as String, 
-      gender: json['gender'] as String, 
-      created_at: json['created_at'] as String, 
-      updated_at: json['updated_at'] as String,
+      idUser: json['id_user'],
+      role: json['role'],
+      name: json['name'],
+      username: json['username'],
+      gender: json['gender'],
+      tanggalLahir: json['tanggal_lahir'], // Parsing tanggal lahir
     );
   }
 }
-
