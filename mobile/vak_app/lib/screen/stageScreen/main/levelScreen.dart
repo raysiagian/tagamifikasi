@@ -188,3 +188,118 @@ class _LevelScreenState extends State<LevelScreen> {
     }
   }
 }
+
+
+// import 'package:flutter/material.dart';
+// import 'package:vak_app/models/level.dart';
+// import 'package:vak_app/models/soal.dart';
+ 
+// import 'package:vak_app/screen/stageScreen/main/audioScreen.dart';
+// import 'package:vak_app/screen/stageScreen/main/kinestetikScreen.dart';
+// import 'package:vak_app/screen/stageScreen/main/visualScreen.dart';
+
+// import '../../../services/levelServices.dart';
+
+// class LevelScreen extends StatefulWidget {
+//   final int idMataPelajaran; // ✅ Parameter ID mata pelajaran
+
+//   const LevelScreen({Key? key, required this.idMataPelajaran}) : super(key: key);
+
+//   @override
+//   _LevelScreenState createState() => _LevelScreenState();
+// }
+
+// class _LevelScreenState extends State<LevelScreen> {
+//   late Future<Level> futureLevel;
+//   late Future<List<Soal>> futureSoal;
+//   int _currentIndex = 0;
+//   List<Soal> _soalList = [];
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     futureLevel = LevelService().fetchLevelsByMataPelajaran(widget.idMataPelajaran).then((levels) {
+//       if (levels.isNotEmpty) {
+//         return levels.first; // ✅ Ambil level pertama untuk contoh
+//       } else {
+//         throw Exception("Tidak ada level untuk mata pelajaran ini");
+//       }
+//     });
+
+//     // futureSoal = futureLevel.then((level) => SoalService().fetchSoalByLevel(level.idLevel));
+//   }
+
+//   void _nextQuestion() {
+//     if (_currentIndex < _soalList.length - 1) {
+//       setState(() {
+//         _currentIndex++;
+//       });
+//     } else {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text("Soal selesai!"))
+//       );
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text("Level")),
+//       body: FutureBuilder<Level>(
+//         future: futureLevel,
+//         builder: (context, levelSnapshot) {
+//           if (levelSnapshot.connectionState == ConnectionState.waiting) {
+//             return Center(child: CircularProgressIndicator());
+//           } else if (levelSnapshot.hasError) {
+//             return Center(child: Text("Error: ${levelSnapshot.error}"));
+//           } else if (!levelSnapshot.hasData) {
+//             return Center(child: Text("Tidak ada level yang ditemukan."));
+//           }
+
+//           final level = levelSnapshot.data!;
+//           return FutureBuilder<List<Soal>>(
+//             future: futureSoal,
+//             builder: (context, soalSnapshot) {
+//               if (soalSnapshot.connectionState == ConnectionState.waiting) {
+//                 return Center(child: CircularProgressIndicator());
+//               } else if (soalSnapshot.hasError) {
+//                 return Center(child: Text("Error: ${soalSnapshot.error}"));
+//               } else if (!soalSnapshot.hasData || soalSnapshot.data!.isEmpty) {
+//                 return Center(child: Text("Tidak ada soal untuk level ini."));
+//               }
+
+//               _soalList = soalSnapshot.data!;
+//               final soal = _soalList[_currentIndex];
+
+//               return Column(
+//                 children: [
+//                   Expanded(child: _buildSoalScreen(soal)),
+//                   Padding(
+//                     padding: const EdgeInsets.all(16.0),
+//                     child: ElevatedButton(
+//                       onPressed: _nextQuestion,
+//                       child: Text("Selanjutnya"),
+//                     ),
+//                   ),
+//                 ],
+//               );
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+
+//   Widget _buildSoalScreen(Soal soal) {
+//     switch (soal.tipeSoal.toLowerCase()) {
+//       case 'kinestetik':
+//         return KinestetikScreen(soal: soal);
+//       case 'auditory':
+//         return AudioScreen(soal: soal);
+//       case 'visual':
+//         return VisualScreen(soal: soal);
+//       default:
+//         return Center(child: Text("Tipe soal tidak dikenali"));
+//     }
+//   }
+// }

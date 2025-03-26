@@ -21,6 +21,8 @@ class Level extends Model
         'penjelasan_level',
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     /**
      * Relasi ke model MataPelajaran.
      * Satu level terkait dengan satu mata pelajaran.

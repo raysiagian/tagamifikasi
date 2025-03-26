@@ -84,4 +84,19 @@ class LevelController extends Controller
             'message' => 'Level berhasil dihapus.'
         ], 204);
     }
+
+    public function getLevelsByMataPelajaran($id_mataPelajaran)
+{
+    $levels = Level::where('id_mataPelajaran', $id_mataPelajaran)
+                ->with('mataPelajaran') // Mengambil juga informasi mata pelajaran
+                ->get();
+
+    if ($levels->isEmpty()) {
+        return response()->json([
+            'message' => 'Tidak ada level untuk mata pelajaran ini.'
+        ], 404);
+    }
+
+    return response()->json($levels, 200);
+}
 }
