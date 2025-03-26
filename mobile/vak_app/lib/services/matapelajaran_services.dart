@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:vak_app/constant/baseUrl.dart';
 
 import '../models/mataPelajaran.dart';
 import 'auth_services.dart';
 
 class MataPelajaranService {
-  // final String baseUrl = "http://10.0.2.2:8000/api";
+  final String baseUrl = "http://10.0.2.2:8000/api";
 
   Future<List<MataPelajaran>> fetchMataPelajaran() async {
-    final url = Uri.parse(baseUrl + "/matapelajaran");
+    final url = Uri.parse("$baseUrl/matapelajaran");
     final token = await AuthService().getToken(); // Ambil token yang tersimpan
 
     try {
