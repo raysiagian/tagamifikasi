@@ -18,9 +18,10 @@ class MataPelajaranController extends Controller
     // Menampilkan daftar semua subjek
     public function index()
     {
-        $matapelajaran = MataPelajaran::all(); // Mengambil semua data dari tabel subjek
-        return response()->json($matapelajaran); // Mengembalikan data dalam format JSON
+        $matapelajaran = MataPelajaran::select('id_mataPelajaran', 'nama_mataPelajaran')->get();
+        return response()->json($matapelajaran);
     }
+    
 
     // Menyimpan subjek baru
     public function store(Request $request)

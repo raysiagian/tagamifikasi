@@ -15,6 +15,8 @@ class MataPelajaran extends Model
     protected $fillable = [
         'nama_mataPelajaran',
     ];
+    protected $hidden = ['created_at', 'updated_at'];
+
 
     /**
      * Relasi ke model Level.
