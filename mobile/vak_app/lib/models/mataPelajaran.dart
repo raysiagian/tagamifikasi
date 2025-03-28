@@ -27,7 +27,7 @@ class MataPelajaran {
 
   MataPelajaran({
     required this.id,
-    required this.nama,
+    required this.nama, 
     required this.iconPath,
   });
 
@@ -54,7 +54,7 @@ class MataPelajaran {
     return {
       'id_mataPelajaran': id,
       'nama_mataPelajaran': nama,
-      'iconPath': iconPath, // ✅ Tambahkan iconPath ke JSON
+      'iconPath': iconPath,  
     };
   }
 }

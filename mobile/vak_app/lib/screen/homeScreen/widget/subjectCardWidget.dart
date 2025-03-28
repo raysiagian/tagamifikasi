@@ -5,7 +5,9 @@ import 'package:vak_app/style/localColor.dart';
 import 'package:vak_app/style/regulerTextStyle.dart';
 
 class SubjectCardWidget extends StatelessWidget {
-  const SubjectCardWidget({super.key});
+  final int idMataPelajaran; // Tambahkan ID Mata Pelajaran
+
+  const SubjectCardWidget({super.key, required this.idMataPelajaran});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,8 @@ class SubjectCardWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: const DecorationImage(
-                image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                image: NetworkImage(
+                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -48,13 +51,18 @@ class SubjectCardWidget extends StatelessWidget {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: LocalColor.primary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             ),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StageScreen()),
+                MaterialPageRoute(
+                  builder: (context) => StageScreen(
+                      idMataPelajaran:
+                          idMataPelajaran), // Kirim ID ke StageScreen
+                ),
               );
             },
             child: Text(

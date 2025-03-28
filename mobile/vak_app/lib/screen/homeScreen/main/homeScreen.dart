@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/screen/stageScreen/main/stageScreen.dart';
-
 import 'package:vak_app/style/localColor.dart';
 
 import '../../../models/mataPelajaran.dart';
@@ -23,8 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(
-                  "assets/images/background/HiFi-Home Background.png"),
+              image: AssetImage("assets/images/background/HiFi-Home Background.png"),
               fit: BoxFit.cover,
             ),
           ),
@@ -36,8 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
               } else if (snapshot.hasError) {
                 return Center(child: Text("Error: ${snapshot.error}"));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(
-                    child: Text("Tidak ada data mata pelajaran"));
+                return const Center(child: Text("Tidak ada data mata pelajaran"));
               }
 
               List<MataPelajaran> mataPelajaranList = snapshot.data!;
@@ -60,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     left: iconPositions[i]["left"],
                     right: iconPositions[i]["right"],
                     imagePath: mataPelajaran.iconPath,
+                    idMataPelajaran: mataPelajaran.id,
                   ),
                 );
               }
@@ -72,12 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSubjectIcon(
-      {double? top,
-      double? bottom,
-      double? left,
-      double? right,
-      required String imagePath}) {
+  Widget _buildSubjectIcon({
+    double? top,
+    double? bottom,
+    double? left,
+    double? right,
+    required String imagePath,
+    required int idMataPelajaran,
+  }) {
     return Positioned(
       top: top,
       bottom: bottom,
@@ -87,7 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => StageScreen()),
+            MaterialPageRoute(
+              builder: (context) => StageScreen(idMataPelajaran: idMataPelajaran),
+            ),
           );
         },
         child: Container(

@@ -50,7 +50,7 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
    Route::get('/soal', [SoalController::class, 'index']); // Semua soal
-    Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
+    // Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
     //soal berdasarkan mapel dan level
     Route::get('/soal/matapelajaran/{id_mataPelajaran}/level/{id_level}', [SoalController::class, 'getByMataPelajaranAndLevel']);
 Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban'])
@@ -61,8 +61,7 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban'])
             Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
             Route::get('/levels', [LevelController::class, 'index']);
             Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
-                        Route::get('/matapelajaran/{id_mataPelajaran}/levels', [LevelController::class, 'getLevelsByMataPelajaran']);
-
+             Route::get('/matapelajaran/{id_mataPelajaran}/levels', [LevelController::class, 'getLevelsByMataPelajaran']);
         });
 
 });

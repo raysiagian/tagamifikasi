@@ -1,25 +1,46 @@
+import 'soal.dart';
+
 class Level {
-  final int id_level;
-  final int id_mataPelajaran;
-  final String penjelasan_level;
+  final int idLevel;
+  final int idMataPelajaran;
+  final String penjelasanLevel;
+  final String namaMataPelajaran;
 
   Level({
-    required this.id_level,
-    required this.id_mataPelajaran,
-    required this.penjelasan_level,
+    required this.idLevel,
+    required this.idMataPelajaran,
+    required this.penjelasanLevel,
+    required this.namaMataPelajaran,
   });
 
+  // Konversi dari JSON ke Model
   factory Level.fromJson(Map<String, dynamic> json) {
     return Level(
-      id_level: json['id_level'],
-      id_mataPelajaran: json['id_mataPelajaran'],
-      penjelasan_level: json['penjelasan_level'],
+      idLevel: json['id_level'],
+      idMataPelajaran: json['id_mataPelajaran'],
+      penjelasanLevel: json['penjelasan_level'],
+      namaMataPelajaran: json['mata_pelajaran']['nama_mataPelajaran'],
     );
   }
 }
 
-List<Level> level = [
-  Level(id_level: 1, id_mataPelajaran: 1, penjelasan_level: 'pengenalan angka'),
-  Level(
-      id_level: 2, id_mataPelajaran: 1, penjelasan_level: 'pengenalan angka 2'),
-];
+// Model untuk response level dan soal
+class LevelSoalResponse {
+  final String status;
+  final String level;
+  final List<Soal> soal;
+
+  LevelSoalResponse({
+    required this.status,
+    required this.level,
+    required this.soal,
+  });
+
+  factory LevelSoalResponse.fromJson(Map<String, dynamic> json) {
+    return LevelSoalResponse(
+      status: json["status"],
+      level: json["level"],
+      soal: (json["soal"] as List).map((item) => Soal.fromJson(item)).toList(),
+    );
+  }
+}
