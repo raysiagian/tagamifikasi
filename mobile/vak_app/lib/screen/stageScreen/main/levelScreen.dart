@@ -101,6 +101,7 @@ import 'package:vak_app/models/soal.dart';
 import 'package:vak_app/screen/stageScreen/main/audioScreen.dart';
 import 'package:vak_app/screen/stageScreen/main/kinestetikScreen.dart';
 import 'package:vak_app/screen/stageScreen/main/visualScreen.dart';
+import 'package:vak_app/style/localColor.dart';
 
 class LevelScreen extends StatefulWidget {
   final Level level;
@@ -141,24 +142,42 @@ class _LevelScreenState extends State<LevelScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Level ${widget.level.id_level} - ${widget.level.penjelasan_level}")),
-      body: FutureBuilder<List<Soal>>(
-        future: futureSoal,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text("Tidak ada soal untuk level ini"));
-          }
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(title: Text("Level ${widget.level.id_level} - ${widget.level.penjelasan_level}")),
+    body: FutureBuilder<List<Soal>>(
+      future: futureSoal,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text("Error: ${snapshot.error}"));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text("Tidak ada soal untuk level ini"));
+        }
 
-          _soalList = snapshot.data!;
-          final soal = _soalList[_currentIndex];
+        _soalList = snapshot.data!;
+        final soal = _soalList[_currentIndex];
 
-          return Column(
+        // Tentukan warna background berdasarkan tipe soal
+        Color backgroundColor;
+        switch (soal.tipeSoal.toLowerCase()) {
+          case 'visual':
+            backgroundColor = LocalColor.redBackground; // Atau Colors.red
+            break;
+          case 'auditory':
+            backgroundColor = LocalColor.greenBackground; // Contoh warna lain
+            break;
+          case 'kinestetik':
+            backgroundColor = LocalColor.yellowBackground; // Contoh warna lain
+            break;
+          default:
+            backgroundColor = Colors.white;
+        }
+
+        return Container(
+          color: backgroundColor, // Terapkan warna background
+          child: Column(
             children: [
               Expanded(child: _buildSoalScreen(soal)),
               Padding(
@@ -169,11 +188,48 @@ class _LevelScreenState extends State<LevelScreen> {
                 ),
               ),
             ],
-          );
-        },
-      ),
-    );
-  }
+          ),
+        );
+      },
+    ),
+  );
+}
+
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text("Level ${widget.level.id_level} - ${widget.level.penjelasan_level}")),
+//       body: FutureBuilder<List<Soal>>(
+//         future: futureSoal,
+//         builder: (context, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.waiting) {
+//             return Center(child: CircularProgressIndicator());
+//           } else if (snapshot.hasError) {
+//             return Center(child: Text("Error: ${snapshot.error}"));
+//           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+//             return Center(child: Text("Tidak ada soal untuk level ini"));
+//           }
+
+//           _soalList = snapshot.data!;
+//           final soal = _soalList[_currentIndex];
+
+//           return Column(
+//             children: [
+//               Expanded(child: _buildSoalScreen(soal)),
+//               Padding(
+//                 padding: const EdgeInsets.all(16.0),
+//                 child: ElevatedButton(
+//                   onPressed: _nextQuestion,
+//                   child: Text("Selanjutnya"),
+//                 ),
+//               ),
+//             ],
+//           );
+//         },
+//       ),
+//     );
+//   }
 
   Widget _buildSoalScreen(Soal soal) {
     switch (soal.tipeSoal.toLowerCase()) {

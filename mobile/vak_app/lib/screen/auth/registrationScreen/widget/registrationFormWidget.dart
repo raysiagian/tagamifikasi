@@ -192,6 +192,26 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
           ),
         ),
         const SizedBox(height: 20.0),
+        SizedBox(
+          height: 44,
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () => Navigator.pushNamed(
+                context, AppRouteConstant.loginScreen),
+            style: OutlinedButton.styleFrom(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+            ),
+            child: Text(
+              'Login',
+              style: RegulerTextStyle.textTheme.bodyLarge!.copyWith(
+                color: LocalColor.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

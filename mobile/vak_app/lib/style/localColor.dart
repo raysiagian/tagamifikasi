@@ -80,6 +80,24 @@ class LocalColor{
     },
   );
 
+  // Merah Background
+  static const int _redBackground = 0xFFFFE5454;
+  static const MaterialColor redBackground = MaterialColor(
+    _redBackground, 
+      <int, Color>{
+      500: Color(LocalColor._redBackground),
+    },
+  );
+
+  // Hijau Background
+  static const int _greenBackground = 0xFFF70DA8E;
+  static const MaterialColor greenBackground = MaterialColor(
+    _greenBackground, 
+      <int, Color>{
+      500: Color(LocalColor._greenBackground),
+    },
+  );
+  
   
   
 }

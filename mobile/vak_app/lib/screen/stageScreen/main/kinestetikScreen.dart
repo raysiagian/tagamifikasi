@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:vak_app/models/soal.dart';
+import 'package:vak_app/style/localColor.dart';
 
 class KinestetikScreen extends StatefulWidget {
   final Soal soal;
@@ -41,7 +42,7 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
     emojis.shuffle(Random(seed));
 
     return Scaffold(
-
+      backgroundColor: LocalColor.transparent,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {

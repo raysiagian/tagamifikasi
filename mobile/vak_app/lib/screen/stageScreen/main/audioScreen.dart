@@ -38,6 +38,7 @@ class _AudioScreenState extends State<AudioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: LocalColor.transparent,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

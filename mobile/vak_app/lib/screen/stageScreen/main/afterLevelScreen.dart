@@ -13,29 +13,28 @@ class _AfterLevelScreenState extends State<AfterLevelScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
+        backgroundColor: LocalColor.greenBackground,
         body: Container(
-          decoration: BoxDecoration(
-             image: DecorationImage(
-              image: AssetImage("assets/images/background/HiFi-After Level Background.png"),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  "assets/images/background/HiFi-After Level Background.png"),
               fit: BoxFit.cover,
             ),
           ),
-          child: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height,
-                color: LocalColor.transparent,
-              ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth*0.08),
-                  child: ScoreBoardWidget(),
+          child: Center(
+             child: Container(
+                width: screenWidth * 0.8, // Lebar 40% dari total layar
+                height: 600,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                child: ScoreBoardWidget(), // Panggil ScoreBoardWidget
               ),
-            ],
           ),
         ),
       ),

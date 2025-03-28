@@ -15,7 +15,7 @@ class _VisualScreenState extends State<VisualScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: LocalColor.transparent,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
@@ -41,7 +41,7 @@ class _VisualScreenState extends State<VisualScreen> {
               height: 102,
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: LocalColor.primary, width: 1),
+                // border: Border.all(color: LocalColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Padding(
@@ -125,8 +125,8 @@ class _VisualScreenState extends State<VisualScreen> {
           );
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: LocalColor.primary,
-          foregroundColor: Colors.white,
+          backgroundColor: Colors.white,
+          foregroundColor: LocalColor.primary,
           padding: EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),

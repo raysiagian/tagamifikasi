@@ -88,7 +88,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 ? CircularProgressIndicator(
                     color: Colors.white) // Tampilkan loading
                 : Text(
-                    "Masuk",
+                    "Login",
                     style: RegulerTextStyle.textTheme.bodyLarge!.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
