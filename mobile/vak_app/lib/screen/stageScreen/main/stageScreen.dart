@@ -17,25 +17,19 @@ class _StageScreenState extends State<StageScreen> {
       appBar: AppBar(title: const Text("Bermain")),
       body: Stack(
         children: [
-          // Background
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/background/HiFi-Stage Background.png"),
+                image: AssetImage(
+                    "assets/images/background/HiFi-Stage Background.png"),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Body
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // Menampilkan unit berdasarkan idMataPelajaran
-                  UnitWidget(idMataPelajaran: widget.idMataPelajaran),
-                ],
-              ),
+              child: UnitWidget(idMataPelajaran: widget.idMataPelajaran),
             ),
           ),
         ],

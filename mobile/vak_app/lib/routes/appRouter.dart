@@ -49,17 +49,20 @@ class AppRouter {
         );
 
       case AppRouteConstant.levelScreen:
-        if (settings.arguments is Level) {
-          final level = settings.arguments as Level;
+        if (settings.arguments is Map<String, dynamic>) {
+          final args = settings.arguments as Map<String, dynamic>;
           return MaterialPageRoute(
-            builder: (_) => LevelScreen(level: level),
+            builder: (_) => LevelScreen(
+              idMataPelajaran: args['idMataPelajaran'],
+              level: args['level'],
+            ),
           );
         }
-
-      default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
-            body: Center(child: Text('Error: Level data not found')),
+            body: Center(
+                child: Text(
+                    'Error: Data Level atau ID Mata Pelajaran tidak ditemukan')),
           ),
         );
 

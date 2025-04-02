@@ -1,8 +1,35 @@
+import 'dart:convert';
+
+class SoalResponse {
+  final String status;
+  final String mataPelajaran;
+  final String level;
+  final List<Soal> soal;
+
+  SoalResponse({
+    required this.status,
+    required this.mataPelajaran,
+    required this.level,
+    required this.soal,
+  });
+
+  factory SoalResponse.fromJson(String str) =>
+      SoalResponse.fromMap(json.decode(str));
+
+  factory SoalResponse.fromMap(Map<String, dynamic> json) => SoalResponse(
+        status: json["status"],
+        mataPelajaran: json["mataPelajaran"],
+        level: json["level"],
+        soal:
+            List<Soal>.from(json["soal"].map((x) => Soal.fromMap(x))),
+      );
+}
+
 class Soal {
   final int idSoal;
   final int idLevel;
   final String tipeSoal;
-  final String media;
+  final String? media;
   final String pertanyaan;
   final String? audioPertanyaan;
   final String opsiA;
@@ -10,14 +37,12 @@ class Soal {
   final String opsiC;
   final String opsiD;
   final String jawabanBenar;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   Soal({
     required this.idSoal,
     required this.idLevel,
     required this.tipeSoal,
-    required this.media,
+    this.media,
     required this.pertanyaan,
     this.audioPertanyaan,
     required this.opsiA,
@@ -25,25 +50,21 @@ class Soal {
     required this.opsiC,
     required this.opsiD,
     required this.jawabanBenar,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
-  factory Soal.fromJson(Map<String, dynamic> json) {
-    return Soal(
-      idSoal: json["id_soal"],
-      idLevel: json["id_level"],
-      tipeSoal: json["tipeSoal"],
-      media: json["media"],
-      pertanyaan: json["pertanyaan"],
-      audioPertanyaan: json["audioPertanyaan"],
-      opsiA: json["opsiA"],
-      opsiB: json["opsiB"],
-      opsiC: json["opsiC"],
-      opsiD: json["opsiD"],
-      jawabanBenar: json["jawabanBenar"],
-      createdAt: DateTime.parse(json["created_at"]),
-      updatedAt: DateTime.parse(json["updated_at"]),
-    );
-  }
+  factory Soal.fromJson(String str) => Soal.fromMap(json.decode(str));
+
+  factory Soal.fromMap(Map<String, dynamic> json) => Soal(
+        idSoal: json["id_soal"],
+        idLevel: json["id_level"],
+        tipeSoal: json["tipeSoal"],
+        media: json["media"],
+        pertanyaan: json["pertanyaan"],
+        audioPertanyaan: json["audioPertanyaan"],
+        opsiA: json["opsiA"],
+        opsiB: json["opsiB"],
+        opsiC: json["opsiC"],
+        opsiD: json["opsiD"],
+        jawabanBenar: json["jawabanBenar"],
+      );
 }

@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/models/level.dart';
 import 'package:vak_app/models/soal.dart';
+
 import '../../../services/soal_services.dart';
 import 'audioScreen.dart';
 import 'kinestetikScreen.dart';
 import 'visualScreen.dart';
 
 class LevelScreen extends StatefulWidget {
+  final int idMataPelajaran;
   final Level level;
 
-  const LevelScreen({Key? key, required this.level}) : super(key: key);
+  const LevelScreen(
+      {Key? key, required this.idMataPelajaran, required this.level})
+      : super(key: key);
 
   @override
   _LevelScreenState createState() => _LevelScreenState();
 }
 
 class _LevelScreenState extends State<LevelScreen> {
-  late Future<List<Soal>> futureSoal;
+  late Future<SoalResponse> futureSoal; // Mengubah tipe ke Future<SoalResponse>
   int _currentIndex = 0;
   List<Soal> _soalList = [];
 
@@ -24,7 +28,8 @@ class _LevelScreenState extends State<LevelScreen> {
   void initState() {
     super.initState();
     debugPrint("Level:  ${widget.level.penjelasanLevel}");
-    futureSoal = SoalService().fetchSoalByLevel(widget.level.idLevel);
+    futureSoal =
+        SoalService().fetchSoal(widget.idMataPelajaran, widget.level.idLevel);
   }
 
   void _nextQuestion() {
@@ -47,18 +52,20 @@ class _LevelScreenState extends State<LevelScreen> {
           "Level   ${widget.level.penjelasanLevel}",
         ),
       ),
-      body: FutureBuilder<List<Soal>>(
+      body: FutureBuilder<SoalResponse>(
+        // Mengubah FutureBuilder menjadi tipe SoalResponse
         future: futureSoal,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          } else if (!snapshot.hasData || snapshot.data!.soal.isEmpty) {
             return const Center(child: Text("Tidak ada soal untuk level ini"));
           }
 
-          _soalList = snapshot.data!;
+          // Mengambil daftar soal dari SoalResponse
+          _soalList = snapshot.data!.soal;
           final soal = _soalList[_currentIndex];
 
           return Column(

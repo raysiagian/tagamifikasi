@@ -74,8 +74,10 @@ class _UnitWidgetState extends State<UnitWidget> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              LevelScreen(level: currentLevel),
+                          builder: (context) => LevelScreen(
+                            idMataPelajaran: widget.idMataPelajaran,
+                            level: currentLevel,
+                          ),
                         ),
                       );
                     },
