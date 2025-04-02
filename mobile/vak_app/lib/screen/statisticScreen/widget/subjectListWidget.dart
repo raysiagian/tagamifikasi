@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
 
-class SubjectList extends StatefulWidget {
-  const SubjectList({super.key});
+class SubjectListWidget extends StatefulWidget {
+  const SubjectListWidget({super.key});
 
   @override
-  State<SubjectList> createState() => _SubjectListState();
+  State<SubjectListWidget> createState() => _SubjectListState();
 }
 
-class _SubjectListState extends State<SubjectList> {
+class _SubjectListState extends State<SubjectListWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(

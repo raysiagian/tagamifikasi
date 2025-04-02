@@ -209,4 +209,33 @@ class SoalController extends Controller
     return response()->json(['message' => 'Soal berhasil dihapus']);
 }
 
+public function getByLevel($id_level)
+{
+    // Cek apakah level ada
+    $level = Level::where('id_level', $id_level)->first();
+    
+    if (!$level) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Level tidak ditemukan'
+        ], 404);
+    }
+
+    // Ambil soal berdasarkan id_level
+    $soal = Soal::where('id_level', $id_level)->get();
+
+    if ($soal->isEmpty()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Tidak ada soal untuk level ini'
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'level' => $level->penjelasan_level,
+        'soal' => $soal
+    ], 200);
+}
+
 }

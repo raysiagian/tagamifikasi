@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/screen/statisticScreen/widget/subjectListWidget.dart';
+import 'package:vak_app/screen/statisticScreen/widget/levelListWidget.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
 
-class StatisticScreen extends StatefulWidget {
-  const StatisticScreen({super.key});
+class StatisticDetailPage extends StatefulWidget {
+  const StatisticDetailPage({super.key});
 
   @override
-  State<StatisticScreen> createState() => _StatisticScreenState();
+  State<StatisticDetailPage> createState() => _StatisticDetailPageState();
 }
 
-class _StatisticScreenState extends State<StatisticScreen> {
+class _StatisticDetailPageState extends State<StatisticDetailPage> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-       body: Container(
+        appBar: AppBar(
+          title: Text("Mata Pelajaran") ,
+        ),
+         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/background/HiFi-Statistic Background.png"),
@@ -58,7 +59,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                     child: SizedBox(
                       width: 146,
                       child: Text(
-                      'Statistik Saya',
+                      'Mata Pelajaran',
                         style: BoldTextStyle.textTheme.titleMedium!.copyWith(
                           color: Colors.white,
                         ),
@@ -68,7 +69,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   ],
                 ),
                 const SizedBox(height: 30,),
-                SubjectListWidget(),
+                LevelListWidget(),
               ],
             ),
           ),

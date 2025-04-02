@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
         useMaterial3: true,
       ),
       title: "Aplikasi Belajar",
-      initialRoute: AppRouteConstant.afterLevelScreen,
+      initialRoute: AppRouteConstant.splashScreen,
       onGenerateRoute: AppRouter.onGenerateRoute,
       
        localizationsDelegates: const [

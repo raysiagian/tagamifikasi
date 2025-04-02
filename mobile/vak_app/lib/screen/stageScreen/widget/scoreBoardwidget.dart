@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:vak_app/routes/appRouteConstant.dart';
 import 'package:vak_app/screen/stageScreen/main/stageScreen.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
@@ -81,33 +82,55 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
           const SizedBox(height: 15),
           Text("Keterangan Level"),
           const SizedBox(height: 30),
+          // ElevatedButton(
+          //    style: ElevatedButton.styleFrom(
+          //     backgroundColor: LocalColor.primary,
+          //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          //     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+          //   ),
+          //     onPressed: () {
+          //       Navigator.pop(context);
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => StageScreen(idMataPelajaran: idMataPelajaran),
+          //         ),
+          //       );
+          //     },
+          //     child: Text(
+          //       "Kembali",
+          //       style: TextStyle(
+          //         color: Colors.white,
+          //       ),
+          //     ),
+          //   ),
           ElevatedButton(
-             style: ElevatedButton.styleFrom(
+            style: ElevatedButton.styleFrom(
               backgroundColor: LocalColor.primary,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             ),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => StageScreen(),
-                  ),
-                );
-              },
-              child: Text(
-                "Kembali",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+            onPressed: () {
+              Navigator.pop(context); // Kembali ke halaman sebelumnya
+              Navigator.pushNamed(
+                context,
+                AppRouteConstant.stageScreen, // Gunakan nama route
+                arguments: 1, // Ganti 1 dengan idMataPelajaran yang sesuai
+              );
+            },
+            child: Text(
+              "Kembali",
+              style: TextStyle(
+                color: Colors.white,
               ),
             ),
-        ],
-      ),
-    );
-  }
-}
+          ),
+
+                  ],
+                ),
+              );
+            }
+          }
 
 // final screenWidth = MediaQuery.of(context).size.width;
 // padding: EdgeInsets.symmetric(horizontal: screenWidth*0.05),

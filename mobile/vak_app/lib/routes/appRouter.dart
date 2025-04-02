@@ -13,8 +13,8 @@ import 'package:vak_app/screen/stageScreen/main/stageScreen.dart';
 import 'package:vak_app/screen/statisticScreen/main/statisticPage.dart';
 import 'package:vak_app/screen/wrapper/main/wrapperScreen.dart';
 
-class AppRouter{
-static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
+class AppRouter {
+  static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRouteConstant.splashScreen:
         return MaterialPageRoute(builder: (_) => SplashScreen());
@@ -24,20 +24,30 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case AppRouteConstant.registrationScreen:
         return MaterialPageRoute(builder: (_) => RegistrationScreen());
-      //Perbaiki Konstruktor ketika sudah ada logika yg tepat 
       case AppRouteConstant.homeScreen:
         return MaterialPageRoute(builder: (_) => HomeScreen());
-      //Perbaiki Konstruktor ketika sudah ada logika yg tepat 
       case AppRouteConstant.wrapperScreen:
         return MaterialPageRoute(builder: (_) => WrapperScreen());
       case AppRouteConstant.afterLevelScreen:
         return MaterialPageRoute(builder: (_) => AfterLevelScreen());
       case AppRouteConstant.statisticScreen:
-        return MaterialPageRoute(builder: (_) =>StatisticScreen());
+        return MaterialPageRoute(builder: (_) => StatisticScreen());
+
+      // Route ke StageScreen dengan idMataPelajaran sebagai argument
       case AppRouteConstant.stageScreen:
-        return MaterialPageRoute(builder: (_) =>StageScreen());
-      // case AppRouteConstant.levelScreen:
-      //   return MaterialPageRoute(builder: (_) =>LevelScreen());
+        if (settings.arguments is int) {
+          final idMataPelajaran = settings.arguments as int;
+          return MaterialPageRoute(
+            builder: (_) => StageScreen(idMataPelajaran: idMataPelajaran),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            body:
+                Center(child: Text('Error: ID Mata Pelajaran tidak ditemukan')),
+          ),
+        );
+
       case AppRouteConstant.levelScreen:
         if (settings.arguments is Level) {
           final level = settings.arguments as Level;
@@ -45,16 +55,26 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
             builder: (_) => LevelScreen(level: level),
           );
         }
-        
-      // case AppRouteConstant.kinesteticScreen:
-      //   return MaterialPageRoute(builder: (_) =>KinestetikScreen());
 
       default:
-      return MaterialPageRoute(
-        builder: (_) => Scaffold(
-          body: Center(child: Text('Error: Route not found')),
-        ),
-      );
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            body: Center(child: Text('Error: Level data not found')),
+          ),
+        );
+
+      // if (settings.arguments is Level) {
+      //   final level = settings.arguments as Level;
+      //   return MaterialPageRoute(
+      //     builder: (_) => LevelScreen(level: level),
+      //   );
+      // }
+
+      // return MaterialPageRoute(
+      //   builder: (_) => Scaffold(
+      //     body: Center(child: Text('Error: Route not found')),
+      //   ),
+      // );
     }
   }
-}  
+}

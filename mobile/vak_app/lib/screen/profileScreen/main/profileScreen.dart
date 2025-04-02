@@ -15,6 +15,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Profil"),
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
