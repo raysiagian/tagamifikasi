@@ -1,5 +1,5 @@
 class Soal {
-  final int id_Soal;
+  final int id_soal;
   final int id_level;
   final String tipeSoal;
   final String? media;
@@ -16,7 +16,7 @@ class Soal {
   final String? jawabanBenar;
 
   Soal({
-    required this.id_Soal,
+    required this.id_soal,
     required this.id_level,
     required this.tipeSoal,
     this.media,
@@ -35,81 +35,21 @@ class Soal {
 
   factory Soal.fromJson(Map<String, dynamic> json) {
     return Soal(
-      id_Soal: json['id_Soal'],
+      id_soal: json['id_soal'], // Ubah ke format sesuai JSON
       id_level: json['id_level'],
       tipeSoal: json['tipeSoal'],
-      media: json['media'], // Bisa null
+      media: json['media'],
       pertanyaan: json['pertanyaan'],
       audioPertanyaan: json['audioPertanyaan'],
       opsiA: json['opsiA'],
       opsiB: json['opsiB'],
       opsiC: json['opsiC'],
       opsiD: json['opsiD'],
+      pasanganA: json['pasanganA'],
+      pasanganB: json['pasanganB'],
+      pasanganC: json['pasanganC'],
+      pasanganD: json['pasanganD'],
       jawabanBenar: json['jawabanBenar'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id_Soal': id_Soal,
-      'id_level': id_level,
-      'tipeSoal': tipeSoal,
-      'media': media,
-      'pertanyaan': pertanyaan,
-      'audioPertanyaan': audioPertanyaan,
-      'opsiA': opsiA,
-      'opsiB': opsiB,
-      'opsiC': opsiC,
-      'opsiD': opsiD,
-      'jawabanBenar': jawabanBenar,
-    };
-  }
 }
-
-// Contoh daftar soal dengan media yang nullable
-List<Soal> soalList = [
-  Soal(
-    id_Soal: 1,
-    id_level: 1,
-    tipeSoal: "visual",
-    media: "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg",
-    pertanyaan: "Hewan apakah ini",
-    audioPertanyaan: "audio/anjing.mp3",
-    opsiA: "Sapi",
-    opsiB: "Burung Hantu",
-    opsiC: "Semut",
-    opsiD: "Gajah",
-    jawabanBenar: "Burung Hantu",
-  ),
-  Soal(
-    id_Soal: 2,
-    id_level: 1,
-    tipeSoal: "auditory",
-    media: "audio/anjing.mp3", // Tidak ada media
-    pertanyaan: "Suara apa yang kamu dengar?",
-    audioPertanyaan: "audio/anjing.mp3",
-    opsiA: "Kucing",
-    opsiB: "Anjing",
-    opsiC: "Burung",
-    opsiD: "Sapi",
-    jawabanBenar: "Kucing",
-  ),
-
-  Soal(
-    id_Soal: 3,
-    id_level: 1,
-    tipeSoal: "kinestetik",
-    // media: null, // Tidak ada media
-    // pertanyaan: "Suara apa yang kamu dengar?",
-    // audioPertanyaan: "audio2.mp3",
-    opsiA: "🐈",
-    opsiB: "🐕",
-    opsiC: "🐜",
-    opsiD: "🐄",
-    pasanganA: "Kucing",
-    pasanganB: "Anjing",
-    pasanganC: "Semut",
-    pasanganD: "Sapi",
-    jawabanBenar: "Kucing",
-  ),
-];

@@ -15,6 +15,8 @@ class _AudioScreenState extends State<AudioScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool isPlaying = false;
   bool isPressed = false;
+
+  String? selectedAnswer;
   
   @override
   void dispose() {
@@ -83,43 +85,46 @@ class _AudioScreenState extends State<AudioScreen> {
             alignment: WrapAlignment.center,
             spacing: 10,
             runSpacing: 10,
-            children: [
-              if (widget.soal.opsiA != null) _buildAnswerButton(widget.soal.opsiA!),
-              if (widget.soal.opsiB != null) _buildAnswerButton(widget.soal.opsiB!),
-              if (widget.soal.opsiC != null) _buildAnswerButton(widget.soal.opsiC!),
-              if (widget.soal.opsiD != null) _buildAnswerButton(widget.soal.opsiD!),
-            ],
+           children: _buildAnswerButtons(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildAnswerButton(String text) {
-    bool isCorrect = text == widget.soal.jawabanBenar;
+  List<Widget> _buildAnswerButtons(BuildContext context) {
+    List<String?> options = [
+      widget.soal.opsiA,
+      widget.soal.opsiB,
+      widget.soal.opsiC,
+      widget.soal.opsiD
+    ];
+
+    return options.where((option) => option != null).map((option) {
+      return _buildAnswerButton(context, option!);
+    }).toList();
+  }
+
+  Widget _buildAnswerButton(BuildContext context, String text) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.4,
       child: ElevatedButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(isCorrect ? "Jawaban Benar! 🎉" : "Jawaban Salah, coba lagi! ❌"),
-              duration: const Duration(seconds: 1),
-              backgroundColor: isCorrect ? Colors.green : Colors.red,
-            ),
-          );
+          setState(() {
+            selectedAnswer = text;
+          });
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: LocalColor.primary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          backgroundColor: selectedAnswer == text ? Colors.blue : Colors.white,
+          foregroundColor: LocalColor.primary,
+          padding: EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
         child: Text(
           text,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16),
         ),
       ),
     );

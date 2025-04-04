@@ -77,7 +77,11 @@ class SoalController extends Controller
             'opsiB' => 'required|string',
             'opsiC' => 'required|string',
             'opsiD' => 'required|string',
-            'jawabanBenar' => 'required|in:A,B,C,D'
+            'pasanganA' => 'nullable|string',
+            'pasanganB' => 'nullable|string',
+            'pasanganC' => 'nullable|string',
+            'pasanganD' => 'nullable|string',
+            'jawabanBenar' => 'nullable|in:A,B,C,D'
         ]);
 
         // Upload media ke Cloudinary jika ada
@@ -109,6 +113,10 @@ class SoalController extends Controller
             'opsiB' => $request->opsiB,
             'opsiC' => $request->opsiC,
             'opsiD' => $request->opsiD,
+            'pasanganA' => $request->pasanganA,
+            'pasanganB' => $request->pasanganB,
+            'pasanganC' => $request->pasanganC,
+            'pasanganD' => $request->pasanganD,
             'jawabanBenar' => $request->jawabanBenar,
         ]);
 
@@ -151,6 +159,10 @@ class SoalController extends Controller
         'opsiB' => 'nullable|string',
         'opsiC' => 'nullable|string',
         'opsiD' => 'nullable|string',
+        'pasanganA' => 'nullable|string',
+        'pasanganB' => 'nullable|string',
+        'pasanganC' => 'nullable|string',
+        'pasanganD' => 'nullable|string',
         'jawabanBenar' => 'nullable|in:A,B,C,D'
     ]);
 
@@ -207,6 +219,35 @@ class SoalController extends Controller
     $soal->delete();
 
     return response()->json(['message' => 'Soal berhasil dihapus']);
+}
+
+public function getByLevel($id_level)
+{
+    // Cek apakah level ada
+    $level = Level::where('id_level', $id_level)->first();
+    
+    if (!$level) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Level tidak ditemukan'
+        ], 404);
+    }
+
+    // Ambil soal berdasarkan id_level
+    $soal = Soal::where('id_level', $id_level)->get();
+
+    if ($soal->isEmpty()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Tidak ada soal untuk level ini'
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'level' => $level->penjelasan_level,
+        'soal' => $soal
+    ], 200);
 }
 
 }

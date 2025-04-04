@@ -13,7 +13,6 @@ class KinestetikScreen extends StatefulWidget {
 }
 
 class _KinestetikScreenState extends State<KinestetikScreen> {
-  final Soal soalKinestetik = soalList.firstWhere((soal) => soal.tipeSoal == "kinestetik");
   
   late Map<String, String> choices;
   late Map<String, String?> targetSlots;
@@ -23,16 +22,16 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
   void initState() {
     super.initState();
     choices = {
-      soalKinestetik.opsiA!: soalKinestetik.pasanganA!,
-      soalKinestetik.opsiB!: soalKinestetik.pasanganB!,
-      soalKinestetik.opsiC!: soalKinestetik.pasanganC!,
-      soalKinestetik.opsiD!: soalKinestetik.pasanganD!,
+     widget.soal.opsiA ?? "Opsional A": widget.soal.pasanganA ?? "Pasangan A",
+      widget.soal.opsiB ?? "Opsional B": widget.soal.pasanganB ?? "Pasangan B",
+      widget.soal.opsiC ?? "Opsional C": widget.soal.pasanganC ?? "Pasangan C",
+      widget.soal.opsiD ?? "Opsional D": widget.soal.pasanganD ?? "Pasangan D",
     };
     targetSlots = {
-      soalKinestetik.pasanganA!: null,
-      soalKinestetik.pasanganB!: null,
-      soalKinestetik.pasanganC!: null,
-      soalKinestetik.pasanganD!: null,
+      widget.soal.pasanganA ?? "Pasangan A": null,
+      widget.soal.pasanganB ?? "Pasangan B": null,
+      widget.soal.pasanganC ?? "Pasangan C": null,
+      widget.soal.pasanganD ?? "Pasangan D": null,
     };
   }
 

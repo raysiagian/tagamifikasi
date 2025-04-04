@@ -12,91 +12,88 @@ class VisualScreen extends StatefulWidget {
 }
 
 class _VisualScreenState extends State<VisualScreen> {
+  String? selectedAnswer;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: LocalColor.transparent,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          children: [
-            // Gambar dari soal
-            Container(
-              height: 250,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: NetworkImage(widget.soal.media ?? 
-                      "assets/images/component/HiFi Dummy.png"), // Fallback jika media null
-                  fit: BoxFit.cover,
-                ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Column(
+        children: [
+          // Gambar dari soal
+          Container(
+            height: 250,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: NetworkImage(widget.soal.media ?? 
+                    "assets/images/component/HiFi Dummy.png"), // Fallback jika media null
+                fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(height: 20),
+          ),
+          const SizedBox(height: 20),
 
-            // Kotak pertanyaan
-            Container(
-              width: double.infinity,
-              height: 102,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                // border: Border.all(color: LocalColor.primary, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: LocalColor.primary,
-                        minimumSize: Size(40, 40),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.all(16),
+          // Kotak pertanyaan
+          Container(
+            width: double.infinity,
+            height: 102,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: LocalColor.primary,
+                      minimumSize: Size(40, 40),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      onPressed: () {
-                        print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
-                      },
-                      child: Image.asset(
-                        "assets/images/component/HiFi-Speaker.png",
-                        width: 40,
-                        height: 40,
-                      ),
+                      padding: EdgeInsets.all(16),
                     ),
-                    const SizedBox(width: 21),
-                    Expanded(
-                      child: Text(
-                        widget.soal.pertanyaan ?? "Pertanyaan tidak tersedia",
-                        style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
-                          color: LocalColor.primary,
-                        ),
-                        softWrap: true,
-                        overflow: TextOverflow.visible,
-                      ),
+                    onPressed: () {
+                      print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+                    },
+                    child: Image.asset(
+                      "assets/images/component/HiFi-Speaker.png",
+                      width: 40,
+                      height: 40,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 21),
+                  Expanded(
+                    child: Text(
+                      widget.soal.pertanyaan ?? "Pertanyaan tidak tersedia",
+                      style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
+                        color: LocalColor.primary,
+                      ),
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
+          ),
+          const SizedBox(height: 20),
 
-            // Opsi jawaban
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 10,
-              runSpacing: 10,
-              children: _buildAnswerButtons(context),
-            ),
-          ],
-        ),
+          // Opsi jawaban
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 10,
+            runSpacing: 10,
+            children: _buildAnswerButtons(context),
+          ),
+        ],
       ),
     );
   }
 
-  // Fungsi untuk membuat tombol jawaban dari data soal
   List<Widget> _buildAnswerButtons(BuildContext context) {
     List<String?> options = [
       widget.soal.opsiA,
@@ -106,26 +103,21 @@ class _VisualScreenState extends State<VisualScreen> {
     ];
 
     return options.where((option) => option != null).map((option) {
-      bool isCorrect = option == widget.soal.jawabanBenar;
-      return _buildAnswerButton(context, option!, isCorrect);
+      return _buildAnswerButton(context, option!);
     }).toList();
   }
 
-  Widget _buildAnswerButton(BuildContext context, String text, bool isCorrect) {
+  Widget _buildAnswerButton(BuildContext context, String text) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.4,
       child: ElevatedButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(isCorrect ? "Jawaban Benar! 🎉" : "Jawaban Salah, coba lagi! ❌"),
-              duration: Duration(seconds: 1),
-              backgroundColor: isCorrect ? Colors.green : Colors.red,
-            ),
-          );
+          setState(() {
+            selectedAnswer = text;
+          });
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
+          backgroundColor: selectedAnswer == text ? Colors.blue : Colors.white,
           foregroundColor: LocalColor.primary,
           padding: EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(

@@ -34,21 +34,51 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         return MaterialPageRoute(builder: (_) => AfterLevelScreen());
       case AppRouteConstant.statisticScreen:
         return MaterialPageRoute(builder: (_) =>StatisticScreen());
-      case AppRouteConstant.stageScreen:
-        return MaterialPageRoute(builder: (_) =>StageScreen());
+      // case AppRouteConstant.stageScreen:
+      //   return MaterialPageRoute(builder: (_) =>StageScreen());
+      // // case AppRouteConstant.levelScreen:
+      // //   return MaterialPageRoute(builder: (_) =>LevelScreen());
       // case AppRouteConstant.levelScreen:
-      //   return MaterialPageRoute(builder: (_) =>LevelScreen());
-      case AppRouteConstant.levelScreen:
-        if (settings.arguments is Level) {
-          final level = settings.arguments as Level;
-          return MaterialPageRoute(
-            builder: (_) => LevelScreen(level: level),
-          );
-        }
+      //   if (settings.arguments is Level) {
+      //     final level = settings.arguments as Level;
+      //     return MaterialPageRoute(
+      //       builder: (_) => LevelScreen(level: level),
+      //     );
+      //   }
         
       // case AppRouteConstant.kinesteticScreen:
       //   return MaterialPageRoute(builder: (_) =>KinestetikScreen());
+      case AppRouteConstant.stageScreen:
+        if (settings.arguments is int) {
+          final idMataPelajaran = settings.arguments as int;
+          return MaterialPageRoute(
+            builder: (_) => StageScreen(idMataPelajaran: idMataPelajaran),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            body:
+                Center(child: Text('Error: ID Mata Pelajaran tidak ditemukan')),
+          ),
+        );
 
+      case AppRouteConstant.levelScreen:
+        if (settings.arguments is Map<String, dynamic>) {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (_) => LevelScreen(
+              idMataPelajaran: args['idMataPelajaran'],
+              level: args['level'],
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            body: Center(
+                child: Text(
+                    'Error: Data Level atau ID Mata Pelajaran tidak ditemukan')),
+          ),
+        );
       default:
       return MaterialPageRoute(
         builder: (_) => Scaffold(

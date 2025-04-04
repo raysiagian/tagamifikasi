@@ -23,6 +23,10 @@ class Soal extends Model
         'opsiB',
         'opsiC',
         'opsiD',
+        'pasanganA',
+        'pasanganB',
+        'pasanganC',
+        'pasanganD',
         'jawabanBenar',
     ];
 
