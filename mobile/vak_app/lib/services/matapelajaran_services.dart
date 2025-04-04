@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:vak_app/constant/baseUrl.dart';
 
+import '../models/level.dart';
 import '../models/mataPelajaran.dart';
 import 'auth_services.dart';
 
@@ -32,6 +33,17 @@ class MataPelajaranService {
       }
     } catch (e) {
       throw Exception("Error: $e");
+    }
+  }
+
+ Future<List<Level>> fetchLevelsByMataPelajaran(int idMataPelajaran) async {
+    final response = await http.get(Uri.parse('$baseUrl/matapelajaran/$idMataPelajaran/levels'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Level.fromJson(json)).toList();
+    } else {
+      throw Exception("Gagal mengambil data level");
     }
   }
 }
