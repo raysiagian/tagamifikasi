@@ -7,7 +7,7 @@ import 'package:vak_app/style/regulerTextStyle.dart';
 class SubjectCardWidget extends StatelessWidget {
   final int idMataPelajaran; // Tambahkan ID Mata Pelajaran
 
-  const SubjectCardWidget({super.key, required this.idMataPelajaran});
+  const SubjectCardWidget({super.key,  required this.idMataPelajaran});
 
   @override
   Widget build(BuildContext context) {

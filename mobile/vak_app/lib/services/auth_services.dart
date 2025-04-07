@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vak_app/constant/baseUrl.dart';
 import '../models/users.dart';
 
 class AuthService {
-  final String baseUrl =
-      "http://10.0.2.2:8000/api"; // Ganti dengan URL API Anda
 
   Future<Users?> register(String name, String username, String password,
       String gender, String tanggalLahir) async {

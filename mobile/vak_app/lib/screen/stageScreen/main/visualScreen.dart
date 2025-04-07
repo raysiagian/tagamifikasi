@@ -5,14 +5,20 @@ import 'package:vak_app/style/localColor.dart';
 
 class VisualScreen extends StatefulWidget {
   final Soal soal;
-  VisualScreen({Key? key, required this.soal}) : super(key: key);
+  final void Function(String?) onAnswerSelected;
+
+  const VisualScreen({
+    Key? key,
+    required this.soal,
+    required this.onAnswerSelected,
+  }) : super(key: key);
 
   @override
   State<VisualScreen> createState() => _VisualScreenState();
 }
 
 class _VisualScreenState extends State<VisualScreen> {
-  String? selectedAnswer;
+  String? selectedOption; // 'A', 'B', 'C', 'D'
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +33,8 @@ class _VisualScreenState extends State<VisualScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: NetworkImage(widget.soal.media ?? 
-                    "assets/images/component/HiFi Dummy.png"), // Fallback jika media null
+                image: NetworkImage(widget.soal.media ??
+                    "https://via.placeholder.com/300"), // Fallback gambar
                 fit: BoxFit.cover,
               ),
             ),
@@ -50,11 +56,10 @@ class _VisualScreenState extends State<VisualScreen> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: LocalColor.primary,
-                      minimumSize: Size(40, 40),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                     ),
                     onPressed: () {
                       print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
@@ -72,8 +77,6 @@ class _VisualScreenState extends State<VisualScreen> {
                       style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
                         color: LocalColor.primary,
                       ),
-                      softWrap: true,
-                      overflow: TextOverflow.visible,
                     ),
                   ),
                 ],
@@ -87,46 +90,50 @@ class _VisualScreenState extends State<VisualScreen> {
             alignment: WrapAlignment.center,
             spacing: 10,
             runSpacing: 10,
-            children: _buildAnswerButtons(context),
+            children: _buildAnswerButtons(),
           ),
         ],
       ),
     );
   }
 
-  List<Widget> _buildAnswerButtons(BuildContext context) {
-    List<String?> options = [
-      widget.soal.opsiA,
-      widget.soal.opsiB,
-      widget.soal.opsiC,
-      widget.soal.opsiD
-    ];
+  List<Widget> _buildAnswerButtons() {
+    final Map<String, String?> options = {
+      'A': widget.soal.opsiA,
+      'B': widget.soal.opsiB,
+      'C': widget.soal.opsiC,
+      'D': widget.soal.opsiD,
+    };
 
-    return options.where((option) => option != null).map((option) {
-      return _buildAnswerButton(context, option!);
-    }).toList();
+    return options.entries
+        .where((entry) => entry.value != null)
+        .map((entry) => _buildAnswerButton(entry.key, entry.value!))
+        .toList();
   }
 
-  Widget _buildAnswerButton(BuildContext context, String text) {
+  Widget _buildAnswerButton(String label, String text) {
+    final bool isSelected = selectedOption == label;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.4,
       child: ElevatedButton(
         onPressed: () {
           setState(() {
-            selectedAnswer = text;
+            selectedOption = label;
           });
+          widget.onAnswerSelected(text); // Kirim jawaban ke parent
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: selectedAnswer == text ? Colors.blue : Colors.white,
+          backgroundColor: isSelected ? Colors.blue : Colors.white,
           foregroundColor: LocalColor.primary,
-          padding: EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
         child: Text(
           text,
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         ),
       ),
     );
