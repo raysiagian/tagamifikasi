@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/models/level.dart';
 import 'package:vak_app/models/soal.dart';
-import 'package:vak_app/screen/stageScreen/main/audioScreen.dart';
 import 'package:vak_app/screen/stageScreen/main/kinestetikScreen.dart';
 import 'package:vak_app/screen/stageScreen/main/visualScreen.dart';
+import 'package:vak_app/screen/unknownScreen/widget/noQuestionWidget.dart';
 import 'package:vak_app/services/auth_services.dart';
 import 'package:vak_app/services/jawaban_services.dart';
 import 'package:vak_app/services/soal_services.dart';
@@ -110,12 +110,17 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
       body: FutureBuilder<List<Soal>>(
         future: futureSoal,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          // if (snapshot.connectionState == ConnectionState.waiting) {
+          //   return const Center(child: CircularProgressIndicator());
+          // } else if (snapshot.hasError) {
+          //   return Center(child: Text("Error: ${snapshot.error}"));
+          // } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          //   return const Center(child: Text("Tidak ada soal untuk level ini"));
+          // }
+           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("Tidak ada soal untuk level ini"));
+            return const Center(child: NoQuestionWidget());
           }
 
           _soalList = snapshot.data!;
