@@ -18,7 +18,7 @@ class RekapSkorPengguna extends Model
         'id_mataPelajaran',
         'id_level',
         'total_visual',
-        'total_auditory',
+        'total_auditori',
         'total_kinestetik',
         'tipe_dominan'
     ];

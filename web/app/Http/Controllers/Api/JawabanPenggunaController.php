@@ -75,6 +75,7 @@ class JawabanPenggunaController extends Controller
         // Tambahkan skor jika jawaban benar dan sebelumnya belum benar
         if ($status === 'benar' && !$jawabanSudahBenar) {
             $this->updateSkor($user->id_user, $soal->id_level, $id_mataPelajaran, $soal->tipeSoal);
+            $this->updateRekap($user->id_user, $soal->id_level, $id_mataPelajaran, $soal->tipeSoal, $status);
         }
 
         // Ambil total jumlah benar berdasarkan tipe soal
@@ -84,10 +85,10 @@ class JawabanPenggunaController extends Controller
             ->where('tipeSoal', 'visual')
             ->sum('jumlah_benar');
 
-        $totalAuditory = SkorPengguna::where('id_user', $user->id_user)
+        $totalAuditori = SkorPengguna::where('id_user', $user->id_user)
             ->where('id_mataPelajaran', $id_mataPelajaran)
             ->where('id_level', $soal->id_level)
-            ->where('tipeSoal', 'auditory')
+            ->where('tipeSoal', 'auditori')
             ->sum('jumlah_benar');
 
         $totalKinestetik = SkorPengguna::where('id_user', $user->id_user)
@@ -99,7 +100,7 @@ class JawabanPenggunaController extends Controller
         // Tentukan tipe dominan
         $scores = [
             'visual' => $totalVisual,
-            'auditory' => $totalAuditory,
+            'auditori' => $totalAuditori,
             'kinestetik' => $totalKinestetik
         ];
         $tipeDominan = array_search(max($scores), $scores);
@@ -113,7 +114,7 @@ class JawabanPenggunaController extends Controller
         if ($rekap) {
             $rekap->update([
                 'total_visual' => $totalVisual,
-                'total_auditory' => $totalAuditory,
+                'total_auditori' => $totalAuditori,
                 'total_kinestetik' => $totalKinestetik,
                 'tipe_dominan' => $tipeDominan
             ]);
@@ -123,7 +124,7 @@ class JawabanPenggunaController extends Controller
                 'id_mataPelajaran' => $id_mataPelajaran,
                 'id_level' => $soal->id_level,
                 'total_visual' => $totalVisual,
-                'total_auditory' => $totalAuditory,
+                'total_auditori' => $totalAuditori,
                 'total_kinestetik' => $totalKinestetik,
                 'tipe_dominan' => $tipeDominan
             ]);
@@ -158,43 +159,41 @@ class JawabanPenggunaController extends Controller
     }
 
     private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $status)
-{
-    $rekap = RekapSkorPengguna::where('id_user', $userId)
-        ->where('id_level', $levelId)
-        ->where('id_mataPelajaran', $mataPelajaranId)
-        ->first();
+    {
+        $rekap = RekapSkorPengguna::where('id_user', $userId)
+            ->where('id_level', $levelId)
+            ->where('id_mataPelajaran', $mataPelajaranId)
+            ->first();
 
-    if (!$rekap) {
-        $rekap = RekapSkorPengguna::create([
-            'id_user' => $userId,
-            'id_mataPelajaran' => $mataPelajaranId,
-            'id_level' => $levelId,
-            'total_visual' => 0,
-            'total_auditory' => 0,
-            'total_kinestetik' => 0,
-            'tipe_dominan' => null
-        ]);
-    }
-
-    if ($status === 'benar') {
-        if ($tipeSoal === 'visual') {
-            $rekap->increment('total_visual');
-        } elseif ($tipeSoal === 'auditory') {
-            $rekap->increment('total_auditory');
-        } elseif ($tipeSoal === 'kinestetik') {
-            $rekap->increment('total_kinestetik');
+        if (!$rekap) {
+            $rekap = RekapSkorPengguna::create([
+                'id_user' => $userId,
+                'id_mataPelajaran' => $mataPelajaranId,
+                'id_level' => $levelId,
+                'total_visual' => 0,
+                'total_auditori' => 0,
+                'total_kinestetik' => 0,
+                'tipe_dominan' => null
+            ]);
         }
+
+        if ($status === 'benar') {
+            if ($tipeSoal === 'visual') {
+                $rekap->increment('total_visual');
+            } elseif ($tipeSoal === 'auditori') {
+                $rekap->increment('total_auditori');
+            } elseif ($tipeSoal === 'kinestetik') {
+                $rekap->increment('total_kinestetik');
+            }
+        }
+
+        // Hitung ulang dominan
+        $tipeDominan = collect([
+            'visual' => $rekap->total_visual,
+            'auditori' => $rekap->total_auditori,
+            'kinestetik' => $rekap->total_kinestetik
+        ])->sortDesc()->keys()->first();
+
+        $rekap->update(['tipe_dominan' => $tipeDominan]);
     }
-
-    // Hitung ulang dominan
-    $tipeDominan = collect([
-        'visual' => $rekap->total_visual,
-        'auditory' => $rekap->total_auditory,
-        'kinestetik' => $rekap->total_kinestetik
-    ])->sortDesc()->keys()->first();
-
-    $rekap->update(['tipe_dominan' => $tipeDominan]);
-}
-
-    
 }
