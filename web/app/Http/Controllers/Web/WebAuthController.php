@@ -55,25 +55,28 @@ class WebAuthController extends Controller
 }
 
 
+   
     // Logout User
-    public function logout(Request $request)
-    {
-        // Menggunakan guard 'web', ganti jika menggunakan guard lain
-        Auth::guard('web')->logout();
-    
-        // Menghapus session dan token jika diperlukan
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-    
-        return redirect()->route('login');
-    }
-    
+public function logout(Request $request)
+{
+    // Logout user menggunakan guard 'web'
+    Auth::guard('web')->logout();
+
+    // Invalidate session dan regenerasi token untuk mencegah session fixation
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    // Redirect ke halaman login dengan pesan sukses (opsional)
+    return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
+}
+
 
     public function showRegistrationForm()
     {
-        return view('super_admin.registration_admin'); // Mengarah ke form pendaftaran admin
+        return view('super_admin.registration_admin', [
+            'title' => 'Web Level',
+        ]);
     }
-
     // Fungsi untuk menangani pendaftaran admin
     public function registerAdmin(Request $request)
     {
@@ -84,7 +87,7 @@ class WebAuthController extends Controller
             'role' => 'required|in:admin', // Role hanya bisa admin
             'name' => 'required|string|max:255',
             'gender' => 'required|in:laki-laki,perempuan',
-            'tanggal_lahir' => 'required|date', // Menambahkan validasi tanggal lahir
+'tanggal_lahir' => 'required|date', // Menambahkan validasi tanggal lahir
         ]);
         
         // Hanya super admin yang dapat mendaftarkan admin

@@ -43,6 +43,10 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     Route::get('/soal/{id}', [SoalController::class, 'show']); // Menampilkan soal berdasarkan ID
     Route::put('/soal/{id}', [SoalController::class, 'update']); // Mengupdate soal
     Route::delete('/soal/{id}', [SoalController::class, 'destroy']); // Menghapus soal
+
+    //menjawab soal kinestetik
+
+    
 });
 
 
@@ -56,7 +60,7 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
 Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban'])
          ->middleware('auth:sanctum');
 
-
+         
          Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
             Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
             Route::get('/levels', [LevelController::class, 'index']);
@@ -64,5 +68,5 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban'])
              Route::get('/matapelajaran/{id_mataPelajaran}/levels', [LevelController::class, 'getLevelsByMataPelajaran']);
         });
 
-});
+}); 
  

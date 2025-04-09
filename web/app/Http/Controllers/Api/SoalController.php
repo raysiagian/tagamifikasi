@@ -24,106 +24,235 @@ class SoalController extends Controller
       ], 200);
   }
 
-  // Menampilkan soal berdasarkan matapelajaran dan level   
   public function getByMataPelajaranAndLevel($id_mataPelajaran, $id_level)
-{
-    // Ambil level berdasarkan id_mataPelajaran dan id_level
-    $level = Level::where('id_mataPelajaran', $id_mataPelajaran)
-                  ->where('id_level', $id_level)
-                  ->first();
+  {
+      $level = Level::where('id_mataPelajaran', $id_mataPelajaran)
+                    ->where('id_level', $id_level)
+                    ->first();
 
-    // Jika level tidak ditemukan, return error
-    if (!$level) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Level tidak ditemukan untuk mata pelajaran ini'
-        ], 404);
-    }
+      if (!$level) {
+          return response()->json([
+              'status' => 'error',
+              'message' => 'Level tidak ditemukan untuk mata pelajaran ini'
+          ], 404);
+      }
 
-    // Ambil soal berdasarkan level yang ditemukan
-    $soal = Soal::where('id_level', $id_level)->get();
+      $soal = Soal::where('id_level', $id_level)->get();
 
-    // Jika tidak ada soal, return error
-    if ($soal->isEmpty()) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Tidak ada soal untuk level ini'
-        ], 404);
-    }
+      if ($soal->isEmpty()) {
+          return response()->json([
+              'status' => 'error',
+              'message' => 'Tidak ada soal untuk level ini'
+          ], 404);
+      }
 
-    return response()->json([
-        'status' => 'success',
-        'mataPelajaran' => $level->mataPelajaran->nama_mataPelajaran,
-        'level' => $level->penjelasan_level,
-        'soal' => $soal
-    ], 200);
-}
-
+      return response()->json([
+          'status' => 'success',
+          'mataPelajaran' => $level->mataPelajaran->nama_mataPelajaran,
+          'level' => $level->penjelasan_level,
+          'soal' => $soal
+      ], 200);
+  }
 
   //
 
     /**
      * Menyimpan soal baru dengan media dan audio ke Cloudinary.
      */
+  
     public function store(Request $request)
+{
+    // Validasi input dasar
+    $request->validate([
+        'id_level' => 'required|exists:level,id_level',
+        'tipeSoal' => 'required|in:visual,auditori,kinestetik',
+        'pertanyaan' => 'required|string',
+        'jawabanBenar' => 'nullable|string'
+    ]);
+
+    // Fungsi reusable: jika file, upload ke Cloudinary. Jika teks, ambil langsung.
+    $uploadOrText = function ($name, $folder) use ($request) {
+        if ($request->hasFile($name)) {
+            return Cloudinary::upload($request->file($name)->getRealPath(), [
+                'folder' => $folder,
+                'resource_type' => 'auto'
+            ])->getSecurePath();
+        } else {
+            return $request->input($name); // Ambil teks jika bukan file
+        }
+    };
+
+    // Proses semua kolom yang bisa teks/file
+    $audioPertanyaan = $uploadOrText('audioPertanyaan', 'soal/audio');
+    $media           = $uploadOrText('media', 'soal/media');
+
+    $opsiA = $uploadOrText('opsiA', 'soal/opsi');
+    $opsiB = $uploadOrText('opsiB', 'soal/opsi');
+    $opsiC = $uploadOrText('opsiC', 'soal/opsi');
+    $opsiD = $uploadOrText('opsiD', 'soal/opsi');
+
+    $pasanganA = $uploadOrText('pasanganA', 'soal/pasangan');
+    $pasanganB = $uploadOrText('pasanganB', 'soal/pasangan');
+    $pasanganC = $uploadOrText('pasanganC', 'soal/pasangan');
+    $pasanganD = $uploadOrText('pasanganD', 'soal/pasangan');
+
+    // Simpan data ke database
+    $soal = Soal::create([
+        'id_level' => $request->id_level,
+        'tipeSoal' => $request->tipeSoal,
+        'pertanyaan' => $request->pertanyaan,
+        'audioPertanyaan' => $audioPertanyaan,
+        'media' => $media,
+        'opsiA' => $opsiA,
+        'opsiB' => $opsiB,
+        'opsiC' => $opsiC,
+        'opsiD' => $opsiD,
+        'pasanganA' => $pasanganA,
+        'pasanganB' => $pasanganB,
+        'pasanganC' => $pasanganC,
+        'pasanganD' => $pasanganD,
+        'jawabanBenar' => $request->jawabanBenar,
+    ]);
+
+    return response()->json([
+        'message' => 'Soal berhasil ditambahkan!',
+        'data' => $soal
+    ], 201);
+}
+
+    
+     
+
+    
+public function simpanJawaban(Request $request)
     {
-        $request->validate([
-            'id_level' => 'required|exists:level,id_level',
-            'tipeSoal' => 'required|in:visual,auditori,kinestetik',
-            'pertanyaan' => 'required|string',
-            'audioPertanyaan' => 'nullable|file', // Bisa semua jenis file
-            'media' => 'nullable|file', // Bisa semua jenis file
-            'opsiA' => 'required|string',
-            'opsiB' => 'required|string',
-            'opsiC' => 'required|string',
-            'opsiD' => 'required|string',
-            'pasanganA' => 'nullable|string',
-            'pasanganB' => 'nullable|string',
-            'pasanganC' => 'nullable|string',
-            'pasanganD' => 'nullable|string',
-            'jawabanBenar' => 'nullable|in:A,B,C,D'
-        ]);
-
-        // Upload media ke Cloudinary jika ada
-        $uploadedMedia = null;
-        if ($request->hasFile('media')) {
-            $uploadedMedia = Cloudinary::upload($request->file('media')->getRealPath(), [
-                'folder' => 'soal_media',
-                'resource_type' => 'auto' // Bisa gambar, video, PDF, dll.
-            ])->getSecurePath();
+        \Log::info('User Auth:', ['user' => Auth::user()]);
+ 
+        if (!Auth::user()) {
+            return response()->json(['message' => 'User tidak ditemukan.'], 401);
         }
-
-        // Upload audio ke Cloudinary jika ada
-        $uploadedAudio = null;
-        if ($request->hasFile('audioPertanyaan')) {
-            $uploadedAudio = Cloudinary::upload($request->file('audioPertanyaan')->getRealPath(), [
-                'folder' => 'soal_audio',
-                'resource_type' => 'auto' // Bisa semua tipe audio
-            ])->getSecurePath();
+ 
+        $user = Auth::user();
+        $soal = Soal::find($request->id_soal);
+ 
+        if (!$soal) {
+            return response()->json(['message' => 'Soal tidak ditemukan.'], 404);
         }
-
-        // Simpan ke database
-        $soal = Soal::create([
-            'id_level' => $request->id_level,
-            'tipeSoal' => $request->tipeSoal,
-            'pertanyaan' => $request->pertanyaan,
-            'audioPertanyaan' => $uploadedAudio,
-            'media' => $uploadedMedia,
-            'opsiA' => $request->opsiA,
-            'opsiB' => $request->opsiB,
-            'opsiC' => $request->opsiC,
-            'opsiD' => $request->opsiD,
-            'pasanganA' => $request->pasanganA,
-            'pasanganB' => $request->pasanganB,
-            'pasanganC' => $request->pasanganC,
-            'pasanganD' => $request->pasanganD,
-            'jawabanBenar' => $request->jawabanBenar,
-        ]);
-
+ 
+        if (!$soal->level || !$soal->level->mataPelajaran) {
+            return response()->json(['message' => 'Mata Pelajaran tidak ditemukan dalam soal.'], 404);
+        }
+ 
+        $id_mataPelajaran = $soal->level->id_mataPelajaran;
+ 
+        // Cek apakah user sudah menjawab soal ini sebelumnya
+        $jawaban = JawabanPengguna::where('id_user', $user->id_user)
+            ->where('id_soal', $soal->id_soal)
+            ->first();
+ 
+        // Tentukan status jawaban
+        $status = 'salah'; // default
+ 
+        if ($soal->tipeSoal === 'kinestetik') {
+            $jawabanSiswa = $request->jawaban_siswa;
+ 
+            if (
+                isset($jawabanSiswa['opsiA'], $jawabanSiswa['opsiB'], $jawabanSiswa['opsiC'], $jawabanSiswa['opsiD']) &&
+                $jawabanSiswa['opsiA'] === $soal->pasanganA &&
+                $jawabanSiswa['opsiB'] === $soal->pasanganB &&
+                $jawabanSiswa['opsiC'] === $soal->pasanganC &&
+                $jawabanSiswa['opsiD'] === $soal->pasanganD
+            ) {
+                $status = 'benar';
+            }
+        } else {
+            $status = ($request->jawaban_siswa === $soal->jawabanBenar) ? 'benar' : 'salah';
+        }
+ 
+        if ($jawaban) {
+            $jawaban->update([
+                'jawaban_siswa' => json_encode($request->jawaban_siswa),
+                'status' => $status
+            ]);
+        } else {
+            $jawaban = JawabanPengguna::create([
+                'id_user' => $user->id_user,
+                'id_soal' => $soal->id_soal,
+                'jawaban_siswa' => json_encode($request->jawaban_siswa),
+                'status' => $status
+            ]);
+ 
+            // Jika benar, update skor
+            if ($status === 'benar') {
+                $skor = SkorPengguna::where('id_user', $user->id_user)
+                    ->where('id_mataPelajaran', $id_mataPelajaran)
+                    ->where('id_level', $soal->id_level)
+                    ->where('tipeSoal', $soal->tipeSoal)
+                    ->first();
+ 
+                if ($skor) {
+                    $skor->jumlah_benar += 1;
+                    $skor->save();
+                } else {
+                    SkorPengguna::create([
+                        'id_user' => $user->id_user,
+                        'id_mataPelajaran' => $id_mataPelajaran,
+                        'id_level' => $soal->id_level,
+                        'tipeSoal' => $soal->tipeSoal,
+                        'jumlah_benar' => 1,
+                        'created_at' => now()
+                    ]);
+                }
+            }
+        }
+ 
+        // Hitung total skor semua tipe
+        $totalVisual = SkorPengguna::where('id_user', $user->id_user)
+            ->where('id_mataPelajaran', $id_mataPelajaran)
+            ->where('id_level', $soal->id_level)
+            ->where('tipeSoal', 'visual')
+            ->sum('jumlah_benar');
+ 
+        $totalAuditory = SkorPengguna::where('id_user', $user->id_user)
+            ->where('id_mataPelajaran', $id_mataPelajaran)
+            ->where('id_level', $soal->id_level)
+            ->where('tipeSoal', 'auditory')
+            ->sum('jumlah_benar');
+ 
+        $totalKinestetik = SkorPengguna::where('id_user', $user->id_user)
+            ->where('id_mataPelajaran', $id_mataPelajaran)
+            ->where('id_level', $soal->id_level)
+            ->where('tipeSoal', 'kinestetik')
+            ->sum('jumlah_benar');
+ 
+        $scores = [
+            'visual' => $totalVisual,
+            'auditory' => $totalAuditory,
+            'kinestetik' => $totalKinestetik
+        ];
+ 
+        $tipeDominan = array_search(max($scores), $scores);
+ 
+        // Update atau buat rekap skor
+        $rekap = RekapSkorPengguna::updateOrCreate(
+            [
+                'id_user' => $user->id_user,
+                'id_mataPelajaran' => $id_mataPelajaran,
+                'id_level' => $soal->id_level
+            ],
+            [
+                'total_visual' => $totalVisual,
+                'total_auditory' => $totalAuditory,
+                'total_kinestetik' => $totalKinestetik,
+                'tipe_dominan' => $tipeDominan
+            ]
+        );
+ 
         return response()->json([
-            'message' => 'Soal berhasil ditambahkan!',
-            'data' => $soal
-        ], 201);
+            'message' => 'Jawaban disimpan dan rekap skor diperbarui',
+            'jawaban' => $jawaban,
+            'rekap' => $rekap
+        ], 200);
     }
 
     /**
@@ -142,112 +271,101 @@ class SoalController extends Controller
      * Mengupdate soal.
      */
     public function update(Request $request, $id)
-{
-    $soal = Soal::where('id_soal', $id)->first();
-    if (!$soal) {
-        return response()->json(['message' => 'Soal tidak ditemukan'], 404);
+    {
+        $soal = Soal::find($id);
+        if (!$soal) {
+            return response()->json(['message' => 'Soal tidak ditemukan'], 404);
+        }
+
+        $request->validate([
+            'id_level' => 'nullable|exists:level,id_level',
+            'tipeSoal' => 'nullable|in:visual,auditori,kinestetik',
+            'pertanyaan' => 'nullable|string',
+            'audioPertanyaan' => 'nullable|file',
+            'media' => 'nullable|file',
+            'opsiA' => 'nullable',
+            'opsiB' => 'nullable',
+            'opsiC' => 'nullable',
+            'opsiD' => 'nullable',
+            'pasanganA' => 'nullable',
+            'pasanganB' => 'nullable',
+            'pasanganC' => 'nullable',
+            'pasanganD' => 'nullable',
+            'jawabanBenar' => 'nullable|in:A,B,C,D'
+        ]);
+
+        $uploadIfFile = function ($inputName) use ($request) {
+            if ($request->hasFile($inputName)) {
+                return Cloudinary::upload($request->file($inputName)->getRealPath(), [
+                    'folder' => 'soal_media',
+                    'resource_type' => 'auto'
+                ])->getSecurePath();
+            }
+            return $request->input($inputName);
+        };
+
+        $soal->update([
+            'id_level' => $request->input('id_level', $soal->id_level),
+            'tipeSoal' => $request->input('tipeSoal', $soal->tipeSoal),
+            'pertanyaan' => $request->input('pertanyaan', $soal->pertanyaan),
+            'audioPertanyaan' => $uploadIfFile('audioPertanyaan') ?? $soal->audioPertanyaan,
+            'media' => $uploadIfFile('media') ?? $soal->media,
+            'opsiA' => $uploadIfFile('opsiA') ?? $soal->opsiA,
+            'opsiB' => $uploadIfFile('opsiB') ?? $soal->opsiB,
+            'opsiC' => $uploadIfFile('opsiC') ?? $soal->opsiC,
+            'opsiD' => $uploadIfFile('opsiD') ?? $soal->opsiD,
+            'pasanganA' => $uploadIfFile('pasanganA') ?? $soal->pasanganA,
+            'pasanganB' => $uploadIfFile('pasanganB') ?? $soal->pasanganB,
+            'pasanganC' => $uploadIfFile('pasanganC') ?? $soal->pasanganC,
+            'pasanganD' => $uploadIfFile('pasanganD') ?? $soal->pasanganD,
+            'jawabanBenar' => $request->input('jawabanBenar', $soal->jawabanBenar),
+        ]);
+
+        return response()->json([
+            'message' => 'Soal berhasil diperbarui!',
+            'data' => $soal
+        ]);
     }
 
-    // Validasi data yang dikirim
-    $request->validate([
-        'id_level' => 'nullable|exists:level,id_level',
-        'tipeSoal' => 'nullable|in:visual,auditori,kinestetik',
-        'pertanyaan' => 'nullable|string',
-        'audioPertanyaan' => 'nullable|file',
-        'media' => 'nullable|file',
-        'opsiA' => 'nullable|string',
-        'opsiB' => 'nullable|string',
-        'opsiC' => 'nullable|string',
-        'opsiD' => 'nullable|string',
-        'pasanganA' => 'nullable|string',
-        'pasanganB' => 'nullable|string',
-        'pasanganC' => 'nullable|string',
-        'pasanganD' => 'nullable|string',
-        'jawabanBenar' => 'nullable|in:A,B,C,D'
-    ]);
-
-    // Update media jika ada file baru diunggah
-    if ($request->hasFile('media')) {
-        $uploadedMedia = Cloudinary::upload($request->file('media')->getRealPath(), [
-            'folder' => 'soal_media',
-            'resource_type' => 'auto'
-        ])->getSecurePath();
-        $soal->media = $uploadedMedia;
-    }
-
-    // Update audio jika ada file baru diunggah
-    if ($request->hasFile('audioPertanyaan')) {
-        $uploadedAudio = Cloudinary::upload($request->file('audioPertanyaan')->getRealPath(), [
-            'folder' => 'soal_audio',
-            'resource_type' => 'auto'
-        ])->getSecurePath();
-        $soal->audioPertanyaan = $uploadedAudio;
-    }
-
-    // Update data selain file
-    $soal->fill($request->except(['media', 'audioPertanyaan'])); // Kecuali file
-
-    $soal->save(); // Simpan perubahan ke database
-
-    return response()->json([
-        'message' => 'Soal berhasil diperbarui!',
-        'data' => $soal
-    ]);
-}
-
-
-    
-    /**
-     * Menghapus soal.
-     */
     public function destroy($id)
-{
-    $soal = Soal::find($id);
-    if (!$soal) {
-        return response()->json(['message' => 'Soal tidak ditemukan'], 404);
+    {
+        $soal = Soal::find($id);
+        if (!$soal) {
+            return response()->json(['message' => 'Soal tidak ditemukan'], 404);
+        }
+
+        // Optional: Ambil public_id dari URL jika kamu ingin destroy dari Cloudinary
+        // Cloudinary::destroy('public_id'); <-- opsional, kalau kamu simpan public_id
+
+        $soal->delete();
+
+        return response()->json(['message' => 'Soal berhasil dihapus']);
     }
 
-    // Hapus media dari Cloudinary jika ada
-    if ($soal->media) {
-        Cloudinary::destroy($soal->media);
-    }
-    if ($soal->audioPertanyaan) {
-        Cloudinary::destroy($soal->audioPertanyaan);
-    }
+    public function getByLevel($id_level)
+    {
+        $level = Level::find($id_level);
 
-    // Hapus data dari database
-    $soal->delete();
+        if (!$level) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Level tidak ditemukan'
+            ], 404);
+        }
 
-    return response()->json(['message' => 'Soal berhasil dihapus']);
-}
+        $soal = Soal::where('id_level', $id_level)->get();
 
-public function getByLevel($id_level)
-{
-    // Cek apakah level ada
-    $level = Level::where('id_level', $id_level)->first();
-    
-    if (!$level) {
+        if ($soal->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tidak ada soal untuk level ini'
+            ], 404);
+        }
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Level tidak ditemukan'
-        ], 404);
+            'status' => 'success',
+            'level' => $level->penjelasan_level,
+            'soal' => $soal
+        ], 200);
     }
-
-    // Ambil soal berdasarkan id_level
-    $soal = Soal::where('id_level', $id_level)->get();
-
-    if ($soal->isEmpty()) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Tidak ada soal untuk level ini'
-        ], 404);
-    }
-
-    return response()->json([
-        'status' => 'success',
-        'level' => $level->penjelasan_level,
-        'soal' => $soal
-    ], 200);
-}
-
 }

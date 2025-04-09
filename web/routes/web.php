@@ -29,6 +29,9 @@ Route::get('/admin/levels', [WebLevelController::class, 'index'])->name('admin.l
     // Menambahkan level baru
     Route::post('/admin/levels', [WebLevelController::class, 'store'])->name('admin.levels.store');
 
+    Route::get('/admin/levels/filter/{id_mataPelajaran}', [WebLevelController::class, 'filter'])->name('admin.levels.filter');
+
+
     // Mengupdate level
     Route::put('/admin/levels/{id}', [WebLevelController::class, 'update'])->name('admin.levels.update');
 
@@ -57,6 +60,8 @@ Route::get('/admin/levels', [WebLevelController::class, 'index'])->name('admin.l
 
 
     Route::get('/matapelajaran/{id}/levels', [WebSoalController::class, 'showLevels'])->name('admin.matapelajaran.show_levels');
+    Route::put('/admin/matapelajaran/{id}', [WebMataPelajaranController::class, 'update'])->name('admin.matapelajaran.update');
+
     Route::get('/level/{id}/soal', [WebSoalController::class, 'showSoal'])->name('admin.level.show_soal');
 
     // Route::get('/soal/create/{id_level}', [WebSoalController::class, 'create'])->name('soal.create');
@@ -76,6 +81,10 @@ Route::get('/admin/hasilpembelajaran', [WebHasilPembelajaranController::class, '
 
 Route::get('/admin/hasilpembelajaran/{id}', [WebHasilPembelajaranController::class, 'show'])->name('admin.hasilpembelajaran.show');
 Route::get('/admin/hasilpembelajaran/{id}', [WebHasilPembelajaranController::class, 'show'])->name('admin.hasilpembelajaran.show');
+
+//logout
+
+Route::post('/logout', [WebAuthController::class, 'logout'])->name('logout');
 
 
 });
