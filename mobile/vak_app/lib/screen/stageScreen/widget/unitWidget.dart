@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/models/level.dart';
 import 'package:vak_app/screen/stageScreen/main/levelScreen.dart';
+import 'package:vak_app/screen/unknownScreen/widget/noLevelWidget.dart';
 
 import '../../../services/level_services.dart'; // Import LevelService
 
@@ -34,15 +35,25 @@ class _UnitWidgetState extends State<UnitWidget> {
     return FutureBuilder<List<Level>>(
       future: futureLevels,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        // if (snapshot.connectionState == ConnectionState.waiting) {
+        //   return const Center(
+        //       child: CircularProgressIndicator()); // Tampilkan loading
+        // } else if (snapshot.hasError) {
+        //   return Center(
+        //       child: Text("Error: ${snapshot.error}")); // Tampilkan error
+        // } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        //   return const Center(
+        //       child: Text("Tidak ada level tersedia")); // Jika data kosong
+        // }
+         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
               child: CircularProgressIndicator()); // Tampilkan loading
-        } else if (snapshot.hasError) {
-          return Center(
-              child: Text("Error: ${snapshot.error}")); // Tampilkan error
+        // } else if (snapshot.hasError) {
+        //   return Center(
+        //       child: Text("Error: ${snapshot.error}")); // Tampilkan error
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(
-              child: Text("Tidak ada level tersedia")); // Jika data kosong
+              child: NoLevelWidget()); // Jika data kosong
         }
 
         List<Level> levels = snapshot.data!; // Ambil data dari API
