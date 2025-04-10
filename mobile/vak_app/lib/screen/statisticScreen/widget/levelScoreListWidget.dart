@@ -25,35 +25,38 @@ class _LevelScoreListState extends State<LevelScoreList> {
             Container(
               decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: LocalColor.primary),
+                  bottom: BorderSide(color: LocalColor.primary, width: 2),
                 ),
               ),
-              child: Row(
-                children: [
-                  Text("Nama Level"),
-                  const SizedBox(width: 40),
-                  Container(
-                    child: Row(
-                      children: [
-                        Icon(
-                          CupertinoIcons.star,
-                          color: Colors.amber,
-                          size: 30.0,
-                        ),
-                         Icon(
-                          CupertinoIcons.star,
-                          color: Colors.amber,
-                          size: 30.0,
-                        ),
-                         Icon(
-                          CupertinoIcons.star,
-                          color: Colors.amber,
-                          size: 30.0,
-                        )
-                      ],
-                    ),
-                  )
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Text("Nama Level"),
+                    const SizedBox(width: 40),
+                    Container(
+                      child: Row(
+                        children: [
+                          Icon(
+                            CupertinoIcons.star,
+                            color: Colors.amber,
+                            size: 30.0,
+                          ),
+                           Icon(
+                            CupertinoIcons.star,
+                            color: Colors.amber,
+                            size: 30.0,
+                          ),
+                           Icon(
+                            CupertinoIcons.star,
+                            color: Colors.amber,
+                            size: 30.0,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             )
           ],

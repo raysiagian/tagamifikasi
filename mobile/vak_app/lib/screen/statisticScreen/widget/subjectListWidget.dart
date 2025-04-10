@@ -62,29 +62,32 @@ class _SubjectListState extends State<SubjectList> {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(color: LocalColor.primary),
+                          bottom: BorderSide(color: LocalColor.primary, width: 2),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(mataPelajaran.iconPath),
-                                fit: BoxFit.cover,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(mataPelajaran.iconPath),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 20),
-                          Text(
-                            mataPelajaran.nama,
-                            style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
-                              color: LocalColor.primary,
+                            const SizedBox(width: 20),
+                            Text(
+                              mataPelajaran.nama,
+                              style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
+                                color: LocalColor.primary,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
