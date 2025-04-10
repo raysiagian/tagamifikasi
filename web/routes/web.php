@@ -21,6 +21,8 @@ Route::post('/register', [WebAuthController::class, 'register']);
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
     Route::get('/home', [WebAuthController::class, 'home'])->name('home'); // Halaman setelah login
 // Route untuk logout
+
+
 Route::post('/logout', [WebAuthController::class, 'logout'])->name('logout');
 
 // Menampilkan halaman manajemen level

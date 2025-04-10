@@ -18,7 +18,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/', [AuthController::class, 'x']);
+
+
 });
+
+Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'me']);
+
 
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
   

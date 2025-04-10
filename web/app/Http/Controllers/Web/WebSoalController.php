@@ -22,61 +22,61 @@ class WebSoalController extends Controller
         ]);
     }
     
-    public function store(Request $request)
+
+
+public function store(Request $request)
 {
-    $request->validate([
-        'id_level' => 'required|exists:level,id_level',
-        'tipeSoal' => 'required|in:visual,auditori,kinestetik',
-        'pertanyaan' => 'required|string',
-        'audioPertanyaan' => 'nullable|file',
-        'media' => 'nullable|file',
-        'opsiA' => 'required|string',
-        'opsiB' => 'required|string',
-        'opsiC' => 'required|string',
-        'opsiD' => 'required|string',
-        'jawabanBenar' => 'required|in:A,B,C,D'
+    $data = $request->all();
+
+    // Upload media jika ada
+    if ($request->hasFile('media')) {
+        $data['media'] = $request->file('media')->store('media', 'public');
+    }
+
+    if ($request->hasFile('audioPertanyaan')) {
+        $data['audioPertanyaan'] = $request->file('audioPertanyaan')->store('audio', 'public');
+    }
+
+    // Handle opsi dan pasangan A–D
+    foreach (['A', 'B', 'C', 'D'] as $opt) {
+        // Opsi
+        if ($request->hasFile("opsi$opt")) {
+            $data["opsi$opt"] = $request->file("opsi$opt")->store("opsi", "public");
+        }
+
+        // Pasangan (jika kinestetik)
+        if ($request->tipeSoal === 'kinestetik' && $request->hasFile("pasangan$opt")) {
+            $data["pasangan$opt"] = $request->file("pasangan$opt")->store("pasangan", "public");
+        }
+    }
+
+    // Jawaban
+    $data['jawabanBenar'] = $request->tipeSoal === 'kinestetik'
+        ? json_encode(array_filter($request->jawaban_pair)) // simpan pasangan
+        : $request->jawabanBenar;
+
+    // Simpan ke DB
+    Soal::create([
+        'id_level' => $data['id_level'],
+        'pertanyaan' => $data['pertanyaan'],
+        'tipeSoal' => $data['tipeSoal'],
+        'opsiA' => $data['opsiA'] ?? null,
+        'opsiB' => $data['opsiB'] ?? null,
+        'opsiC' => $data['opsiC'] ?? null,
+        'opsiD' => $data['opsiD'] ?? null,
+        'pasanganA' => $data['pasanganA'] ?? null,
+        'pasanganB' => $data['pasanganB'] ?? null,
+        'pasanganC' => $data['pasanganC'] ?? null,
+        'pasanganD' => $data['pasanganD'] ?? null,
+        'jawabanBenar' => $data['jawabanBenar'],
+        'media' => $data['media'] ?? null,
+        'audioPertanyaan' => $data['audioPertanyaan'] ?? null,
     ]);
 
-    try {
-        // Upload media ke Cloudinary jika ada
-        $uploadedMedia = null;
-        if ($request->hasFile('media')) {
-            $uploadedMedia = Cloudinary::upload($request->file('media')->getRealPath(), [
-                'folder' => 'soal_media',
-                'resource_type' => 'auto'
-            ])->getSecurePath();
-        }
-
-        // Upload audio ke Cloudinary jika ada
-        $uploadedAudio = null;
-        if ($request->hasFile('audioPertanyaan')) {
-            $uploadedAudio = Cloudinary::upload($request->file('audioPertanyaan')->getRealPath(), [
-                'folder' => 'soal_audio',
-                'resource_type' => 'auto'
-            ])->getSecurePath();
-        }
-
-        // Simpan ke database
-        Soal::create([
-            'id_level' => $request->id_level,
-            'tipeSoal' => $request->tipeSoal,
-            'pertanyaan' => $request->pertanyaan,
-            'audioPertanyaan' => $uploadedAudio,
-            'media' => $uploadedMedia,
-            'opsiA' => $request->opsiA,
-            'opsiB' => $request->opsiB,
-            'opsiC' => $request->opsiC,
-            'opsiD' => $request->opsiD,
-            'jawabanBenar' => $request->jawabanBenar,
-        ]);
-
-        // Redirect ke halaman daftar soal berdasarkan level
-        return redirect()->route('admin.level.show_soal', ['id' => $request->id_level])
-            ->with('success', 'Soal berhasil ditambahkan!');
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Gagal menambahkan soal: ' . $e->getMessage());
-    }
+    return redirect()->route('soal.list', ['id' => $data['id_level']])
+        ->with('success', 'Soal berhasil disimpan!');
 }
+
 
 
     public function update(Request $request, $id)
@@ -132,7 +132,9 @@ class WebSoalController extends Controller
 public function showSoal($id)
 {
     $level = Level::findOrFail($id);
-    $soals = Soal::where('id_level', $id)->get(); // Ambil semua soal tanpa pagination
+
+    // Ambil soal berdasarkan id_level, 5 soal per halaman
+    $soals = Soal::where('id_level', $id)->paginate(5);
 
     return view('admin.soal.list_soal', [
         'title' => 'Soal - Level ' . $level->id_level,
@@ -140,6 +142,7 @@ public function showSoal($id)
         'soals' => $soals
     ]);
 }
+
 
 
 public function create($id_level)
