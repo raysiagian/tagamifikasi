@@ -33,23 +33,44 @@ class Soal {
     this.jawabanBenar,
   });
 
+  // factory Soal.fromJson(Map<String, dynamic> json) {
+  //   return Soal(
+  //     id_soal: json['id_soal'], // Ubah ke format sesuai JSON
+  //     id_level: json['id_level'],
+  //     tipeSoal: json['tipeSoal'],
+  //     media: json['media'],
+  //     pertanyaan: json['pertanyaan'],
+  //     audioPertanyaan: json['audioPertanyaan'],
+  //     opsiA: json['opsiA'],
+  //     opsiB: json['opsiB'],
+  //     opsiC: json['opsiC'],
+  //     opsiD: json['opsiD'],
+  //     pasanganA: json['pasanganA'],
+  //     pasanganB: json['pasanganB'],
+  //     pasanganC: json['pasanganC'],
+  //     pasanganD: json['pasanganD'],
+  //     jawabanBenar: json['jawabanBenar'],
+  //   );
+  // }
+
   factory Soal.fromJson(Map<String, dynamic> json) {
-    return Soal(
-      id_soal: json['id_soal'], // Ubah ke format sesuai JSON
-      id_level: json['id_level'],
-      tipeSoal: json['tipeSoal'],
-      media: json['media'],
-      pertanyaan: json['pertanyaan'],
-      audioPertanyaan: json['audioPertanyaan'],
-      opsiA: json['opsiA'],
-      opsiB: json['opsiB'],
-      opsiC: json['opsiC'],
-      opsiD: json['opsiD'],
-      pasanganA: json['pasanganA'],
-      pasanganB: json['pasanganB'],
-      pasanganC: json['pasanganC'],
-      pasanganD: json['pasanganD'],
-      jawabanBenar: json['jawabanBenar'],
-    );
-  }
+  return Soal(
+    id_soal: json['id_soal'],
+    id_level: json['id_level'],
+    tipeSoal: json['tipeSoal'],
+    media: json['media'],
+    pertanyaan: json['pertanyaan'],
+    audioPertanyaan: json['audioPertanyaan'],
+    opsiA: json['opsiA'] ?? "Opsi A",
+    opsiB: json['opsiB'] ?? "Opsi B",
+    opsiC: json['opsiC'] ?? "Opsi C",
+    opsiD: json['opsiD'] ?? "Opsi D",
+    pasanganA: json['pasanganA'] ?? "Pasangan A",
+    pasanganB: json['pasanganB'] ?? "Pasangan B",
+    pasanganC: json['pasanganC'] ?? "Pasangan C",
+    pasanganD: json['pasanganD'] ?? "Pasangan D",
+    jawabanBenar: json['jawabanBenar'],
+  );
+}
+
 }
