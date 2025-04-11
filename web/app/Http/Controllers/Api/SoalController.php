@@ -65,7 +65,7 @@ class SoalController extends Controller
     // Validasi input dasar
     $request->validate([
         'id_level' => 'required|exists:level,id_level',
-        'tipeSoal' => 'required|in:visual,auditori,kinestetik',
+        'tipeSoal' => 'required|in:visual1,visual2,auditori1,auditori2,kinestetik1,kinestetik2',
         'pertanyaan' => 'required|string',
         'jawabanBenar' => 'nullable|string'
     ]);
@@ -281,8 +281,8 @@ public function simpanJawaban(Request $request)
             'id_level' => 'nullable|exists:level,id_level',
             'tipeSoal' => 'nullable|in:visual,auditori,kinestetik',
             'pertanyaan' => 'nullable|string',
-            'audioPertanyaan' => 'nullable|file',
-            'media' => 'nullable|file',
+            'audioPertanyaan' => 'nullable',
+            'media' => 'nullable',
             'opsiA' => 'nullable',
             'opsiB' => 'nullable',
             'opsiC' => 'nullable',
@@ -291,41 +291,45 @@ public function simpanJawaban(Request $request)
             'pasanganB' => 'nullable',
             'pasanganC' => 'nullable',
             'pasanganD' => 'nullable',
-            'jawabanBenar' => 'nullable|in:A,B,C,D'
+            'jawabanBenar' => 'nullable|string'
         ]);
 
-        $uploadIfFile = function ($inputName) use ($request) {
+        $uploadOrText = function ($inputName, $folder, $default) use ($request) {
             if ($request->hasFile($inputName)) {
                 return Cloudinary::upload($request->file($inputName)->getRealPath(), [
-                    'folder' => 'soal_media',
+                    'folder' => $folder,
                     'resource_type' => 'auto'
                 ])->getSecurePath();
+            } elseif ($request->filled($inputName)) {
+                return $request->input($inputName);
+            } else {
+                return $default;
             }
-            return $request->input($inputName);
         };
 
         $soal->update([
-            'id_level' => $request->input('id_level', $soal->id_level),
-            'tipeSoal' => $request->input('tipeSoal', $soal->tipeSoal),
-            'pertanyaan' => $request->input('pertanyaan', $soal->pertanyaan),
-            'audioPertanyaan' => $uploadIfFile('audioPertanyaan') ?? $soal->audioPertanyaan,
-            'media' => $uploadIfFile('media') ?? $soal->media,
-            'opsiA' => $uploadIfFile('opsiA') ?? $soal->opsiA,
-            'opsiB' => $uploadIfFile('opsiB') ?? $soal->opsiB,
-            'opsiC' => $uploadIfFile('opsiC') ?? $soal->opsiC,
-            'opsiD' => $uploadIfFile('opsiD') ?? $soal->opsiD,
-            'pasanganA' => $uploadIfFile('pasanganA') ?? $soal->pasanganA,
-            'pasanganB' => $uploadIfFile('pasanganB') ?? $soal->pasanganB,
-            'pasanganC' => $uploadIfFile('pasanganC') ?? $soal->pasanganC,
-            'pasanganD' => $uploadIfFile('pasanganD') ?? $soal->pasanganD,
-            'jawabanBenar' => $request->input('jawabanBenar', $soal->jawabanBenar),
+            'id_level'       => $request->input('id_level', $soal->id_level),
+            'tipeSoal'       => $request->input('tipeSoal', $soal->tipeSoal),
+            'pertanyaan'     => $request->input('pertanyaan', $soal->pertanyaan),
+            'audioPertanyaan'=> $uploadOrText('audioPertanyaan', 'soal/audio', $soal->audioPertanyaan),
+            'media'          => $uploadOrText('media', 'soal/media', $soal->media),
+            'opsiA'          => $uploadOrText('opsiA', 'soal/opsi', $soal->opsiA),
+            'opsiB'          => $uploadOrText('opsiB', 'soal/opsi', $soal->opsiB),
+            'opsiC'          => $uploadOrText('opsiC', 'soal/opsi', $soal->opsiC),
+            'opsiD'          => $uploadOrText('opsiD', 'soal/opsi', $soal->opsiD),
+            'pasanganA'      => $uploadOrText('pasanganA', 'soal/pasangan', $soal->pasanganA),
+            'pasanganB'      => $uploadOrText('pasanganB', 'soal/pasangan', $soal->pasanganB),
+            'pasanganC'      => $uploadOrText('pasanganC', 'soal/pasangan', $soal->pasanganC),
+            'pasanganD'      => $uploadOrText('pasanganD', 'soal/pasangan', $soal->pasanganD),
+            'jawabanBenar'   => $request->input('jawabanBenar', $soal->jawabanBenar)
         ]);
 
         return response()->json([
-            'message' => 'Soal berhasil diperbarui!',
+            'message' => 'Soal berhasil diperbarui',
             'data' => $soal
-        ]);
+        ], 200);
     }
+
 
     public function destroy($id)
     {

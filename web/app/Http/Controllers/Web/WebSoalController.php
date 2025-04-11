@@ -8,7 +8,11 @@ use App\Models\Level;
 use App\Models\MataPelajaran;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
+
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+ 
+
 class WebSoalController extends Controller
 {
     public function index()
@@ -23,59 +27,58 @@ class WebSoalController extends Controller
     }
     
 
-
-public function store(Request $request)
-{
-    $data = $request->all();
-
-    // Upload media jika ada
-    if ($request->hasFile('media')) {
-        $data['media'] = $request->file('media')->store('media', 'public');
-    }
-
-    if ($request->hasFile('audioPertanyaan')) {
-        $data['audioPertanyaan'] = $request->file('audioPertanyaan')->store('audio', 'public');
-    }
-
-    // Handle opsi dan pasangan A–D
-    foreach (['A', 'B', 'C', 'D'] as $opt) {
-        // Opsi
-        if ($request->hasFile("opsi$opt")) {
-            $data["opsi$opt"] = $request->file("opsi$opt")->store("opsi", "public");
+ 
+    public function store(Request $request)
+    {
+        // Validasi input dasar
+        $request->validate([
+            'id_level' => 'required|exists:level,id_level',
+            'tipeSoal' => 'required|in:visual1,visual2,auditori1,auditori2,kinestetik1,kinestetik2',
+            'pertanyaan' => 'required|string',
+        ]);
+    
+        // Fungsi reusable: upload file ke Cloudinary atau ambil teks
+        $uploadOrText = function ($name, $folder) use ($request) {
+            if ($request->hasFile($name)) {
+                return Cloudinary::upload(
+                    $request->file($name)->getRealPath(),
+                    ['folder' => $folder, 'resource_type' => 'auto']
+                )->getSecurePath();
+            }
+            return $request->input($name); // teks biasa
+        };
+    
+        // Proses semua kolom yang bisa berupa teks/file
+        $data = [
+            'id_level' => $request->id_level,
+            'tipeSoal' => $request->tipeSoal,
+            'pertanyaan' => $request->pertanyaan,
+            'audioPertanyaan' => $uploadOrText('audioPertanyaan', 'soal/audio'),
+            'media' => $uploadOrText('media', 'soal/media'),
+            'opsiA' => $uploadOrText('opsiA', 'soal/opsi'),
+            'opsiB' => $uploadOrText('opsiB', 'soal/opsi'),
+            'opsiC' => $uploadOrText('opsiC', 'soal/opsi'),
+            'opsiD' => $uploadOrText('opsiD', 'soal/opsi'),
+        ];
+    
+        // Hanya untuk tipe kinestetik → pasanganA–D & jawaban pair
+        if (str_contains($request->tipeSoal, 'kinestetik')) {
+            $data['pasanganA'] = $uploadOrText('pasanganA', 'soal/pasangan');
+            $data['pasanganB'] = $uploadOrText('pasanganB', 'soal/pasangan');
+            $data['pasanganC'] = $uploadOrText('pasanganC', 'soal/pasangan');
+            $data['pasanganD'] = $uploadOrText('pasanganD', 'soal/pasangan');
+    
+            $data['jawabanBenar'] = json_encode(array_filter($request->jawaban_pair));
+        } else {
+            $data['jawabanBenar'] = $request->jawabanBenar;
         }
-
-        // Pasangan (jika kinestetik)
-        if ($request->tipeSoal === 'kinestetik' && $request->hasFile("pasangan$opt")) {
-            $data["pasangan$opt"] = $request->file("pasangan$opt")->store("pasangan", "public");
-        }
-    }
-
-    // Jawaban
-    $data['jawabanBenar'] = $request->tipeSoal === 'kinestetik'
-        ? json_encode(array_filter($request->jawaban_pair)) // simpan pasangan
-        : $request->jawabanBenar;
-
-    // Simpan ke DB
-    Soal::create([
-        'id_level' => $data['id_level'],
-        'pertanyaan' => $data['pertanyaan'],
-        'tipeSoal' => $data['tipeSoal'],
-        'opsiA' => $data['opsiA'] ?? null,
-        'opsiB' => $data['opsiB'] ?? null,
-        'opsiC' => $data['opsiC'] ?? null,
-        'opsiD' => $data['opsiD'] ?? null,
-        'pasanganA' => $data['pasanganA'] ?? null,
-        'pasanganB' => $data['pasanganB'] ?? null,
-        'pasanganC' => $data['pasanganC'] ?? null,
-        'pasanganD' => $data['pasanganD'] ?? null,
-        'jawabanBenar' => $data['jawabanBenar'],
-        'media' => $data['media'] ?? null,
-        'audioPertanyaan' => $data['audioPertanyaan'] ?? null,
-    ]);
-
-    return redirect()->route('soal.list', ['id' => $data['id_level']])
+    
+        // Simpan ke database
+        $soal = Soal::create($data);
+    
+        return redirect()->route('soal.list', ['id' => $data['id_level']])
         ->with('success', 'Soal berhasil disimpan!');
-}
+    }
 
 
 
@@ -142,7 +145,6 @@ public function showSoal($id)
         'soals' => $soals
     ]);
 }
-
 
 
 public function create($id_level)

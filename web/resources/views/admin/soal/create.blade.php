@@ -18,9 +18,12 @@
                     <div class="mb-3">
                         <label for="tipeSoal" class="form-label">Tipe Soal</label>
                         <select name="tipeSoal" id="tipeSoal" class="form-control" required onchange="toggleFields()">
-                            <option value="visual">Visual</option>
-                            <option value="auditori">Auditori</option>
-                            <option value="kinestetik">Kinestetik</option>
+                            <option value="visual1">Visual1</option>
+                            <option value="visual2">Visual2</option>
+                            <option value="auditori1">Auditori1</option>
+                            <option value="auditori2">Auditori2</option>
+                            <option value="kinestetik1">Kinestetik1</option>
+                            <option value="kinestetik2">Kinestetik2</option>
                         </select>
                     </div>
 
@@ -126,13 +129,15 @@
                 fileInput.name = baseId;
             }
         }
-
         function toggleFields() {
-            const tipe = document.getElementById('tipeSoal').value;
-            document.getElementById('pasanganFields').style.display = tipe === 'kinestetik' ? 'block' : 'none';
-            document.getElementById('jawabanBenarKinestetik').style.display = tipe === 'kinestetik' ? 'block' : 'none';
-            document.getElementById('jawabanSingleField').style.display = tipe === 'kinestetik' ? 'none' : 'block';
-        }
+    const tipe = document.getElementById('tipeSoal').value;
+    const isKinestetik = tipe.startsWith('kinestetik'); // true untuk 'kinestetik1' dan 'kinestetik2'
+
+    document.getElementById('pasanganFields').style.display = isKinestetik ? 'block' : 'none';
+    document.getElementById('jawabanBenarKinestetik').style.display = isKinestetik ? 'block' : 'none';
+    document.getElementById('jawabanSingleField').style.display = isKinestetik ? 'none' : 'block';
+}
+
 
         document.addEventListener('DOMContentLoaded', function () {
             toggleFields();
@@ -141,7 +146,7 @@
                 if (next && next.id && next.id.endsWith('_text')) {
                     const baseId = next.id.replace('_text', '');
                     toggleInput(select, baseId);
-                }
+                }   
             });
         });
     </script>
