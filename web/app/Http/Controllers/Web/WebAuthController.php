@@ -15,7 +15,7 @@ class WebAuthController extends Controller
     {
         return view('auth.login'); // Menampilkan view login.blade.php di dalam folder auth
     }
-
+    
     // Show Home Page after login
     public function home()
     {
