@@ -70,6 +70,24 @@ class LocalColor{
   );
 
   // Additional
+  static const int _green = 0xFF00B03C;
+  static const MaterialColor green = MaterialColor(
+    _green, 
+      <int, Color>{
+      500: Color(LocalColor._green),
+    },
+  );
+
+  static const int _red = 0xFFC2050B;
+  static const MaterialColor red = MaterialColor(
+    _red, 
+      <int, Color>{
+      500: Color(LocalColor._red),
+    },
+  );
+
+
+
   // Kuning Background
 
   static const int _yellowBackground = 0xFFF6CD5A;

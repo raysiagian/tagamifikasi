@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vak_app/models/soal.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class VisualScreen extends StatefulWidget {
   final Soal soal;
@@ -18,7 +19,7 @@ class VisualScreen extends StatefulWidget {
 }
 
 class _VisualScreenState extends State<VisualScreen> {
-  String? selectedOption; // 'A', 'B', 'C', 'D'
+  String? selectedOption;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class _VisualScreenState extends State<VisualScreen> {
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
                 image: NetworkImage(widget.soal.media ??
-                    "https://via.placeholder.com/300"), // Fallback gambar
+                    "https://res.cloudinary.com/dio9zvrg3/image/upload/v1744163521/soal/media/ptcadvfrwpmpuza3uky4.png"), // Fallback gambar
                 fit: BoxFit.cover,
               ),
             ),

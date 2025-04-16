@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vak_app/models/users.dart';
+import 'package:vak_app/services/auth_services.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
+import 'package:vak_app/style/localColor.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,50 +12,105 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late Future<Users?> userFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    userFuture = AuthService().getUser();  // Fetch user data on init
+  }
+
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 240,
-              decoration: BoxDecoration(
+        body: FutureBuilder<Users?>(
+          future: userFuture,
+          builder: (context, snapshot) {
+            // Check the snapshot status
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());  // Loading state
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return Center(child: Text('User data not available'));
+            }
+
+            // Now we know that the user is not null and data is available
+            Users user = snapshot.data!;
+            String imagePath;
+              
+            // Gender check for image path
+            if (user.gender.toLowerCase() == 'laki-laki') {
+              imagePath = "assets/images/component/dummy male.png";
+            } else if (user.gender.toLowerCase() == 'perempuan') {
+              imagePath = "assets/images/component/dummy female.png";
+            } else {
+              imagePath = "assets/images/component/dummy male.png"; // Default
+              print("Image path: $imagePath");
+            }
+
+            return Container(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/component/HiFI-Dummy.png'),
+                  image: AssetImage("assets/images/background/HiFi-Profile Background.png"),
                   fit: BoxFit.cover,
-                )
+                ),
               ),
-            ),
-            const SizedBox(height: 20,),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth*0.05),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Nama
-                  Text(
-                    'Player',
-                    style: BoldTextStyle.textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 5),
-                  // Username
-                  Text(
-                    'Player',
-                    style: RegulerTextStyle.textTheme.labelMedium,
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    'Bergabung :',
-                    style: RegulerTextStyle.textTheme.labelMedium,
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 79,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: LocalColor.yellowBackground,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 25, left: 14),
+                        child: Text(
+                          'Profil',
+                          style: BoldTextStyle.textTheme.titleMedium!.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                        child: Column(
+                          children: [
+                            ClipOval(
+                              child: Image.asset(
+                                imagePath,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(user.name, style: BoldTextStyle.textTheme.titleMedium),
+                            Text(user.username),
+                            Text("Gender: ${user.gender}"),
+                            Text("Tanggal Lahir: ${user.tanggalLahir}"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
