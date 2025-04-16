@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/models/level.dart';
 import 'package:vak_app/models/soal.dart';
+import 'package:vak_app/screen/stageScreen/main/audio2Screen.dart';
+import 'package:vak_app/screen/stageScreen/main/audioScreen.dart';
+import 'package:vak_app/screen/stageScreen/main/kinestetik2Screen.dart';
 import 'package:vak_app/screen/stageScreen/main/kinestetikScreen.dart';
+import 'package:vak_app/screen/stageScreen/main/visual2Screen.dart';
 import 'package:vak_app/screen/stageScreen/main/visualScreen.dart';
 import 'package:vak_app/screen/unknownScreen/widget/noQuestionWidget.dart';
 import 'package:vak_app/services/auth_services.dart';
@@ -132,9 +136,15 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
             case 'visual':
               backgroundColor = LocalColor.redBackground;
               break;
+            // case 'visual2':
+            //   backgroundColor = LocalColor.redBackground;
+            //   break;
             case 'auditory':
               backgroundColor = LocalColor.greenBackground;
               break;
+            // case 'auditory2':
+            //   backgroundColor = LocalColor.greenBackground;
+            //   break;
             case 'kinestetik':
               backgroundColor = LocalColor.yellowBackground;
               break;
@@ -164,7 +174,7 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
 
   Widget _buildSoalScreen(Soal soal) {
     switch (soal.tipeSoal.toLowerCase()) {
-     case 'visual':
+     case 'visual1':
         return VisualScreen(
           soal: soal,
           onAnswerSelected: (jawaban) {
@@ -173,10 +183,30 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
             }
           },
         );
-      case 'kinestetik':
+      case 'visual2':
+      return Visual2Screen(
+        soal: soal,
+        onAnswerSelected: (jawaban) {
+          if (jawaban != null) {
+            jawabanSiswa[soal.id_soal] = jawaban;
+          }
+        },
+      );
+      case 'kinestetik1':
         return KinestetikScreen(soal: soal);
-      case 'auditory':
-       return VisualScreen(
+      case 'kinestetik2':
+        return Kinestetik2Screen(soal: soal);
+      case 'auditori1':
+       return AudioScreen(
+          soal: soal,
+          onAnswerSelected: (jawaban) {
+            if (jawaban != null) {
+              jawabanSiswa[soal.id_soal] = jawaban;
+            }
+          },
+        );
+      case 'auditori2':
+       return Audio2Screen(
           soal: soal,
           onAnswerSelected: (jawaban) {
             if (jawaban != null) {
