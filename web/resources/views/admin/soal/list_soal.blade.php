@@ -7,18 +7,12 @@
         <div class="container-fluid py-4">
 
             <!-- Tombol Tambah Soal -->
-            <table>
-                <tr>
-                    <h4 class="text-white">Soal {{ $level->penjelasan_level }}</h4>
-                </tr>
-                <tr>
-                    <div class="d-flex justify-content-start mb-3">
-                        <a href="{{ route('soal.create', ['id_level' => $level->id_level]) }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Tambah Soal
-                        </a>
-                    </div>
-                </tr>
-            </table>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-white">Soal {{ $level->penjelasan_level }}</h4>
+                <a href="{{ route('soal.create', ['id_level' => $level->id_level]) }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Tambah Soal
+                </a>
+            </div>
 
             <!-- Daftar Soal -->
             <div class="row">
@@ -34,7 +28,7 @@
                                 @if($soal->media)
                                     <p><strong>Media:</strong></p>
                                     @if(preg_match('/\.(jpg|jpeg|png|gif)$/i', $soal->media))
-                                        <img src="{{ $soal->media }}" class="img-fluid rounded" style="max-width: 300px;">
+                                        <img src="{{ $soal->media }}" class="img-fluid rounded" style="max-width: 300px; min-width: 150px; height: auto;">
                                     @elseif(preg_match('/\.(mp4|webm|ogg)$/i', $soal->media))
                                         <video controls class="w-100" style="max-width: 400px;">
                                             <source src="{{ $soal->media }}" type="video/mp4">
@@ -53,13 +47,104 @@
                                     </audio>
                                 @endif
 
-                                <ul>
-                                    <li>A: {{ $soal->opsiA }}</li>
-                                    <li>B: {{ $soal->opsiB }}</li>
-                                    <li>C: {{ $soal->opsiC }}</li>
-                                    <li>D: {{ $soal->opsiD }}</li>
-                                </ul>
-                                <p class="text-success">Jawaban Benar: {{ $soal->jawabanBenar }}</p>
+                                {{-- Jika tipe soal kinestetik --}}
+                                @if(Str::startsWith($soal->tipeSoal, 'kinestetik'))
+                                    <div class="row">
+                                        <!-- Opsi -->
+                                        <div class="col-md-6">
+                                            <h6><strong>Opsi:</strong></h6>
+                                            <ul class="list-group list-group-flush">
+                                                @foreach(['A', 'B', 'C', 'D'] as $huruf)
+                                                    @php
+                                                        $opsiField = 'opsi' . $huruf;
+                                                        $opsiValue = $soal->$opsiField;
+                                                    @endphp
+                                                    <li class="list-group-item">
+                                                        <strong>{{ $huruf }}.</strong>
+                                                        @if(preg_match('/\.(jpg|jpeg|png|gif)$/i', $opsiValue))
+                                                            <img src="{{ $opsiValue }}" class="img-thumbnail mt-2" style="max-width: 150px; height: auto;">
+                                                        @elseif(preg_match('/\.(mp4|webm|ogg)$/i', $opsiValue))
+                                                            <video controls class="mt-2" style="max-width: 200px; height: auto;">
+                                                                <source src="{{ $opsiValue }}">
+                                                                Browser tidak mendukung video.
+                                                            </video>
+                                                        @elseif(Str::startsWith($opsiValue, 'http'))
+                                                            <a href="{{ $opsiValue }}" target="_blank">Lihat File</a>
+                                                        @else
+                                                            {{ $opsiValue }}
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+
+                                        <!-- Pasangan -->
+                                        <div class="col-md-6">
+                                            <h6><strong>Pasangan:</strong></h6>
+                                            <div class="row">
+                                                @foreach(['A', 'B', 'C', 'D'] as $huruf)
+                                                    @php
+                                                        $pasanganField = 'pasangan' . $huruf;
+                                                    @endphp
+                                                    <div class="col-6 mb-2">
+                                                        <p class="mb-1"><strong>{{ $huruf }}:</strong></p>
+                                                        @if(!empty($soal->$pasanganField))
+                                                            <img src="{{ $soal->$pasanganField }}" class="img-thumbnail" style="max-width: 100%; min-width: 100px; max-height: 150px; object-fit: contain;">
+                                                        @else
+                                                            <span class="text-muted">Tidak ada gambar</span>
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    {{-- Soal biasa --}}
+                                    <ul class="list-group list-group-flush mt-3">
+                                        @foreach(['A', 'B', 'C', 'D'] as $huruf)
+                                            @php
+                                                $opsiField = 'opsi' . $huruf;
+                                                $opsiValue = $soal->$opsiField;
+                                            @endphp
+                                            <li class="list-group-item">
+                                                <strong>{{ $huruf }}.</strong>
+                                                @if(preg_match('/\.(jpg|jpeg|png|gif)$/i', $opsiValue))
+                                                    <img src="{{ $opsiValue }}" class="img-thumbnail mt-2" style="max-width: 150px; height: auto;">
+                                                @elseif(preg_match('/\.(mp4|webm|ogg)$/i', $opsiValue))
+                                                    <video controls class="mt-2" style="max-width: 200px; height: auto;">
+                                                        <source src="{{ $opsiValue }}">
+                                                        Browser tidak mendukung video.
+                                                    </video>
+                                                @elseif(Str::startsWith($opsiValue, 'http'))
+                                                    <a href="{{ $opsiValue }}" target="_blank">Lihat File</a>
+                                                @else
+                                                    {{ $opsiValue }}
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+
+                                {{-- Jawaban Benar --}}
+                                <div class="mt-3">
+                                    <strong class="text-success">Jawaban Benar:</strong>
+                                    @if(Str::startsWith($soal->tipeSoal, 'kinestetik') && $soal->jawabanBenar)
+                                        <ul class="mt-2">
+                                            @php
+                                                $jawabanPair = json_decode($soal->jawabanBenar, true);
+                                            @endphp
+                                            @if(is_array($jawabanPair))
+                                                @foreach($jawabanPair as $opsi => $pasangan)
+                                                    <li>{{ $opsi }} cocok dengan {{ $pasangan }}</li>
+                                                @endforeach
+                                            @else
+                                                <li class="text-danger">Format jawaban tidak valid atau kosong.</li>
+                                            @endif
+                                        </ul>
+                                    @else
+                                        <p class="mt-2">{{ $soal->jawabanBenar }}</p>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

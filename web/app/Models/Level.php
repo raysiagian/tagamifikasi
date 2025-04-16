@@ -32,6 +32,13 @@ class Level extends Model
         return $this->belongsTo(MataPelajaran::class, 'id_mataPelajaran', 'id_mataPelajaran');
     }
 
+    // Level.php
+// public function mataPelajaran()
+// {
+//     return $this->belongsTo(MataPelajaran::class, 'id_mataPelajaran');
+// }
+
+
     /**
      * Relasi ke tabel Soal (One to Many)
      */

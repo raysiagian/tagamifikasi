@@ -9,162 +9,134 @@ use App\Models\RekapSkorPengguna;
 use App\Models\Soal;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB; // tambahkan di atas jika belum
+
 
 class JawabanPenggunaController extends Controller
 {
     public function simpanJawaban(Request $request)
-    {
-        \Log::info('User Auth:', ['user' => Auth::user()]);
+{
+    \Log::info('User Auth:', ['user' => Auth::user()]);
 
-        if (!Auth::user()) {
-            return response()->json(['message' => 'User tidak ditemukan.'], 401);
-        }
-
-        $user = Auth::user();
-        $soal = Soal::with('level.mataPelajaran')->find($request->id_soal);
-
-        if (!$soal || !$soal->level || !$soal->level->mataPelajaran) {
-            return response()->json(['message' => 'Data soal atau mata pelajaran tidak valid.'], 404);
-        }
-
-        $id_mataPelajaran = $soal->level->id_mataPelajaran;
-
-        // Cek apakah user sudah menjawab soal ini sebelumnya
-        $jawaban = JawabanPengguna::where('id_user', $user->id_user)
-            ->where('id_soal', $soal->id_soal)
-            ->first();
-
-        // Konversi jawaban siswa menjadi JSON string jika perlu
-        $jawabanSiswa = is_array($request->jawaban_siswa)
-            ? json_encode($request->jawaban_siswa)
-            : $request->jawaban_siswa;
-
-        // Cek status jawaban
-        $decodedJawabanSiswa = json_decode($jawabanSiswa, true);
-        $decodedJawabanBenar = json_decode($soal->jawabanBenar, true);
-
-        if (is_array($decodedJawabanSiswa) && is_array($decodedJawabanBenar)) {
-            ksort($decodedJawabanSiswa);
-            ksort($decodedJawabanBenar);
-            $status = ($decodedJawabanSiswa == $decodedJawabanBenar) ? 'benar' : 'salah';
-        } else {
-            $status = ($jawabanSiswa === $soal->jawabanBenar) ? 'benar' : 'salah';
-        }
-
-        // Cek apakah jawaban sebelumnya sudah benar
-        $jawabanSudahBenar = $jawaban && $jawaban->status === 'benar';
-
-        // Simpan atau update jawaban
-        if ($jawaban) {
-            $jawaban->update([
-                'jawaban_siswa' => $jawabanSiswa,
-                'status' => $status
-            ]);
-        } else {
-            $jawaban = JawabanPengguna::create([
-                'id_user' => $user->id_user,
-                'id_soal' => $soal->id_soal,
-                'jawaban_siswa' => $jawabanSiswa,
-                'status' => $status
-            ]);
-        }
-
-        // Ambil tipe dasar: kinestetik1 → kinestetik
-        $tipeDasar = $this->getTipeDasar($soal->tipeSoal);
-
-        if (!$tipeDasar) {
-            return response()->json(['message' => 'Tipe soal tidak dikenali.'], 400);
-        }
-
-        // Tambah skor jika benar dan belum pernah benar
-        if ($status === 'benar' && !$jawabanSudahBenar) {
-            $this->updateSkor($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeDasar);
-            $this->updateRekap($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeDasar, $status);
-        }
-
-        // Ambil skor terbaru
-        $skorBaru = SkorPengguna::where('id_user', $user->id_user)
-            ->where('id_level', $soal->id_level)
-            ->where('id_mataPelajaran', $id_mataPelajaran)
-            ->where('tipeSoal', $tipeDasar)
-            ->first();
-
-        return response()->json([
-            'message' => 'Jawaban disimpan dan skor diperbarui.',
-            'jawaban' => $jawaban,
-            'skor' => $skorBaru
-        ], 200);
+    if (!Auth::user()) {
+        return response()->json(['message' => 'User tidak ditemukan.'], 401);
     }
 
-    private function updateSkor($userId, $mataPelajaranId, $levelId, $tipeSoal)
-    {
-        $tipeDasar = $this->getTipeDasar($tipeSoal);
+    $user = Auth::user();
+    $soal = Soal::find($request->id_soal);
+
+    if (!$soal) {
+        return response()->json(['message' => 'Soal tidak ditemukan.'], 404);
+    }
+
+    if (!$soal->level || !$soal->level->mataPelajaran) {
+        return response()->json(['message' => 'Mata Pelajaran tidak ditemukan dalam soal.'], 404);
+    }
+
+    $id_mataPelajaran = $soal->level->id_mataPelajaran;
+
+    // Mapping tipeSoal
+    $tipeSoalOriginal = strtolower($soal->tipeSoal);
+    $tipeSoal = match (true) {
+        str_contains($tipeSoalOriginal, 'visual') => 'visual',
+        str_contains($tipeSoalOriginal, 'auditori') => 'auditori',
+        str_contains($tipeSoalOriginal, 'kinestetik') => 'kinestetik',
+        default => $tipeSoalOriginal,
+    };
+
+    // Cek apakah user sudah menjawab soal ini sebelumnya
+    $jawaban = JawabanPengguna::where('id_user', $user->id_user)
+        ->where('id_soal', $soal->id_soal)
+        ->first();
+
+    $status = ($request->jawaban_siswa === $soal->jawabanBenar) ? 'benar' : 'salah';
+
+    if ($jawaban) {
+        $jawaban->update([
+            'jawaban_siswa' => $request->jawaban_siswa,
+            'status' => $status
+        ]);
+    } else {
+        $jawaban = JawabanPengguna::create([
+            'id_user' => $user->id_user,
+            'id_soal' => $soal->id_soal,
+            'jawaban_siswa' => $request->jawaban_siswa,
+            'status' => $status
+        ]);
+    }
+
+    // ✅ updateSkor dipindah ke luar if else
+    if ($status === 'benar') {
+        $this->updateSkor($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeSoal);
+    }
+
+    $this->updateRekap($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeSoal, $status);
+
+    $rekap = RekapSkorPengguna::where('id_user', $user->id_user)
+        ->where('id_mataPelajaran', $id_mataPelajaran)
+        ->where('id_level', $soal->id_level)
+        ->first();
+
+    return response()->json([
+        'message' => 'Jawaban disimpan dan rekap skor diperbarui',
+        'jawaban' => $jawaban,
+        'rekap' => $rekap
+    ], 200);
+}
+
     
-        $existingSkor = SkorPengguna::where('id_user', $userId)
-            ->where('id_mataPelajaran', $mataPelajaranId)
+    private function updateSkor($userId, $levelId, $mataPelajaranId, $tipeSoal)
+    {
+        $skor = SkorPengguna::where('id_user', $userId)
             ->where('id_level', $levelId)
-            ->where('tipeSoal', $tipeDasar)
+            ->where('id_mataPelajaran', $mataPelajaranId)
+            ->where('tipeSoal', $tipeSoal)
             ->first();
     
-        if ($existingSkor) {
-            $existingSkor->increment('skor');
+        if ($skor) {
+            $skor->increment('jumlah_benar');
         } else {
             SkorPengguna::create([
                 'id_user' => $userId,
                 'id_mataPelajaran' => $mataPelajaranId,
                 'id_level' => $levelId,
-                'tipeSoal' => $tipeDasar,
-                'skor' => 1
+                'tipeSoal' => $tipeSoal,
+                'jumlah_benar' => 1
             ]);
         }
-    
-        $this->updateRekapSkor($userId, $mataPelajaranId, $levelId);
     }
     
-    private function updateRekapSkor($userId, $mataPelajaranId, $levelId)
+    private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $status)
     {
-        $skorPerTipe = SkorPengguna::where('id_user', $userId)
-            ->where('id_mataPelajaran', $mataPelajaranId)
-            ->where('id_level', $levelId)
-            ->select('tipeSoal', DB::raw('SUM(skor) as total_skor'))
-            ->groupBy('tipeSoal')
-            ->get();
+        $rekap = RekapSkorPengguna::firstOrCreate([
+            'id_user' => $userId,
+            'id_mataPelajaran' => $mataPelajaranId,
+            'id_level' => $levelId
+        ], [
+            'total_visual' => 0,
+            'total_auditori' => 0,
+            'total_kinestetik' => 0,
+            'tipe_dominan' => null
+        ]);
     
-        $tipeDominan = null;
-        $skorMax = 0;
-    
-        foreach ($skorPerTipe as $skor) {
-            if ($skor->total_skor > $skorMax) {
-                $tipeDominan = $skor->tipeSoal;
-                $skorMax = $skor->total_skor;
+        if ($status === 'benar') {
+            if ($tipeSoal === 'visual') {
+                $rekap->increment('total_visual');
+            } elseif ($tipeSoal === 'auditori') {
+                $rekap->increment('total_auditori');
+            } elseif ($tipeSoal === 'kinestetik') {
+                $rekap->increment('total_kinestetik');
             }
         }
     
-        RekapSkorPengguna::updateOrCreate(
-            [
-                'id_user' => $userId,
-                'id_mataPelajaran' => $mataPelajaranId,
-                'id_level' => $levelId,
-            ],
-            [
-                'tipe_dominan' => $tipeDominan,
-                'total_skor' => $skorMax,
-            ]
-        );
-    }
+        $tipeDominan = collect([
+            'visual' => $rekap->total_visual,
+            'auditori' => $rekap->total_auditori,
+            'kinestetik' => $rekap->total_kinestetik
+        ])->sortDesc()->keys()->first();
     
-    private function getTipeDasar($tipe)
-    {
-        if (str_starts_with($tipe, 'visual')) {
-            return 'visual';
-        } elseif (str_starts_with($tipe, 'auditori')) {
-            return 'auditori';
-        } elseif (str_starts_with($tipe, 'kinestetik')) {
-            return 'kinestetik';
-        }
-        return $tipe; // fallback
+        $rekap->update(['tipe_dominan' => $tipeDominan]);
     }
     
 
 }
-

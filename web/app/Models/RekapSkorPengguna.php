@@ -15,8 +15,8 @@ class RekapSkorPengguna extends Model
 
     protected $fillable = [
         'id_user',
-        'id_mataPelajaran',
-        'id_level',
+      'id_mataPelajaran',
+      'id_level',
         'total_visual',
         'total_auditori',
         'total_kinestetik',

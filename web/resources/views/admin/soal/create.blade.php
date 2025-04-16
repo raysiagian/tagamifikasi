@@ -129,24 +129,24 @@
                 fileInput.name = baseId;
             }
         }
+
         function toggleFields() {
-    const tipe = document.getElementById('tipeSoal').value;
-    const isKinestetik = tipe.startsWith('kinestetik'); // true untuk 'kinestetik1' dan 'kinestetik2'
+            const tipe = document.getElementById('tipeSoal').value;
+            const isKinestetik = tipe.startsWith('kinestetik');
 
-    document.getElementById('pasanganFields').style.display = isKinestetik ? 'block' : 'none';
-    document.getElementById('jawabanBenarKinestetik').style.display = isKinestetik ? 'block' : 'none';
-    document.getElementById('jawabanSingleField').style.display = isKinestetik ? 'none' : 'block';
-}
-
+            document.getElementById('pasanganFields').style.display = isKinestetik ? 'block' : 'none';
+            document.getElementById('jawabanBenarKinestetik').style.display = isKinestetik ? 'block' : 'none';
+            document.getElementById('jawabanSingleField').style.display = isKinestetik ? 'none' : 'block';
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             toggleFields();
-            document.querySelectorAll('select').forEach(select => {
-                const next = select.nextElementSibling;
-                if (next && next.id && next.id.endsWith('_text')) {
-                    const baseId = next.id.replace('_text', '');
+            document.querySelectorAll('.form-select').forEach(select => {
+                const nextInput = select.parentElement.querySelector('input[type="text"], input[type="file"]');
+                if (nextInput && nextInput.id && (nextInput.id.endsWith('_text') || nextInput.id.endsWith('_file'))) {
+                    const baseId = nextInput.id.replace(/_(text|file)/, '');
                     toggleInput(select, baseId);
-                }   
+                }
             });
         });
     </script>

@@ -62,9 +62,7 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     // Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
     //soal berdasarkan mapel dan level
     Route::get('/soal/matapelajaran/{id_mataPelajaran}/level/{id_level}', [SoalController::class, 'getByMataPelajaranAndLevel']);
-Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban'])
-         ->middleware('auth:sanctum');
-
+Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
          
          Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
             Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
