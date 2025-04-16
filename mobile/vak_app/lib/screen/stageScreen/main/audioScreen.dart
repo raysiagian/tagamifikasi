@@ -37,7 +37,7 @@ class _AudioScreenState extends State<AudioScreen> {
       await _audioPlayer.pause();
     } else {
       await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource(widget.soal.audioPertanyaan!));
+      await _audioPlayer.play(UrlSource(widget.soal.audioPertanyaan!));
     }
     setState(() {
       isPlaying = !isPlaying;
