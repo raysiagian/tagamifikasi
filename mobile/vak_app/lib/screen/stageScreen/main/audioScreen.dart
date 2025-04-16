@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:vak_app/models/soal.dart';
+import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
 
 class AudioScreen extends StatefulWidget {
@@ -13,7 +14,6 @@ class AudioScreen extends StatefulWidget {
     required this.onAnswerSelected,
   }) : super(key: key);
 
-
   @override
   _AudioScreenState createState() => _AudioScreenState();
 }
@@ -22,9 +22,8 @@ class _AudioScreenState extends State<AudioScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool isPlaying = false;
   bool isPressed = false;
+  String? selectedOption;
 
-  String? selectedOption; // 'A', 'B', 'C', 'D'
-  
   @override
   void dispose() {
     _audioPlayer.dispose();
@@ -48,58 +47,111 @@ class _AudioScreenState extends State<AudioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: LocalColor.transparent,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 20),
-          Center(
-            child: Listener(
-              onPointerDown: (_) => setState(() => isPressed = true),
-              onPointerUp: (_) => setState(() => isPressed = false),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 100),
-                transform: isPressed ? Matrix4.translationValues(0, 4, 0) : Matrix4.identity(),
-                child: SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(30),
-                      backgroundColor: isPlaying ? Colors.redAccent : Colors.green,
-                      shadowColor: Colors.black,
-                      elevation: isPressed ? 5 : 15,
-                    ),
-                    onPressed: _playPause,
-                    child: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow,
-                      size: 60,
-                      color: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            Center(
+              child: Listener(
+                onPointerDown: (_) => setState(() => isPressed = true),
+                onPointerUp: (_) => setState(() => isPressed = false),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 100),
+                  transform: isPressed
+                      ? Matrix4.translationValues(0, 4, 0)
+                      : Matrix4.identity(),
+                  child: SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(30),
+                        backgroundColor:
+                            isPlaying ? Colors.redAccent : Colors.green,
+                        shadowColor: Colors.black,
+                        elevation: isPressed ? 5 : 15,
+                      ),
+                      onPressed: _playPause,
+                      child: Icon(
+                        isPlaying ? Icons.pause : Icons.play_arrow,
+                        size: 60,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            widget.soal.pertanyaan ?? "Pertanyaan tidak tersedia",
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-             Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 10,
-            runSpacing: 10,
-            children: _buildAnswerButtons(),
-          ),
-        ],
+            const SizedBox(height: 20),
+            Container(
+              width: double.infinity,
+              height: 102,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: LocalColor.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.all(16),
+                      ),
+                      onPressed: () {
+                        print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+                      },
+                      child: Image.asset(
+                        "assets/images/component/HiFi-Speaker.png",
+                        width: 40,
+                        height: 40,
+                      ),
+                    ),
+                    const SizedBox(width: 21),
+                    Expanded(
+                      child: Text(
+                        widget.soal.pertanyaan ?? "Pertanyaan tidak tersedia",
+                        style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
+                          color: LocalColor.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Responsive 2 kolom Wrap
+            LayoutBuilder(
+              builder: (context, constraints) {
+                double maxWidth = constraints.maxWidth;
+                double spacing = 30;
+                double itemWidth = (maxWidth - spacing) / 2;
+
+                return Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: spacing,
+                  runSpacing: 10,
+                  children: _buildAnswerButtons(itemWidth),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  List<Widget> _buildAnswerButtons() {
+  List<Widget> _buildAnswerButtons(double itemWidth) {
     final Map<String, String?> options = {
       'A': widget.soal.opsiA,
       'B': widget.soal.opsiB,
@@ -109,21 +161,21 @@ class _AudioScreenState extends State<AudioScreen> {
 
     return options.entries
         .where((entry) => entry.value != null)
-        .map((entry) => _buildAnswerButton(entry.key, entry.value!))
+        .map((entry) => _buildAnswerButton(entry.key, entry.value!, itemWidth))
         .toList();
   }
 
-   Widget _buildAnswerButton(String label, String text) {
+  Widget _buildAnswerButton(String label, String text, double itemWidth) {
     final bool isSelected = selectedOption == label;
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: itemWidth,
       child: ElevatedButton(
         onPressed: () {
           setState(() {
             selectedOption = label;
           });
-          widget.onAnswerSelected(text); // Kirim jawaban ke parent
+          widget.onAnswerSelected(text);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: isSelected ? Colors.blue : Colors.white,
@@ -136,8 +188,10 @@ class _AudioScreenState extends State<AudioScreen> {
         child: Text(
           text,
           style: const TextStyle(fontSize: 16),
+          textAlign: TextAlign.center,
         ),
       ),
     );
   }
 }
+

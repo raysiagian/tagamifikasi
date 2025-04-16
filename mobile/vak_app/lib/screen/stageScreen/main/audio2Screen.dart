@@ -78,7 +78,9 @@ class _Audio2ScreenState extends State<Audio2Screen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Scaffold(
+      backgroundColor: LocalColor.transparent,
+      body: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
         children: [
@@ -169,6 +171,7 @@ class _Audio2ScreenState extends State<Audio2Screen> {
           ),
         ],
       ),
+    ),
     );
   }
 }

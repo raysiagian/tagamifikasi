@@ -133,19 +133,31 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
           // Tentukan warna background berdasarkan tipe soal
           Color backgroundColor;
           switch (soal.tipeSoal.toLowerCase()) {
-            case 'visual':
+            case 'visual1':
+              backgroundColor = LocalColor.redBackground;
+              break;
+            case 'visual2':
+              backgroundColor = LocalColor.redBackground;
+              break;
+            case 'visual2':
               backgroundColor = LocalColor.redBackground;
               break;
             // case 'visual2':
             //   backgroundColor = LocalColor.redBackground;
             //   break;
-            case 'auditory':
+            case 'auditori1':
+              backgroundColor = LocalColor.greenBackground;
+              break;
+            case 'auditori2':
               backgroundColor = LocalColor.greenBackground;
               break;
             // case 'auditory2':
             //   backgroundColor = LocalColor.greenBackground;
             //   break;
-            case 'kinestetik':
+            case 'kinestetik1':
+              backgroundColor = LocalColor.yellowBackground;
+              break;
+            case 'kinestetik2':
               backgroundColor = LocalColor.yellowBackground;
               break;
             default:

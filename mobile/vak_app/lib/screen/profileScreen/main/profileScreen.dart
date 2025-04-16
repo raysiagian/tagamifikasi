@@ -102,6 +102,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Text(user.username),
                             Text("Gender: ${user.gender}"),
                             Text("Tanggal Lahir: ${user.tanggalLahir}"),
+                            const SizedBox(height: 40),
+                            SizedBox(
+                              height: 44,
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: (){},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: LocalColor.redBackground,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                ),
+                                child: Text(
+                                  "Keluar",
+                                  style:
+                                      TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
