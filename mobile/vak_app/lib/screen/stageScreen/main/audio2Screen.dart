@@ -23,7 +23,7 @@ class _Audio2ScreenState extends State<Audio2Screen> {
   late Map<String, String?> options;
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool isPlaying = false;
-  bool isPressed = false;
+  String? _currentlyPlayingUrl;
 
   @override
   void initState() {
@@ -32,62 +32,78 @@ class _Audio2ScreenState extends State<Audio2Screen> {
       'A': widget.soal.opsiA,
       'B': widget.soal.opsiB,
     };
+    _audioPlayer.setReleaseMode(ReleaseMode.stop);
   }
 
-  Future<void> _playPause() async {
-    if (widget.soal.audioPertanyaan == null) return;
-    if (isPlaying) {
+  Future<void> _playPause(String option) async {
+    String? audioToPlay;
+
+    if (option == 'A') {
+      audioToPlay = widget.soal.opsiA;
+    } else if (option == 'B') {
+      audioToPlay = widget.soal.opsiB;
+    } else {
+      audioToPlay = widget.soal.audioPertanyaan;
+    }
+
+    if (audioToPlay == null || audioToPlay.isEmpty) {
+      print("URL audio kosong atau null");
+      return;
+    }
+
+    print("Audio yang akan diputar: $audioToPlay");
+
+    // Kalau sedang muter audio yang sama, pause
+    if (_currentlyPlayingUrl == audioToPlay && isPlaying) {
       await _audioPlayer.pause();
+      setState(() {
+        isPlaying = false;
+      });
     } else {
       await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource(widget.soal.audioPertanyaan!));
+      await _audioPlayer.setSource(UrlSource(audioToPlay));
+      await _audioPlayer.resume();
+      setState(() {
+        isPlaying = true;
+        _currentlyPlayingUrl = audioToPlay;
+      });
     }
-    setState(() {
-      isPlaying = !isPlaying;
-    });
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-     child: Column(
+      child: Column(
         children: [
-          // Opsi 1 (opsi A)
+          // Tombol opsi A
           ElevatedButton(
             onPressed: () {
               setState(() {
                 selectedOption = 'A';
               });
               widget.onAnswerSelected(options['A']);
+              _playPause('A');
             },
             style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 250),
-              padding: EdgeInsets.zero,
-              backgroundColor: Colors.white,
-              side: BorderSide(
-                color: selectedOption == 'A' ? LocalColor.primary : Colors.white,
-                width: 3,
-              ),
+              backgroundColor: Colors.blue,
+              fixedSize: const Size(150, 150),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                options['A'] ??
-                    "https://res.cloudinary.com/dio9zvrg3/image/upload/v1744163521/soal/media/ptcadvfrwpmpuza3uky4.png",
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 250,
-              ),
-            ),
+            child: const Icon(Icons.play_arrow, size: 40, color: Colors.white),
           ),
 
           const SizedBox(height: 20),
 
-          // Audio dan pertanyaan
+          // Tombol play untuk pertanyaan
           Container(
             width: double.infinity,
             height: 102,
@@ -108,7 +124,8 @@ class _Audio2ScreenState extends State<Audio2Screen> {
                       padding: const EdgeInsets.all(16),
                     ),
                     onPressed: () {
-                      print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+                      print("Audio pertanyaan dimainkan: ${widget.soal.audioPertanyaan}");
+                      _playPause('Q'); // 'Q' untuk pertanyaan
                     },
                     child: Image.asset(
                       "assets/images/component/HiFi-Speaker.png",
@@ -119,7 +136,7 @@ class _Audio2ScreenState extends State<Audio2Screen> {
                   const SizedBox(width: 21),
                   Expanded(
                     child: Text(
-                      "Pertanyaan tidak tersedia",
+                      "Putar Pertanyaan",
                       style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
                         color: LocalColor.primary,
                       ),
@@ -132,37 +149,24 @@ class _Audio2ScreenState extends State<Audio2Screen> {
 
           const SizedBox(height: 20),
 
-          // Opsi 2 (opsi B)
-         ElevatedButton(
-          onPressed: () async {
-            setState(() {
-              selectedOption = 'B';
-            });
-            widget.onAnswerSelected(options['B']);
-          },
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 250),
-            padding: EdgeInsets.zero,
-            backgroundColor: Colors.white,
-            side: BorderSide(
-              color: selectedOption == 'B' ? LocalColor.primary : Colors.white,
-              width: 3,
+          // Tombol opsi B
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                selectedOption = 'B';
+              });
+              widget.onAnswerSelected(options['B']);
+              _playPause('B');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              fixedSize: const Size(150, 150),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            child: const Icon(Icons.play_arrow, size: 40, color: Colors.white),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              options['B'] ??
-                  "https://res.cloudinary.com/dio9zvrg3/image/upload/v1744163521/soal/media/ptcadvfrwpmpuza3uky4.png",
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 250,
-            ),
-          ),
-        ),
         ],
       ),
     );

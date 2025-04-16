@@ -71,4 +71,29 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
   }
+
+  Future<Users?> getUser() async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
+
+  if (token != null) {
+    final response = await http.get(
+      Uri.parse('$baseUrl/user'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return Users.fromJson(data);
+    } else {
+      throw Exception('Failed to load user: ${response.body}');
+    }
+  } else {
+    throw Exception('Token not found');
+  }
+}
+
 }
