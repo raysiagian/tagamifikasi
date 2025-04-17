@@ -79,128 +79,112 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // const Text(
-            //   "Cocokkan Pasangan",
-            //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            // ),
+            // Header or instructions
             Container(
-            width: double.infinity,
-            height: 102,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
-              child: Row(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: LocalColor.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+              width: double.infinity,
+              height: 102,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: LocalColor.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.all(16),
                       ),
-                      padding: const EdgeInsets.all(16),
-                    ),
-                    onPressed: () {
-                      print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
-                    },
-                    child: Image.asset(
-                      "assets/images/component/HiFi-Speaker.png",
-                      width: 40,
-                      height: 40,
-                    ),
-                  ),
-                  const SizedBox(width: 21),
-                  Expanded(
-                    child: Text(
-                      "Cocokkan Pasangan",
-                      style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
-                        color: LocalColor.primary,
+                      onPressed: () {
+                        print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+                      },
+                      child: Image.asset(
+                        "assets/images/component/HiFi-Speaker.png",
+                        width: 40,
+                        height: 40,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 21),
+                    Expanded(
+                      child: Text(
+                        "Cocokkan Pasangan",
+                        style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
+                          color: LocalColor.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
             const SizedBox(height: 20),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 2.5, // lebih lebar dari tinggi
-          physics: const NeverScrollableScrollPhysics(),
-          children: targetSlots.keys.map((nama) {
-            return DragTarget<String>(
-              onAccept: (emoji) {
-                setState(() {
-                  targetSlots[nama] = emoji;
 
-                  bool semuaTerisi = targetSlots.values.every((v) => v != null);
-                  bool semuaBenar = targetSlots.entries.every((entry) {
-                    final pasangan = entry.key;
-                    final opsi = entry.value;
-                    return opsi != null && choices[opsi] == pasangan;
-                  });
+            // Target grid for dropping options
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 2.5, // lebar lebih dari tinggi
+              physics: const NeverScrollableScrollPhysics(),
+              children: targetSlots.keys.map((nama) {
+                return DragTarget<String>(
+                  onAccept: (emoji) {
+                    setState(() {
+                      targetSlots[nama] = emoji;
 
-                  // if (semuaTerisi && semuaBenar) {
-                  //   final jawaban = targetSlots.entries
-                  //       .map((e) => "${e.value}:${e.key}")
-                  //       .join(",");
-                  //   widget.onJawabanSelesai?.call(jawaban);
-                  // }
-                  if (semuaTerisi) {
-                    final jawaban = targetSlots.entries
-                        .map((e) => "${e.value}:${e.key}")
-                        .join(",");
-                    widget.onJawabanSelesai?.call(jawaban);
-                  }
-
-                });
-              },
-              builder: (context, candidateData, rejectedData) {
-                return Container(
-                  padding: const EdgeInsets.all(8),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.black, width: 1.5),
-                    color: targetSlots[nama] != null ? Colors.green[200] : Colors.white,
-                  ),
-                  child: Text(
-                    targetSlots[nama] ?? nama,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 14),
-                  ),
+                      bool semuaTerisi = targetSlots.values.every((v) => v != null);
+                      if (semuaTerisi) {
+                        final jawaban = _buildJawaban();
+                        widget.onJawabanSelesai?.call(jawaban);
+                      }
+                    });
+                  },
+                  builder: (context, candidateData, rejectedData) {
+                    return Container(
+                      padding: const EdgeInsets.all(8),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.black, width: 1.5),
+                        color: targetSlots[nama] != null ? Colors.green[200] : Colors.white,
+                      ),
+                      child: Text(
+                        targetSlots[nama] ?? nama,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    );
+                  },
                 );
-              },
-            );
-          }).toList(),
-        ),
+              }).toList(),
+            ),
 
+            const SizedBox(height: 40),
 
-          const SizedBox(height: 40),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 2, // sedikit lebih kecil supaya tidak overflow
-            physics: const NeverScrollableScrollPhysics(),
-            children: emojis.map((emoji) {
-              return Draggable<String>(
-                data: emoji,
-                feedback: _buildDraggableItem(emoji, isDragging: true),
-                childWhenDragging: Opacity(opacity: 0.3, child: _buildDraggableItem(emoji)),
-                child: targetSlots.containsValue(emoji)
-                    ? const SizedBox.shrink()
-                    : _buildDraggableItem(emoji),
-              );
-            }).toList(),
-          ),
-
+            // Draggable options
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 2, // sedikit lebih kecil supaya tidak overflow
+              physics: const NeverScrollableScrollPhysics(),
+              children: emojis.map((emoji) {
+                return Draggable<String>(
+                  data: emoji,
+                  feedback: _buildDraggableItem(emoji, isDragging: true),
+                  childWhenDragging: Opacity(opacity: 0.3, child: _buildDraggableItem(emoji)),
+                  child: targetSlots.containsValue(emoji)
+                      ? const SizedBox.shrink()
+                      : _buildDraggableItem(emoji),
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),
@@ -230,5 +214,36 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
       emojis.shuffle(Random(seed));
       targetSlots.updateAll((key, value) => null);
     });
+  }
+
+  // Menyusun jawaban dalam format yang diinginkan
+  String _buildJawaban() {
+    Map<String, String> jawaban = {};
+    targetSlots.forEach((key, value) {
+      if (value != null) {
+        final opsiHuruf = _getHurufDariOpsi(value);
+        final pasanganHuruf = _getHurufDariPasangan(key);
+        jawaban[opsiHuruf] = pasanganHuruf;
+      }
+    });
+    return "{${jawaban.entries.map((e) => '"${e.key}":"${e.value}"').join(",")}}";
+  }
+
+  // Fungsi untuk mendapatkan huruf opsi
+  String _getHurufDariOpsi(String opsi) {
+    if (opsi == widget.soal.opsiA) return "A";
+    if (opsi == widget.soal.opsiB) return "B";
+    if (opsi == widget.soal.opsiC) return "C";
+    if (opsi == widget.soal.opsiD) return "D";
+    return opsi;
+  }
+
+  // Fungsi untuk mendapatkan huruf pasangan
+  String _getHurufDariPasangan(String pasangan) {
+    if (pasangan == widget.soal.pasanganA) return "A";
+    if (pasangan == widget.soal.pasanganB) return "B";
+    if (pasangan == widget.soal.pasanganC) return "C";
+    if (pasangan == widget.soal.pasanganD) return "D";
+    return pasangan;
   }
 }
