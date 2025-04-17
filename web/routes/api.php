@@ -69,6 +69,10 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
             Route::get('/levels', [LevelController::class, 'index']);
             Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
              Route::get('/matapelajaran/{id_mataPelajaran}/levels', [LevelController::class, 'getLevelsByMataPelajaran']);
+             //cek kelulusan
+             
+             Route::post('/cek-kelulusan-level', [JawabanPenggunaController::class, 'cekKelulusanLevel']);
+
         });
 
 }); 

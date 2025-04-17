@@ -139,4 +139,37 @@ class JawabanPenggunaController extends Controller
     }
     
 
+    //cek kelulusan
+    
+    public function cekKelulusanLevel(Request $request)
+{
+    $request->validate([
+        'id_user' => 'required|integer',
+        'id_mataPelajaran' => 'required|integer',
+        'id_level' => 'required|integer',
+    ]);
+
+    $jumlahBenar = SkorPengguna::where('id_user', $request->id_user)
+        ->where('id_mataPelajaran', $request->id_mataPelajaran)
+        ->where('id_level', $request->id_level)
+        ->sum('jumlah_benar');
+
+    if ($jumlahBenar >= 3) {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Kamu bisa lanjut ke level berikutnya.',
+            'boleh_lanjut' => true,
+            'jumlah_benar' => $jumlahBenar
+        ]);
+    } else {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Minimal 3 soal benar untuk bisa lanjut ke level berikutnya.',
+            'boleh_lanjut' => false,
+            'jumlah_benar' => $jumlahBenar
+        ]);
+    }
+}
+
+
 }
