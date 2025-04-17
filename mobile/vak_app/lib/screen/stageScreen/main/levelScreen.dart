@@ -57,23 +57,6 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
   );
 }
 
-
-  // void _nextQuestion() {
-  //   if (_currentIndex < _soalList.length - 1) {
-  //     setState(() {
-  //       _currentIndex++;
-  //     });
-  //   } else {
-  //     print("Jawaban siswa:");
-  //     jawabanSiswa.forEach((idSoal, jawaban) {
-  //       print("ID Soal: $idSoal => Jawaban: $jawaban");
-  //     });
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text("Soal selesai!")),
-  //     );
-  //   }
-  // }
-
   void _nextQuestion() async {
   final soal = _soalList[_currentIndex];
   final jawaban = jawabanSiswa[soal.id_soal];
@@ -81,7 +64,8 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
   if (jawaban != null) {
     try {
       await submitJawaban(soal.id_soal, jawaban);
-      debugPrint("Jawaban dikirim untuk ID Soal: ${soal.id_soal}");
+      debugPrint("Jawaban dikirim :$jawaban, id soal: ${soal.id_soal}");
+      print(jawaban);
     } catch (e) {
       debugPrint("Gagal mengirim jawaban: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -114,13 +98,6 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
       body: FutureBuilder<List<Soal>>(
         future: futureSoal,
         builder: (context, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //   return const Center(child: CircularProgressIndicator());
-          // } else if (snapshot.hasError) {
-          //   return Center(child: Text("Error: ${snapshot.error}"));
-          // } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          //   return const Center(child: Text("Tidak ada soal untuk level ini"));
-          // }
            if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -196,16 +173,25 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
           },
         );
       case 'visual2':
-      return Visual2Screen(
-        soal: soal,
-        onAnswerSelected: (jawaban) {
-          if (jawaban != null) {
-            jawabanSiswa[soal.id_soal] = jawaban;
-          }
-        },
-      );
+        return Visual2Screen(
+          soal: soal,
+          onAnswerSelected: (jawaban) {
+            if (jawaban != null) {
+              jawabanSiswa[soal.id_soal] = jawaban;
+            }
+          },
+        );
+      // case 'kinestetik1':
+      //   return KinestetikScreen(soal: soal);
       case 'kinestetik1':
-        return KinestetikScreen(soal: soal);
+        return KinestetikScreen(
+          soal: soal,
+          onJawabanSelesai: (jawaban) {
+            jawabanSiswa[soal.id_soal] = jawaban;
+            print("Jawaban kinestetik1: $jawaban");
+          },
+        );
+
       case 'kinestetik2':
         return Kinestetik2Screen(soal: soal);
       case 'auditori1':
