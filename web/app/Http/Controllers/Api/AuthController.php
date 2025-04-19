@@ -89,4 +89,31 @@ class AuthController extends Controller
             'tanggal_lahir' => $request->user()->tanggal_lahir, // Kirim tanggal lahir dalam data user
         ]);
     }
+
+    public function lupaPassword(Request $request)
+{
+    $request->validate([
+        'username' => 'required|string',
+        'tanggal_lahir' => 'required|date_format:Y-m-d',
+        'password_baru' => 'required|string|min:6|confirmed', // gunakan password_baru + password_baru_confirmation
+    ]);
+
+    $user = User::where('username', $request->username)
+                ->where('tanggal_lahir', $request->tanggal_lahir)
+                ->where('role', 'user') // hanya untuk role user
+                ->first();
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'Data tidak ditemukan atau tidak cocok.'
+        ], 404);
+    }
+
+    $user->password = Hash::make($request->password_baru);
+    $user->save();
+
+    return response()->json([
+        'message' => 'Password berhasil diubah.',
+    ]);
+}
 }

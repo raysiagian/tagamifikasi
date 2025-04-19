@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\JawabanPenggunaController;
 //daftar user
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/lupa-password', [AuthController::class, 'lupaPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -70,7 +71,6 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
             Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
              Route::get('/matapelajaran/{id_mataPelajaran}/levels', [LevelController::class, 'getLevelsByMataPelajaran']);
              //cek kelulusan
-             
              Route::post('/cek-kelulusan-level', [JawabanPenggunaController::class, 'cekKelulusanLevel']);
 
         });

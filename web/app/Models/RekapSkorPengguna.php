@@ -20,7 +20,7 @@ class RekapSkorPengguna extends Model
         'total_visual',
         'total_auditori',
         'total_kinestetik',
-        'tipe_dominan'
+ 
     ];
 
     public function user()
