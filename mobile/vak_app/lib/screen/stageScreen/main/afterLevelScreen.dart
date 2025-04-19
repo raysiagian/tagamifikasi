@@ -3,7 +3,9 @@ import 'package:vak_app/screen/stageScreen/widget/scoreBoardwidget.dart';
 import 'package:vak_app/style/localColor.dart';
 
 class AfterLevelScreen extends StatefulWidget {
-  const AfterLevelScreen({super.key});
+  final int idMataPelajaran;
+
+  const AfterLevelScreen({super.key, required this.idMataPelajaran});
 
   @override
   State<AfterLevelScreen> createState() => _AfterLevelScreenState();
@@ -33,7 +35,7 @@ class _AfterLevelScreenState extends State<AfterLevelScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: ScoreBoardWidget(), // Panggil ScoreBoardWidget
+               child: ScoreBoardWidget(idMataPelajaran: widget.idMataPelajaran),
               ),
           ),
         ),

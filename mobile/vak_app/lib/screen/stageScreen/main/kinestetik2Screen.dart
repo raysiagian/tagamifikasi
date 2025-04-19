@@ -6,9 +6,9 @@ import 'package:vak_app/style/localColor.dart';
 
 class Kinestetik2Screen extends StatefulWidget {
   final Soal soal;
-  // final Function(String)? onJawabanSelesai;
+  final Function(String)? onJawabanSelesai;
 
-  Kinestetik2Screen({Key? key, required this.soal,}) : super(key: key);
+  Kinestetik2Screen({Key? key, required this.soal,this.onJawabanSelesai}) : super(key: key);
 
   @override
   State<Kinestetik2Screen> createState() => _Kinestetik2ScreenState();
@@ -25,14 +25,24 @@ class _Kinestetik2ScreenState extends State<Kinestetik2Screen> {
     shuffledLetters = widget.soal.pertanyaan!.split('')..shuffle(Random());
   }
 
-    void _onLetterDropped(String letter, int index) {
-    setState(() {
-      if (answerSlots[index] == null) {
-        answerSlots[index] = letter;
-        shuffledLetters.remove(letter);
+  void _onLetterDropped(String letter, int index) {
+  setState(() {
+    if (answerSlots[index] == null) {
+      answerSlots[index] = letter;
+      shuffledLetters.remove(letter);
+       _updateJawaban();
+      // Cek jika semua huruf sudah diisi
+      if (!answerSlots.contains(null)) {
+        String jawaban = answerSlots.join();
+        print("ID Soal:  ,Jawaban pengguna: $jawaban");
+        if (widget.onJawabanSelesai != null) {
+          widget.onJawabanSelesai!(jawaban);
+        }
       }
-    });
-  }
+    }
+  });
+}
+
 
   
   void _removeLetterFromSlot(int index) {
@@ -40,19 +50,40 @@ class _Kinestetik2ScreenState extends State<Kinestetik2Screen> {
       if (answerSlots[index] != null) {
         shuffledLetters.add(answerSlots[index]!);
         answerSlots[index] = null;
+        _updateJawaban();
       }
     });
   }
 
+    void _updateJawaban() {
+    String jawaban = answerSlots.whereType<String>().join();
+    if (widget.onJawabanSelesai != null) {
+      widget.onJawabanSelesai!(jawaban);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final bool isComplete = !answerSlots.contains(null);
-    final bool isCorrect = answerSlots.join() == widget.soal.pertanyaan;
+    final bool onJawabanSelesai = !answerSlots.contains(null);
+    // final bool isCorrect = answerSlots.join() == widget.soal.pertanyaan;
 
     return Scaffold(
       backgroundColor: LocalColor.transparent,
       body: Column(
         children: [
+          Container(
+            height: 250,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: NetworkImage(widget.soal.media ??
+                    "https://res.cloudinary.com/dio9zvrg3/image/upload/v1744163521/soal/media/ptcadvfrwpmpuza3uky4.png"), // Fallback gambar
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
           Text("Urutkan Kata"),
           const SizedBox(height: 24),
            Row(
@@ -113,15 +144,15 @@ class _Kinestetik2ScreenState extends State<Kinestetik2Screen> {
               }).toList(),
             ),
             const SizedBox(height: 30),
-            if (isComplete)
-              Text(
-                isCorrect ? 'Jawaban Benar!' : 'Coba lagi!',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: isCorrect ? Colors.green : Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            // if (onJawabanSelesai)
+            //   Text(
+            //     isCorrect ? 'Jawaban Benar!' : 'Coba lagi!',
+            //     style: TextStyle(
+            //       fontSize: 20,
+            //       color: isCorrect ? Colors.green : Colors.red,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
               const SizedBox(height: 40,),
                 
         ],

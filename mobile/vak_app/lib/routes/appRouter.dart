@@ -30,8 +30,15 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       //Perbaiki Konstruktor ketika sudah ada logika yg tepat 
       case AppRouteConstant.wrapperScreen:
         return MaterialPageRoute(builder: (_) => WrapperScreen());
+      // case AppRouteConstant.afterLevelScreen:
+      //   return MaterialPageRoute(builder: (_) => AfterLevelScreen());
       case AppRouteConstant.afterLevelScreen:
-        return MaterialPageRoute(builder: (_) => AfterLevelScreen());
+        if (settings.arguments is int) {
+          final idMataPelajaran = settings.arguments as int;
+          return MaterialPageRoute(
+            builder: (_) => AfterLevelScreen(idMataPelajaran: idMataPelajaran),
+          );
+        }
       case AppRouteConstant.statisticScreen:
         return MaterialPageRoute(builder: (_) =>StatisticScreen());
       // case AppRouteConstant.stageScreen:

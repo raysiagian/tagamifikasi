@@ -5,8 +5,9 @@ import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
 
 class ScoreBoardWidget extends StatefulWidget {
+  final int idMataPelajaran;
 
-  const ScoreBoardWidget({super.key});
+  const ScoreBoardWidget({super.key, required this.idMataPelajaran});
 
   @override
   State<ScoreBoardWidget> createState() => _ScoreBoardWidgetState();
@@ -88,16 +89,16 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             ),
-            onPressed: (){},
-              // onPressed: () {
-              //   Navigator.pop(context);
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => StageScreen(idMataPelajaran: ,),
-              //     ),
-              //   );
-              // },
+           onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => StageScreen(idMataPelajaran: widget.idMataPelajaran),
+                ),
+                (Route<dynamic> route) => false, // Clear semua screen sebelumnya
+              );
+            },
+
               child: Text(
                 "Kembali",
                 style: TextStyle(

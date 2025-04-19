@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/models/level.dart';
 import 'package:vak_app/models/soal.dart';
+import 'package:vak_app/screen/stageScreen/main/afterLevelScreen.dart';
 import 'package:vak_app/screen/stageScreen/main/audio2Screen.dart';
 import 'package:vak_app/screen/stageScreen/main/audioScreen.dart';
 import 'package:vak_app/screen/stageScreen/main/kinestetik2Screen.dart';
@@ -84,9 +85,21 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
       _currentIndex++;
     });
   } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Soal selesai!")),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   const SnackBar(content: Text("Soal selesai!")),
+    // );
+    //  Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const AfterLevelScreen()),
+    // );
+
+  Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(
+    builder: (context) => AfterLevelScreen(idMataPelajaran: widget.idMataPelajaran),
+  ),
+);
+
   }
 }
 
@@ -111,9 +124,6 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
           Color backgroundColor;
           switch (soal.tipeSoal.toLowerCase()) {
             case 'visual1':
-              backgroundColor = LocalColor.redBackground;
-              break;
-            case 'visual2':
               backgroundColor = LocalColor.redBackground;
               break;
             case 'visual2':
@@ -193,7 +203,13 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
         );
 
       case 'kinestetik2':
-        return Kinestetik2Screen(soal: soal);
+        return Kinestetik2Screen(
+          soal: soal,
+          onJawabanSelesai: (jawaban) {
+            jawabanSiswa[soal.id_soal] = jawaban;
+            print("Jawaban kinestetik2: $jawaban");
+          },
+        );
       case 'auditori1':
        return AudioScreen(
           soal: soal,
@@ -201,8 +217,8 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
             if (jawaban != null) {
               jawabanSiswa[soal.id_soal] = jawaban;
             }
-          },
-        );
+            },
+          );
       case 'auditori2':
        return Audio2Screen(
           soal: soal,
