@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vak_app/routes/appRouteConstant.dart';
 import 'package:vak_app/screen/stageScreen/widget/unitWidget.dart';
 
 class StageScreen extends StatefulWidget {
@@ -14,7 +15,16 @@ class _StageScreenState extends State<StageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Bermain")),
+      // appBar: AppBar(title: const Text("Bermain")),
+      appBar: AppBar(
+        title: const Text("Bermain"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, AppRouteConstant.wrapperScreen);
+          },
+        ),
+      ),
       body: Stack(
         children: [
           Container(
