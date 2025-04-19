@@ -10,4 +10,5 @@ class AppRouteConstant {
   static const String stageScreen = '/stage';
   static const String levelScreen ='/level';
   static const String kinesteticScreen='/kinestetic';
+  static const String forgetPasswordScreen='/forgetPassword';
 }

@@ -44,6 +44,13 @@ class _LevelScreenState extends State<LevelScreen> {
     return SoalService().fetchSoalByLevel(widget.idMataPelajaran);
   }
 
+   Future<void> _simpanProgressIndex(int index) async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'progress_${widget.level.id_level}';
+    await prefs.setInt(key, index);
+  }
+
+
 Future<void> submitJawaban(int idSoal, String jawaban) async {
   final token = await AuthService().getToken();
 
@@ -103,6 +110,14 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
   }
 }
 
+ void _prevQuestion() {
+    if (_currentIndex > 0) {
+      setState(() {
+        _currentIndex--;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -155,12 +170,30 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
             color: backgroundColor,
             child: Column(
               children: [
+                 const SizedBox(height: 16),
+                Text(
+                  'Soal ke ${_currentIndex + 1} dari ${_soalList.length}',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
                 Expanded(child: _buildSoalScreen(soal)),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton(
-                    onPressed: _nextQuestion,
-                    child: const Text("Selanjutnya"),
+                  child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                       if (_currentIndex > 0)
+                        ElevatedButton(
+                          onPressed: _prevQuestion,
+                          child: const Text("Kembali"),
+                        )
+                      else
+                        const SizedBox(width: 100), // Placeholder biar sejajar
+                      ElevatedButton(
+                        onPressed: _nextQuestion,
+                        child: const Text("Selanjutnya"),
+                      ),
+                    ],
                   ),
                 ),
               ],

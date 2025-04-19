@@ -156,5 +156,48 @@ private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $st
     }
 }
 
+// public function getSkorAkhir(Request $request)
+// {
+//     $user = auth()->user();
+//     $idUser = $user->id;
+//     $idMataPelajaran = $request->query('id_mataPelajaran');
+//     $idLevel = $request->query('id_level'); // Menambahkan parameter level
+
+//     // Validasi input
+//     if (!$idMataPelajaran || !$idLevel) {
+//         return response()->json(['message' => 'ID Mata Pelajaran dan ID Level wajib diisi'], 400);
+//     }
+
+//     // Ambil data skor akhir dari skor_pengguna berdasarkan level
+//     $skor = \App\Models\SkorPengguna::where('id_user', $idUser)
+//         ->where('id_mataPelajaran', $idMataPelajaran)
+//         ->where('id_level', $idLevel) // Memastikan level juga difilter
+//         ->get();
+
+//     if ($skor->isEmpty()) {
+//         return response()->json(['message' => 'Data skor tidak ditemukan untuk level ini'], 404);
+//     }
+
+//     $totalBenar = 0;
+//     $tipeCount = [];
+
+//     // Loop untuk menghitung jumlah benar dan tipe soal dominan
+//     foreach ($skor as $s) {
+//         $totalBenar += $s->jumlah_benar;
+//         $tipeCount[$s->tipeSoal] = ($tipeCount[$s->tipeSoal] ?? 0) + 1;
+//     }
+
+//     // Cari tipe soal dominan
+//     arsort($tipeCount);
+//     $tipeDominan = array_key_first($tipeCount);
+
+//     return response()->json([
+//         'total_benar' => $totalBenar,
+//         'tipe_dominan' => $tipeDominan,
+//     ]);
+// }
+
+
+
 
 }
