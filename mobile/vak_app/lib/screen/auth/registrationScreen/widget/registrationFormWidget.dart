@@ -87,7 +87,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Registrasi berhasil! Silakan login.")),
         );
-        Navigator.pushNamed(context, AppRouteConstant.wrapperScreen);
+        Navigator.pushNamed(context, AppRouteConstant.loginScreen);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -72,6 +72,9 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
              Route::get('/matapelajaran/{id_mataPelajaran}/levels', [LevelController::class, 'getLevelsByMataPelajaran']);
              //cek kelulusan
              Route::post('/cek-kelulusan-level', [JawabanPenggunaController::class, 'cekKelulusanLevel']);
+            
+             //skor setelah mengerjakan soal
+             Route::get('/skor-akhir', [JawabanPenggunaController::class, 'getSkorAkhir']);
 
         });
 

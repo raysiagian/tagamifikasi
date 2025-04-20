@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/models/level.dart';
 import 'package:vak_app/routes/appRouteConstant.dart';
+import 'package:vak_app/screen/auth/forgetPasswordScreen/main/forgetPasswordScreen.dart';
 import 'package:vak_app/screen/auth/loginScreen/main/loginScreen.dart';
 import 'package:vak_app/screen/auth/registrationScreen/main/registrationScreen.dart';
 import 'package:vak_app/screen/homeScreen/main/homeScreen.dart';
@@ -24,6 +25,8 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case AppRouteConstant.registrationScreen:
         return MaterialPageRoute(builder: (_) => RegistrationScreen());
+      case AppRouteConstant.forgetPasswordScreen:
+        return MaterialPageRoute(builder: (_) => ForgetPasswordScreen());
       //Perbaiki Konstruktor ketika sudah ada logika yg tepat 
       case AppRouteConstant.homeScreen:
         return MaterialPageRoute(builder: (_) => HomeScreen());

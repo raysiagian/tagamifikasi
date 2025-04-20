@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:vak_app/routes/appRouteConstant.dart';
 import 'package:vak_app/style/localColor.dart';
@@ -94,6 +95,27 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        RichText(
+          text: TextSpan(
+            text: 'Lupa password? ',
+            style: TextStyle(color: Colors.black87),
+            children: [
+              TextSpan(
+                text: 'Reset di sini',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.pushNamed(context, AppRouteConstant.forgetPasswordScreen);
+                  },
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 20.0),
