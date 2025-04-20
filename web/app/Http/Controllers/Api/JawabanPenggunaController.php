@@ -155,47 +155,82 @@ private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $st
         ]);
     }
 }
+ 
 
-// public function getSkorAkhir(Request $request)
-// {
-//     $user = auth()->user();
-//     $idUser = $user->id;
-//     $idMataPelajaran = $request->query('id_mataPelajaran');
-//     $idLevel = $request->query('id_level'); // Menambahkan parameter level
+public function getSkorAkhir()
+{
+    $user = Auth::user();
 
-//     // Validasi input
-//     if (!$idMataPelajaran || !$idLevel) {
-//         return response()->json(['message' => 'ID Mata Pelajaran dan ID Level wajib diisi'], 400);
-//     }
+    if (!$user) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'User tidak ditemukan.'
+        ], 401);
+    }
 
-//     // Ambil data skor akhir dari skor_pengguna berdasarkan level
-//     $skor = \App\Models\SkorPengguna::where('id_user', $idUser)
-//         ->where('id_mataPelajaran', $idMataPelajaran)
-//         ->where('id_level', $idLevel) // Memastikan level juga difilter
-//         ->get();
+    // Ambil rekap skor dari semua mata pelajaran dan level
+    $rekapList = RekapSkorPengguna::where('id_user', $user->id_user)->get();
 
-//     if ($skor->isEmpty()) {
-//         return response()->json(['message' => 'Data skor tidak ditemukan untuk level ini'], 404);
-//     }
+    // Inisialisasi total
+    $totalVisual = 0;
+    $totalAuditori = 0;
+    $totalKinestetik = 0;
 
-//     $totalBenar = 0;
-//     $tipeCount = [];
+    foreach ($rekapList as $rekap) {
+        $totalVisual += $rekap->total_visual;
+        $totalAuditori += $rekap->total_auditori;
+        $totalKinestetik += $rekap->total_kinestetik;
+    }
 
-//     // Loop untuk menghitung jumlah benar dan tipe soal dominan
-//     foreach ($skor as $s) {
-//         $totalBenar += $s->jumlah_benar;
-//         $tipeCount[$s->tipeSoal] = ($tipeCount[$s->tipeSoal] ?? 0) + 1;
-//     }
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Total skor akhir berhasil diambil.',
+        'data' => [
+            'total_visual' => $totalVisual,
+            'total_auditori' => $totalAuditori,
+            'total_kinestetik' => $totalKinestetik
+        ]
+    ]);
+}
 
-//     // Cari tipe soal dominan
-//     arsort($tipeCount);
-//     $tipeDominan = array_key_first($tipeCount);
+public function getSkorAkhirPerLevel(Request $request)
+{
+    $user = Auth::user();
 
-//     return response()->json([
-//         'total_benar' => $totalBenar,
-//         'tipe_dominan' => $tipeDominan,
-//     ]);
-// }
+    if (!$user) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'User tidak ditemukan.'
+        ], 401);
+    }
+
+    $request->validate([
+        'id_mataPelajaran' => 'required|integer',
+        'id_level' => 'required|integer',
+    ]);
+
+    $rekap = RekapSkorPengguna::where('id_user', $user->id_user)
+        ->where('id_mataPelajaran', $request->id_mataPelajaran)
+        ->where('id_level', $request->id_level)
+        ->first();
+
+    if (!$rekap) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Rekap skor tidak ditemukan untuk level dan mata pelajaran tersebut.',
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Skor akhir berhasil diambil.',
+        'data' => [
+            'total_visual' => $rekap->total_visual,
+            'total_auditori' => $rekap->total_auditori,
+            'total_kinestetik' => $rekap->total_kinestetik
+        ]
+    ]);
+}
 
 
 
