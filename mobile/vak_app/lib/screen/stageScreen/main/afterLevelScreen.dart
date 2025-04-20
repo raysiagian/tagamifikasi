@@ -4,8 +4,9 @@ import 'package:vak_app/style/localColor.dart';
 
 class AfterLevelScreen extends StatefulWidget {
   final int idMataPelajaran;
+  final int idLevel;
 
-  const AfterLevelScreen({super.key, required this.idMataPelajaran});
+  const AfterLevelScreen({super.key, required this.idMataPelajaran,required this.idLevel,});
 
   @override
   State<AfterLevelScreen> createState() => _AfterLevelScreenState();
@@ -35,7 +36,7 @@ class _AfterLevelScreenState extends State<AfterLevelScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-               child: ScoreBoardWidget(idMataPelajaran: widget.idMataPelajaran),
+               child: ScoreBoardWidget(idMataPelajaran: widget.idMataPelajaran, idLevel: widget.idLevel,),
               ),
           ),
         ),

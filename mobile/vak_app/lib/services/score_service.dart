@@ -5,19 +5,21 @@ import 'package:vak_app/services/auth_services.dart';
 import 'package:vak_app/models/users.dart';
 
 class SkorService {
-  Future<Map<String, dynamic>> fetchSkorAkhir(int idMataPelajaran) async {
-    final authService = AuthService();
-    final token = await authService.getToken();
-    final user = await authService.getUser(); // ambil user dari token
+  final AuthService _authService = AuthService();
+
+  Future<Map<String, dynamic>> fetchSkorAkhirLevel({
+    required int idMataPelajaran,
+    required int idLevel,
+  }) async {
+    final token = await _authService.getToken();
+    final user = await _authService.getUser();
 
     if (token == null || user == null) {
       throw Exception('Token atau data pengguna tidak ditemukan');
     }
 
-    final idUser = user.idUser; // pastikan model Users punya properti `id`
-
     final url = Uri.parse(
-      "$baseUrl/skor-akhir?id_user=$idUser&id_mataPelajaran=$idMataPelajaran"
+      "$baseUrl/skor-akhir-level?id_mataPelajaran=$idMataPelajaran&id_level=$idLevel",
     );
 
     final response = await http.get(

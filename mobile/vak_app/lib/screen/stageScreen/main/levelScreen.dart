@@ -103,7 +103,7 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
   Navigator.pushReplacement(
   context,
   MaterialPageRoute(
-    builder: (context) => AfterLevelScreen(idMataPelajaran: widget.idMataPelajaran),
+    builder: (context) => AfterLevelScreen(idMataPelajaran: widget.idMataPelajaran, idLevel: widget.level.id_level,),
   ),
 );
 

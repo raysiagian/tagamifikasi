@@ -156,7 +156,6 @@ private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $st
     }
 }
  
-
 public function getSkorAkhir()
 {
     $user = Auth::user();
@@ -231,7 +230,6 @@ public function getSkorAkhirPerLevel(Request $request)
         ]
     ]);
 }
-
 
 
 

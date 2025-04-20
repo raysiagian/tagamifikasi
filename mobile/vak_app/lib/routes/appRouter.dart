@@ -35,13 +35,34 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         return MaterialPageRoute(builder: (_) => WrapperScreen());
       // case AppRouteConstant.afterLevelScreen:
       //   return MaterialPageRoute(builder: (_) => AfterLevelScreen());
+      // case AppRouteConstant.afterLevelScreen:
+      //   if (settings.arguments is int) {
+      //     final idMataPelajaran = settings.arguments as int;
+      //     return MaterialPageRoute(
+      //       builder: (_) => AfterLevelScreen(idMataPelajaran: idMataPelajaran, idLevel: idLevel,),
+      //     );
+      //   }
+
       case AppRouteConstant.afterLevelScreen:
-        if (settings.arguments is int) {
-          final idMataPelajaran = settings.arguments as int;
+        if (settings.arguments is Map<String, dynamic>) {
+          final args = settings.arguments as Map<String, dynamic>;
+          final int idMataPelajaran = args['idMataPelajaran'];
+          final int idLevel = args['idLevel'];
+          
           return MaterialPageRoute(
-            builder: (_) => AfterLevelScreen(idMataPelajaran: idMataPelajaran),
+            builder: (_) => AfterLevelScreen(
+              idMataPelajaran: idMataPelajaran,
+              idLevel: idLevel,
+            ),
           );
         }
+
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            body: Center(child: Text('Error: Argument tidak lengkap untuk AfterLevelScreen')),
+          ),
+        );
+
       case AppRouteConstant.statisticScreen:
         return MaterialPageRoute(builder: (_) =>StatisticScreen());
       // case AppRouteConstant.stageScreen:
