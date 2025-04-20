@@ -151,25 +151,41 @@
 @endif
 
 {{-- Jawaban Benar --}}
+{{-- Jawaban Benar --}}
 <div class="mt-3">
-<strong class="text-success">Jawaban Benar:</strong>
-@if(Str::startsWith($soal->tipeSoal, 'kinestetik') && $soal->jawabanBenar)
-    <ul class="mt-2">
-        @php
-            $jawabanPair = json_decode($soal->jawabanBenar, true);
-        @endphp
-        @if(is_array($jawabanPair))
-            @foreach($jawabanPair as $opsi => $pasangan)
-                <li>{{ $opsi }} cocok dengan {{ $pasangan }}</li>
-            @endforeach
-        @else
-            <li class="text-danger">Format jawaban tidak valid atau kosong.</li>
-        @endif
-    </ul>
-@else
-    <p class="mt-2">{{ $soal->jawabanBenar }}</p>
-@endif
+    <strong class="text-success">Jawaban Benar:</strong>
+    @if(Str::startsWith($soal->tipeSoal, 'kinestetik') && $soal->jawabanBenar)
+        <ul class="mt-2">
+            @php
+                $jawabanPair = json_decode($soal->jawabanBenar, true);
+            @endphp
+
+            @if(is_array($jawabanPair))
+                {{-- Jika format JSON valid --}}
+                @foreach($jawabanPair as $opsi => $pasangan)
+                    <li>{{ $opsi }} cocok dengan {{ $pasangan }}</li>
+                @endforeach
+
+            @elseif($soal->tipeSoal === 'kinestetik2')
+                {{-- Jika kinestetik2 tapi bukan format JSON, tampilkan per pasangan dipisah koma --}}
+                @php
+                    $pairs = explode(',', $soal->jawabanBenar);
+                @endphp
+                @foreach($pairs as $pair)
+                    <li>{{ $pair }}</li>
+                @endforeach
+
+            @else
+                {{-- Format tidak dikenali --}}
+                <li class="text-danger">Format jawaban tidak valid atau kosong.</li>
+            @endif
+        </ul>
+    @else
+        {{-- Untuk tipe soal lainnya --}}
+        <p class="mt-2">{{ $soal->jawabanBenar }}</p>
+    @endif
 </div>
+
 
                             </div>
                         </div>

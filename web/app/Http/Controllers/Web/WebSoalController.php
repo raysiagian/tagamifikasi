@@ -73,6 +73,9 @@ class WebSoalController extends Controller
                 // Simpan sebagai JSON string
                 $jawabanBenar = json_encode($pairing);
             }
+        } elseif ($request->tipeSoal === 'kinestetik2') {
+            // Untuk kinestetik2, ambil jawaban teks
+            $jawabanBenar = $request->input('jawabanBenarText');
         } else {
             $jawabanBenar = $request->input('jawabanBenar');
         }

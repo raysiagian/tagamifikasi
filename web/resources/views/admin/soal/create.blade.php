@@ -38,7 +38,7 @@
                                 <option value="file">File</option>
                             </select>
                             <input type="text" name="opsi{{ $opt }}" id="opsi{{ $opt }}_text" class="form-control opsi-input">
-                            <input type="file" name="opsi{{ $opt }}" id="opsi{{ $opt }}_file" class="form-control opsi-input d-none">
+                            <input type="file" name="opsi{{ $opt }}_file" id="opsi{{ $opt }}_file" class="form-control opsi-input d-none">
                         </div>
                         @endforeach
                     </div>
@@ -55,13 +55,13 @@
                                     <option value="file">File</option>
                                 </select>
                                 <input type="text" name="pasangan{{ $opt }}" id="pasangan{{ $opt }}_text" class="form-control pasangan-input">
-                                <input type="file" name="pasangan{{ $opt }}" id="pasangan{{ $opt }}_file" class="form-control pasangan-input d-none">
+                                <input type="file" name="pasangan{{ $opt }}_file" id="pasangan{{ $opt }}_file" class="form-control pasangan-input d-none">
                             </div>
                             @endforeach
                         </div>
                     </div>
 
-                    {{-- Jawaban untuk visual dan auditori --}}
+                    {{-- Jawaban untuk visual & auditori --}}
                     <div class="mb-3" id="jawabanSingleField">
                         <label for="jawabanBenar" class="form-label">Jawaban Benar</label>
                         <select name="jawabanBenar" class="form-control">
@@ -72,8 +72,8 @@
                         </select>
                     </div>
 
-                    {{-- Jawaban kinestetik --}}
-                    <div class="mb-3" id="jawabanBenarKinestetik" style="display: none;">
+                    {{-- Jawaban kinestetik1 --}}
+                    <div class="mb-3" id="jawabanBenarKinestetik1" style="display: none;">
                         <label class="form-label">Jawaban Benar (Pasangan Opsi dan Pasangan)</label>
                         <div class="row">
                             @foreach(['A','B','C','D'] as $opt)
@@ -89,6 +89,12 @@
                             </div>
                             @endforeach
                         </div>
+                    </div>
+
+                    {{-- Jawaban kinestetik2 --}}
+                    <div class="mb-3" id="jawabanBenarKinestetik2" style="display: none;">
+                        <label for="jawabanBenarText" class="form-label">Jawaban Benar</label>
+                        <input type="text" name="jawabanBenarText" class="form-control">
                     </div>
 
                     <div class="mb-3">
@@ -132,22 +138,49 @@
 
         function toggleFields() {
             const tipe = document.getElementById('tipeSoal').value;
-            const isKinestetik = tipe.startsWith('kinestetik');
+            const pasanganFields = document.getElementById('pasanganFields');
+            const jawabanSingle = document.getElementById('jawabanSingleField');
+            const jawabanKinestetik1 = document.getElementById('jawabanBenarKinestetik1');
+            const jawabanKinestetik2 = document.getElementById('jawabanBenarKinestetik2');
+            const mediaFormGroup = document.querySelector('input[name="media"]').closest('.mb-3');
+            const audioFormGroup = document.querySelector('input[name="audioPertanyaan"]').closest('.mb-3');
 
-            document.getElementById('pasanganFields').style.display = isKinestetik ? 'block' : 'none';
-            document.getElementById('jawabanBenarKinestetik').style.display = isKinestetik ? 'block' : 'none';
-            document.getElementById('jawabanSingleField').style.display = isKinestetik ? 'none' : 'block';
+            jawabanSingle.style.display = 'none';
+            jawabanKinestetik1.style.display = 'none';
+            jawabanKinestetik2.style.display = 'none';
+            pasanganFields.style.display = 'none';
+            mediaFormGroup.style.display = 'block';
+            audioFormGroup.style.display = 'block';
+
+            ['A','B','C','D'].forEach(opt => {
+                const el = document.querySelector(`[name="opsi${opt}"]`)?.closest('.border');
+                if (el) el.style.display = 'block';
+            });
+
+            if (tipe.startsWith('kinestetik')) {
+                pasanganFields.style.display = 'block';
+
+                if (tipe === 'kinestetik1') {
+                    jawabanKinestetik1.style.display = 'block';
+                    mediaFormGroup.style.display = 'none';
+                } else if (tipe === 'kinestetik2') {
+                    jawabanKinestetik2.style.display = 'block';
+                }
+
+            } else if (tipe === 'visual2' || tipe === 'auditori2') {
+                jawabanSingle.style.display = 'block';
+                mediaFormGroup.style.display = 'none';
+                ['C','D'].forEach(opt => {
+                    const el = document.querySelector(`[name="opsi${opt}"]`)?.closest('.border');
+                    if (el) el.style.display = 'none';
+                });
+            } else {
+                jawabanSingle.style.display = 'block';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
             toggleFields();
-            document.querySelectorAll('.form-select').forEach(select => {
-                const nextInput = select.parentElement.querySelector('input[type="text"], input[type="file"]');
-                if (nextInput && nextInput.id && (nextInput.id.endsWith('_text') || nextInput.id.endsWith('_file'))) {
-                    const baseId = nextInput.id.replace(/_(text|file)/, '');
-                    toggleInput(select, baseId);
-                }
-            });
         });
     </script>
 </body>
