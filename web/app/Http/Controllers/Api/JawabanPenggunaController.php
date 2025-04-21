@@ -209,8 +209,11 @@ public function getSkorAkhirPerLevel(Request $request)
     ]);
 
     $skorTerakhir = SkorPengguna::where('id_user', $user->id_user)
-        ->where('id_mataPelajaran', $request->id_mataPelajaran)
-        ->where('id_level', $request->id_level)
+        // ->where('id_mataPelajaran', $request->id_mataPelajaran)
+        // ->where('id_level', $request->id_level)
+        ->where('id_mataPelajaran', $request->query('id_mataPelajaran'))
+        ->where('id_level', $request->query('id_level'))
+
         ->orderBy('created_at', 'desc') // Ambil skor terakhir berdasarkan waktu
         ->first();
 

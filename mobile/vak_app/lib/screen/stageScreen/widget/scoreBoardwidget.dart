@@ -236,10 +236,10 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  "Skor kamu: ${totalBenar ?? 0}",
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                // Text(
+                //   "Skor kamu: ${totalBenar ?? 0}",
+                //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                // ),
                 const SizedBox(height: 5),
                 Text("Tipe dominan: ${tipeDominan ?? '-'}"),
                 const SizedBox(height: 30),

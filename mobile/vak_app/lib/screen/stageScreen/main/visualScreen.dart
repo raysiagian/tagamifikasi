@@ -162,7 +162,28 @@ class VisualScreen extends StatefulWidget {
 }
 
 class _VisualScreenState extends State<VisualScreen> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
   String? selectedOption;
+    bool isPlaying = false;
+  bool isPressed = false;
+
+      @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+  Future<void> _playPause() async {
+    if (widget.soal.audioPertanyaan == null) return;
+    if (isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(UrlSource(widget.soal.audioPertanyaan!));
+    }
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +218,7 @@ class _VisualScreenState extends State<VisualScreen> {
               padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
               child: Row(
                 children: [
-                  ElevatedButton(
+                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: LocalColor.primary,
                       shape: RoundedRectangleBorder(
@@ -205,15 +226,30 @@ class _VisualScreenState extends State<VisualScreen> {
                       ),
                       padding: const EdgeInsets.all(16),
                     ),
-                    onPressed: () {
-                      print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
-                    },
+                    onPressed: _playPause,
                     child: Image.asset(
                       "assets/images/component/HiFi-Speaker.png",
                       width: 40,
                       height: 40,
                     ),
                   ),
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: LocalColor.primary,
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(8),
+                  //     ),
+                  //     padding: const EdgeInsets.all(16),
+                  //   ),
+                  //   onPressed: () {
+                  //     print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+                  //   },
+                  //   child: Image.asset(
+                  //     "assets/images/component/HiFi-Speaker.png",
+                  //     width: 40,
+                  //     height: 40,
+                  //   ),
+                  // ),
                   const SizedBox(width: 21),
                   Expanded(
                     child: Text(

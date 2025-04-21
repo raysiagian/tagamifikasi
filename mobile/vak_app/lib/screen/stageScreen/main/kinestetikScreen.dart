@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vak_app/models/soal.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class KinestetikScreen extends StatefulWidget {
   final Soal soal;
@@ -14,15 +15,20 @@ class KinestetikScreen extends StatefulWidget {
 }
 
 class _KinestetikScreenState extends State<KinestetikScreen> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
   Map<String, String> choices = {};
   Map<String, String?> targetSlots = {};
   bool _isInitialized = false;
+  bool isPlaying = false;
+  bool isPressed = false;
 
   @override
   void initState() {
     super.initState();
     _initializeData();
   }
+
+
 
   void _initializeData() {
     final opsiA = widget.soal.opsiA ?? "Opsi A";
@@ -55,6 +61,25 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
   }
 
   @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+    Future<void> _playPause() async {
+    if (widget.soal.audioPertanyaan == null) return;
+    if (isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(UrlSource(widget.soal.audioPertanyaan!));
+    }
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
       return const Center(child: CircularProgressIndicator());
@@ -63,8 +88,9 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
     return Scaffold(
       backgroundColor: LocalColor.transparent,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: LocalColor.primary,
         onPressed: _resetJawaban,
-        child: const Icon(Icons.refresh),
+        child: const Icon(Icons.refresh,color: Colors.white,),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -96,27 +122,43 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
         padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
         child: Row(
           children: [
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: LocalColor.primary,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(8),
+            //     ),
+            //     padding: const EdgeInsets.all(16),
+            //   ),
+            //   onPressed: () {
+            //     print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+            //   },
+            //   child: Image.asset(
+            //     "assets/images/component/HiFi-Speaker.png",
+            //     width: 40,
+            //     height: 40,
+            //   ),
+            // ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: LocalColor.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: const EdgeInsets.all(16),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: LocalColor.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              onPressed: () {
-                print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
-              },
-              child: Image.asset(
-                "assets/images/component/HiFi-Speaker.png",
-                width: 40,
-                height: 40,
-              ),
+              padding: const EdgeInsets.all(16),
             ),
+            onPressed: _playPause,
+            child: Image.asset(
+              "assets/images/component/HiFi-Speaker.png",
+              width: 40,
+              height: 40,
+            ),
+          ),
+
             const SizedBox(width: 21),
             Expanded(
               child: Text(
-                "Cocokkan gambar dengan kata",
+                widget.soal.pertanyaan??"Cocokkan gambar dengan kata",
                 style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
                   color: LocalColor.primary,
                 ),
@@ -336,8 +378,8 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
     Map<String, String> jawaban = {};
     targetSlots.forEach((kunci, nilai) {
       if (nilai != null) {
-        final opsiHuruf = _getHurufDariOpsi(nilai);
-        final pasanganHuruf = _getHurufDariPasangan(kunci);
+        final opsiHuruf = _getHurufDariOpsi(kunci);
+        final pasanganHuruf = _getHurufDariPasangan(nilai);
         jawaban[opsiHuruf] = pasanganHuruf;
       }
     });

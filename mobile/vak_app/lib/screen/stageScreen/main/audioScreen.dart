@@ -30,18 +30,22 @@ class _AudioScreenState extends State<AudioScreen> {
     super.dispose();
   }
 
+  
   Future<void> _playPause() async {
-    if (widget.soal.audioPertanyaan == null) return;
-    if (isPlaying) {
-      await _audioPlayer.pause();
-    } else {
-      await _audioPlayer.stop();
-      await _audioPlayer.play(UrlSource(widget.soal.audioPertanyaan!));
-    }
-    setState(() {
-      isPlaying = !isPlaying;
-    });
+  if (widget.soal.media == null) return;
+
+  if (isPlaying) {
+    await _audioPlayer.pause();
+  } else {
+    await _audioPlayer.stop();
+    await _audioPlayer.play(UrlSource(widget.soal.media!));
   }
+
+  setState(() {
+    isPlaying = !isPlaying;
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,23 +102,47 @@ class _AudioScreenState extends State<AudioScreen> {
                     const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
                 child: Row(
                   children: [
+                    // putar audio pertanyaan
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: LocalColor.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.all(16),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: LocalColor.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      onPressed: () {
-                        print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
-                      },
-                      child: Image.asset(
-                        "assets/images/component/HiFi-Speaker.png",
-                        width: 40,
-                        height: 40,
-                      ),
+                      padding: const EdgeInsets.all(16),
                     ),
+                    onPressed: () async {
+                      if (widget.soal.audioPertanyaan != null) {
+                        await _audioPlayer.stop(); // Optional: biar nggak tabrakan kalau lagi ada audio jalan
+                        await _audioPlayer.play(UrlSource(widget.soal.audioPertanyaan!));
+                      } else {
+                        print("Tidak ada audio untuk pertanyaan.");
+                      }
+                    },
+                    child: Image.asset(
+                      "assets/images/component/HiFi-Speaker.png",
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: LocalColor.primary,
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(8),
+                    //     ),
+                    //     padding: const EdgeInsets.all(16),
+                    //   ),
+                    //   onPressed: () {
+                    //     print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+                    //   },
+                    //   child: Image.asset(
+                    //     "assets/images/component/HiFi-Speaker.png",
+                    //     width: 40,
+                    //     height: 40,
+                    //   ),
+                    // ),
                     const SizedBox(width: 21),
                     Expanded(
                       child: Text(

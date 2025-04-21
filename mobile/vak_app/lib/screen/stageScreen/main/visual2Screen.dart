@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vak_app/models/soal.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class Visual2Screen extends StatefulWidget {
   final Soal soal;
@@ -18,8 +19,11 @@ class Visual2Screen extends StatefulWidget {
 }
 
 class _Visual2ScreenState extends State<Visual2Screen> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
   String? selectedOption;
   late Map<String, String?> options;
+  bool isPlaying = false;
+  bool isPressed = false;
 
   @override
   void initState() {
@@ -28,6 +32,25 @@ class _Visual2ScreenState extends State<Visual2Screen> {
       'A': widget.soal.opsiA,
       'B': widget.soal.opsiB,
     };
+  }
+
+    @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+      Future<void> _playPause() async {
+    if (widget.soal.audioPertanyaan == null) return;
+    if (isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(UrlSource(widget.soal.audioPertanyaan!));
+    }
+    setState(() {
+      isPlaying = !isPlaying;
+    });
   }
 
   @override
@@ -85,7 +108,7 @@ class _Visual2ScreenState extends State<Visual2Screen> {
               padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
               child: Row(
                 children: [
-                  ElevatedButton(
+                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: LocalColor.primary,
                       shape: RoundedRectangleBorder(
@@ -93,19 +116,34 @@ class _Visual2ScreenState extends State<Visual2Screen> {
                       ),
                       padding: const EdgeInsets.all(16),
                     ),
-                    onPressed: () {
-                      print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
-                    },
+                    onPressed: _playPause,
                     child: Image.asset(
                       "assets/images/component/HiFi-Speaker.png",
                       width: 40,
                       height: 40,
                     ),
                   ),
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: LocalColor.primary,
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(8),
+                  //     ),
+                  //     padding: const EdgeInsets.all(16),
+                  //   ),
+                  //   onPressed: () {
+                  //     print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
+                  //   },
+                  //   child: Image.asset(
+                  //     "assets/images/component/HiFi-Speaker.png",
+                  //     width: 40,
+                  //     height: 40,
+                  //   ),
+                  // ),
                   const SizedBox(width: 21),
                   Expanded(
                     child: Text(
-                      "Pertanyaan tidak tersedia",
+                      widget.soal.pertanyaan ?? "Pertanyaan tidak tersedia",
                       style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
                         color: LocalColor.primary,
                       ),
