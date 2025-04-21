@@ -69,93 +69,96 @@ class _Kinestetik2ScreenState extends State<Kinestetik2Screen> {
 
     return Scaffold(
       backgroundColor: LocalColor.transparent,
-      body: Column(
-        children: [
-          Container(
-            height: 250,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: NetworkImage(widget.soal.media ??
-                    "https://res.cloudinary.com/dio9zvrg3/image/upload/v1744163521/soal/media/ptcadvfrwpmpuza3uky4.png"), // Fallback gambar
-                fit: BoxFit.cover,
+      body: Padding(
+         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          children: [
+            Container(
+              height: 250,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: NetworkImage(widget.soal.media ??
+                      "https://res.cloudinary.com/dio9zvrg3/image/upload/v1744163521/soal/media/ptcadvfrwpmpuza3uky4.png"), // Fallback gambar
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Text("Urutkan Kata"),
-          const SizedBox(height: 24),
-           Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(answerSlots.length, (index) {
-                return DragTarget<String>(
-                  builder: (context, candidateData, rejectedData) {
-                    return GestureDetector(
-                      onTap: () => _removeLetterFromSlot(index),
+            const SizedBox(height: 20),
+            Text("Urutkan Kata"),
+            const SizedBox(height: 24),
+             Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(answerSlots.length, (index) {
+                  return DragTarget<String>(
+                    builder: (context, candidateData, rejectedData) {
+                      return GestureDetector(
+                        onTap: () => _removeLetterFromSlot(index),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: 40,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent, width: 2),
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            answerSlots[index] ?? '',
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      );
+                    },
+                    onAccept: (letter) => _onLetterDropped(letter, index),
+                    onWillAccept: (data) => answerSlots[index] == null,
+                  );
+                }),
+              ),
+               const SizedBox(height: 40),
+        
+              // HURUF YANG BISA DIPILIH
+              Wrap(
+                spacing: 10,
+                children: shuffledLetters.map((letter) {
+                  return Draggable<String>(
+                    data: letter,
+                    feedback: Material(
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
                         width: 40,
                         height: 50,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blueAccent, width: 2),
+                          color: Colors.amber,
                           borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
                         ),
                         alignment: Alignment.center,
-                        child: Text(
-                          answerSlots[index] ?? '',
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
+                        child: Text(letter, style: TextStyle(fontSize: 24)),
                       ),
-                    );
-                  },
-                  onAccept: (letter) => _onLetterDropped(letter, index),
-                  onWillAccept: (data) => answerSlots[index] == null,
-                );
-              }),
-            ),
-             const SizedBox(height: 40),
-
-            // HURUF YANG BISA DIPILIH
-            Wrap(
-              spacing: 10,
-              children: shuffledLetters.map((letter) {
-                return Draggable<String>(
-                  data: letter,
-                  feedback: Material(
-                    child: Container(
-                      width: 40,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(letter, style: TextStyle(fontSize: 24)),
                     ),
-                  ),
-                  childWhenDragging: Opacity(
-                    opacity: 0.3,
+                    childWhenDragging: Opacity(
+                      opacity: 0.3,
+                      child: _buildLetterTile(letter),
+                    ),
                     child: _buildLetterTile(letter),
-                  ),
-                  child: _buildLetterTile(letter),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 30),
-            // if (onJawabanSelesai)
-            //   Text(
-            //     isCorrect ? 'Jawaban Benar!' : 'Coba lagi!',
-            //     style: TextStyle(
-            //       fontSize: 20,
-            //       color: isCorrect ? Colors.green : Colors.red,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-              const SizedBox(height: 40,),
-                
-        ],
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 30),
+              // if (onJawabanSelesai)
+              //   Text(
+              //     isCorrect ? 'Jawaban Benar!' : 'Coba lagi!',
+              //     style: TextStyle(
+              //       fontSize: 20,
+              //       color: isCorrect ? Colors.green : Colors.red,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+                const SizedBox(height: 40,),
+                  
+          ],
+        ),
       ),
     );
     

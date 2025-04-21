@@ -49,7 +49,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+      body: Column(
       children: [
         TextFormField(
           controller: _usernameController,
@@ -140,6 +141,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           ),
         ),
       ],
+    ),
     );
   }
 }

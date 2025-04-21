@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vak_app/routes/appRouteConstant.dart';
+import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
 import 'package:vak_app/style/regulerTextStyle.dart';
 import 'package:vak_app/models/users.dart';
@@ -106,7 +107,19 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+         const SizedBox(height: 10),
+        Text(
+          "Daftar",
+          style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          "Akun",
+          style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
+        ),
+        const SizedBox(height: 10),
         TextFormField(
           controller: _nameController,
           decoration: InputDecoration(
@@ -131,26 +144,50 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
         const SizedBox(height: 20.0),
 
         // Pilih Jenis Kelamin
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+       // Pilih Jenis Kelamin
+       // Pilih Jenis Kelamin
+       // Pilih Jenis Kelamin - pakai button toggle
+        Text(
+          "Pilih Jenis Kelamin",
+          style: RegulerTextStyle.textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 8),
+        Row(
           children: [
-            const Text("Pilih Jenis Kelamin"),
-            CheckboxListTile(
-              title: const Text("Laki-laki"),
-              value: isMale,
-              onChanged: (bool? value) {
-                _updateGenderSelection("laki-laki");
-              },
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () => _updateGenderSelection("laki-laki"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isMale ? LocalColor.primary : Colors.grey[200],
+                  foregroundColor: isMale ? Colors.white : Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: isMale ? 2 : 0,
+                ),
+                child: const Text("Laki-laki"),
+              ),
             ),
-            CheckboxListTile(
-              title: const Text("Perempuan"),
-              value: isFemale,
-              onChanged: (bool? value) {
-                _updateGenderSelection("perempuan");
-              },
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () => _updateGenderSelection("perempuan"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isFemale ? LocalColor.primary : Colors.grey[200],
+                  foregroundColor: isFemale ? Colors.white : Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: isFemale ? 2 : 0,
+                ),
+                child: const Text("Perempuan"),
+              ),
             ),
           ],
         ),
+
+
+
         const SizedBox(height: 20),
 
         TextFormField(

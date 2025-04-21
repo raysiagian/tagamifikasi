@@ -13,11 +13,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child:  Scaffold(
-      body: Padding(
+      body: SingleChildScrollView(
+        child: Padding(
        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         child: Container(
           child: ForgetPasswordFormWidget(),
         ),
+      ),
       ),
     ));
   }

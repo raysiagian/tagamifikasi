@@ -36,17 +36,17 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
     final pasanganD = widget.soal.pasanganD ?? "Pasangan D";
 
     choices = {
-      opsiA: pasanganA,
-      opsiB: pasanganB,
-      opsiC: pasanganC,
-      opsiD: pasanganD,
+      pasanganA: opsiA,
+      pasanganB: opsiB,
+      pasanganC: opsiC,
+      pasanganD: opsiD,
     };
 
     targetSlots = {
-      pasanganA: null,
-      pasanganB: null,
-      pasanganC: null,
-      pasanganD: null,
+      opsiA: null,
+      opsiB: null,
+      opsiC: null,
+      opsiD: null,
     };
 
     setState(() {
@@ -72,13 +72,9 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildHeader(),
-
             const SizedBox(height: 20),
-
             _buildTargetGrid(),
-
             const SizedBox(height: 40),
-
             _buildOpsiGrid(),
           ],
         ),
@@ -118,7 +114,7 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
             const SizedBox(width: 21),
             Expanded(
               child: Text(
-                "Cocokkan Pasangan",
+                "Cocokkan gambar dengan kata",
                 style: BoldTextStyle.textTheme.bodyLarge!.copyWith(
                   color: LocalColor.primary,
                 ),
@@ -155,37 +151,105 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
     );
   }
 
+  // Widget _buildTargetBox(String label) {
+  //   return DragTarget<String>(
+  //     onAccept: (data) {
+  //       setState(() {
+  //         targetSlots[label] = data;
+  //         if (targetSlots.values.every((val) => val != null)) {
+  //           final jawaban = _buildJawaban();
+  //           widget.onJawabanSelesai?.call(jawaban);
+  //         }
+  //       });
+  //     },
+  //     builder: (context, candidateData, rejectedData) {
+  //       final data = targetSlots[label];
+  //       final isImage = data != null && (data.endsWith(".png") || data.endsWith(".jpg"));
+  //         return ClipRRect(
+  //           borderRadius: BorderRadius.circular(8),
+  //           child: Container(
+  //             width: 150,
+  //             height: 100,
+  //             decoration: BoxDecoration(
+  //               border: Border.all(color: Colors.black, width: 1.5),
+  //               color: data != null ? Colors.green[200] : Colors.white,
+  //             ),
+  //             child: data == null
+  //                 ? Center(
+  //                     child: Text(
+  //                       label,
+  //                       textAlign: TextAlign.center,
+  //                       style: const TextStyle(fontSize: 14),
+  //                     ),
+  //                   )
+  //                 : isImage
+  //                     ? (data.startsWith("http")
+  //                         ? Image.network(data, fit: BoxFit.cover,width: double.infinity, height: double.infinity)
+  //                         : Image.asset(data, fit: BoxFit.cover,width: double.infinity, height: double.infinity))
+  //                     : Center(
+  //                         child: Text(
+  //                           data,
+  //                           textAlign: TextAlign.center,
+  //                           style: const TextStyle(fontSize: 14),
+  //                         ),
+  //                       ),
+  //           ),
+  //         );
+
+  //     },
+  //   );
+  // }
+
   Widget _buildTargetBox(String label) {
-    return DragTarget<String>(
-      onAccept: (data) {
-        setState(() {
-          targetSlots[label] = data;
-          if (targetSlots.values.every((val) => val != null)) {
-            final jawaban = _buildJawaban();
-            widget.onJawabanSelesai?.call(jawaban);
-          }
-        });
-      },
-      builder: (context, candidateData, rejectedData) {
-        return Container(
+  return DragTarget<String>(
+    onAccept: (data) {
+      setState(() {
+        targetSlots[label] = data;
+        if (targetSlots.values.every((val) => val != null)) {
+          final jawaban = _buildJawaban();
+          widget.onJawabanSelesai?.call(jawaban);
+        }
+      });
+    },
+    builder: (context, candidateData, rejectedData) {
+      final data = targetSlots[label];
+      final isImage = data != null && (data.endsWith(".png") || data.endsWith(".jpg"));
+      
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
           width: 150,
-          height: 60,
-          padding: const EdgeInsets.all(8),
-          alignment: Alignment.center,
+          height: 100,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.black, width: 1.5),
-            color: targetSlots[label] != null ? Colors.green[200] : Colors.white,
+            // Hapus border di sini
+            color: data != null ? Colors.green[200] : Colors.white,
           ),
-          child: Text(
-            targetSlots[label] ?? label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14),
-          ),
-        );
-      },
-    );
-  }
+          child: data == null
+              ? Center(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: 
+                    BoldTextStyle.textTheme.bodyLarge!.copyWith(color: LocalColor.primary), // Warna teks biru
+                  ),
+                )
+              : isImage
+                  ? (data.startsWith("http")
+                      ? Image.network(data, fit: BoxFit.cover, width: double.infinity, height: double.infinity)
+                      : Image.asset(data, fit: BoxFit.cover, width: double.infinity, height: double.infinity))
+                  : Center(
+                      child: Text(
+                        data,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 14, color: Colors.blue), // Warna teks biru
+                      ),
+                    ),
+        ),
+      );
+    },
+  );
+}
+
 
   Widget _buildOpsiGrid() {
     final opsi = choices.keys.toList();
@@ -224,20 +288,38 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
   }
 
   Widget _buildDraggableItem(String label, {bool isDragging = false}) {
+    final isImage = label.endsWith(".png") || label.endsWith(".jpg");
+
     return Container(
       width: 150,
-      height: 60,
-      padding: const EdgeInsets.all(15),
+      height: 100,
+      // padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: isDragging ? Colors.grey[300] : Colors.blueAccent,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 18, color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
+        // child: isImage
+        //     ? (label.startsWith("http")
+        //         ? Image.network(label)
+        //         : Image.asset(label))
+        //     : Text(
+        //         label,
+        //         style: const TextStyle(fontSize: 18, color: Colors.white),
+        //         textAlign: TextAlign.center,
+        //       ),
+        child: isImage
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: label.startsWith("http")
+                  ? Image.network(label, fit: BoxFit.cover, width: double.infinity, height: double.infinity)
+                  : Image.asset(label, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+            )
+          : Text(
+              label,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
       ),
     );
   }
@@ -276,3 +358,4 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
     return pasangan;
   }
 }
+
