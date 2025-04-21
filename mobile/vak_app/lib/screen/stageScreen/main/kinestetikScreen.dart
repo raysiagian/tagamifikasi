@@ -66,7 +66,8 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
         onPressed: _resetJawaban,
         child: const Icon(Icons.refresh),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -78,6 +79,7 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
             _buildOpsiGrid(),
           ],
         ),
+      ),
       ),
     );
   }

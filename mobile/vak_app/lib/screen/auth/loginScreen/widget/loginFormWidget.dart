@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:vak_app/routes/appRouteConstant.dart';
+import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
 import 'package:vak_app/style/regulerTextStyle.dart';
 import 'package:vak_app/models/users.dart';
@@ -49,9 +50,24 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Column(
+          children: [
+             const SizedBox(height: 10),
+        Text(
+          "Selamat",
+          style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          "Datang",
+          style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
+        ),
+          ],
+        ),
+        const SizedBox(height: 10),
         TextFormField(
           controller: _usernameController,
           decoration: InputDecoration(
@@ -99,24 +115,26 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           ),
         ),
         const SizedBox(height: 8),
-        RichText(
-          text: TextSpan(
-            text: 'Lupa password? ',
-            style: TextStyle(color: Colors.black87),
-            children: [
-              TextSpan(
-                text: 'Reset di sini',
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
+        Center(
+          child: RichText(
+            text: TextSpan(
+              text: 'Lupa password? ',
+              style: TextStyle(color: Colors.black87),
+              children: [
+                TextSpan(
+                  text: 'Reset di sini',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.pushNamed(context, AppRouteConstant.forgetPasswordScreen);
+                    },
                 ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.pushNamed(context, AppRouteConstant.forgetPasswordScreen);
-                  },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 20.0),
@@ -141,7 +159,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           ),
         ),
       ],
-    ),
     );
   }
 }

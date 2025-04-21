@@ -32,7 +32,10 @@ class _Visual2ScreenState extends State<Visual2Screen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Scaffold(
+      backgroundColor: LocalColor.transparent,
+      body: SingleChildScrollView(
+        child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
         children: [
@@ -45,7 +48,7 @@ class _Visual2ScreenState extends State<Visual2Screen> {
               widget.onAnswerSelected(options['A']);
             },
             style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 250),
+              minimumSize: const Size(double.infinity, 190),
               padding: EdgeInsets.zero,
               backgroundColor: Colors.white,
               side: BorderSide(
@@ -63,7 +66,7 @@ class _Visual2ScreenState extends State<Visual2Screen> {
                     "https://res.cloudinary.com/dio9zvrg3/image/upload/v1744163521/soal/media/ptcadvfrwpmpuza3uky4.png",
                 fit: BoxFit.cover,
                 width: double.infinity,
-                height: 250,
+                height: 190,
               ),
             ),
           ),
@@ -124,7 +127,7 @@ class _Visual2ScreenState extends State<Visual2Screen> {
               widget.onAnswerSelected(options['B']);
             },
             style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 250),
+              minimumSize: const Size(double.infinity, 190),
               padding: EdgeInsets.zero,
               backgroundColor: Colors.white,
               side: BorderSide(
@@ -142,11 +145,13 @@ class _Visual2ScreenState extends State<Visual2Screen> {
                     "https://res.cloudinary.com/dio9zvrg3/image/upload/v1744163521/soal/media/ptcadvfrwpmpuza3uky4.png",
                 fit: BoxFit.cover,
                 width: double.infinity,
-                height: 250,
+                height: 190,
               ),
             ),
           ),
         ],
+      ),
+    ),
       ),
     );
   }

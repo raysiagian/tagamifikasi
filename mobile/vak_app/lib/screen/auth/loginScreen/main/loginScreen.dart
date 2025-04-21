@@ -14,29 +14,13 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: LocalColor.primary,
+        backgroundColor: Colors.white,
         body: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 250,),
-              Image.asset("assets/images/component/HiFi-Cat.png"),
-            ],
-          ),
-        ),
-        bottomSheet: Container(
-          height: 400,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: LoginFormWidget(),
           ),
-        ), 
+        ),
       ),
     );
   }
