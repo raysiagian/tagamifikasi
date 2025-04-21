@@ -208,28 +208,30 @@ public function getSkorAkhirPerLevel(Request $request)
         'id_level' => 'required|integer',
     ]);
 
-    $rekap = RekapSkorPengguna::where('id_user', $user->id_user)
+    $skorTerakhir = SkorPengguna::where('id_user', $user->id_user)
         ->where('id_mataPelajaran', $request->id_mataPelajaran)
         ->where('id_level', $request->id_level)
+        ->orderBy('created_at', 'desc') // Ambil skor terakhir berdasarkan waktu
         ->first();
 
-    if (!$rekap) {
+    if (!$skorTerakhir) {
         return response()->json([
             'status' => 'error',
-            'message' => 'Rekap skor tidak ditemukan untuk level dan mata pelajaran tersebut.',
+            'message' => 'Skor tidak ditemukan untuk level dan mata pelajaran tersebut.',
         ], 404);
     }
 
     return response()->json([
         'status' => 'success',
-        'message' => 'Skor akhir berhasil diambil.',
+        'message' => 'Skor terakhir berhasil diambil.',
         'data' => [
-            'total_visual' => $rekap->total_visual,
-            'total_auditori' => $rekap->total_auditori,
-            'total_kinestetik' => $rekap->total_kinestetik
+            'total_visual' => $skorTerakhir->total_visual,
+            'total_auditori' => $skorTerakhir->total_auditori,
+            'total_kinestetik' => $skorTerakhir->total_kinestetik
         ]
     ]);
 }
+
 
 
 
