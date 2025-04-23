@@ -53,20 +53,20 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          children: [
-             const SizedBox(height: 10),
-        Text(
-          "Selamat",
-          style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          "Datang",
-          style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
-        ),
-          ],
-        ),
+        // Column(
+        //   children: [
+        //      const SizedBox(height: 10),
+        // Text(
+        //   "Selamat",
+        //   style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
+        // ),
+        // const SizedBox(height: 5),
+        // Text(
+        //   "Datang",
+        //   style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
+        // ),
+        //   ],
+        // ),
         const SizedBox(height: 10),
         TextFormField(
           controller: _usernameController,
@@ -114,7 +114,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   ),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 20),
         Center(
           child: RichText(
             text: TextSpan(
@@ -122,9 +122,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               style: TextStyle(color: Colors.black87),
               children: [
                 TextSpan(
-                  text: 'Reset di sini',
+                  text: 'Ubah disini',
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: LocalColor.primary,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.underline,
                   ),

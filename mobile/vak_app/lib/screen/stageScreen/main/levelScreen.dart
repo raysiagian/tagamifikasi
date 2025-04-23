@@ -8,6 +8,7 @@ import 'package:vak_app/screen/stageScreen/main/kinestetik2Screen.dart';
 import 'package:vak_app/screen/stageScreen/main/kinestetikScreen.dart';
 import 'package:vak_app/screen/stageScreen/main/visual2Screen.dart';
 import 'package:vak_app/screen/stageScreen/main/visualScreen.dart';
+import 'package:vak_app/screen/unknownScreen/widget/customErrorWidget.dart';
 import 'package:vak_app/screen/unknownScreen/widget/noQuestionWidget.dart';
 import 'package:vak_app/services/auth_services.dart';
 import 'package:vak_app/services/jawaban_services.dart';
@@ -128,7 +129,9 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
         builder: (context, snapshot) {
            if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          }else if (snapshot.hasError) {
+            return Center(child: CustomErrorWidget(),); 
+          }else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: NoQuestionWidget());
           }
 

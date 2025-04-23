@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/style/regulerTextStyle.dart';
 
-class NoQuestionWidget extends StatelessWidget {
-  const NoQuestionWidget({super.key});
+class NoSubjectWidget extends StatelessWidget {
+  const NoSubjectWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
    return Container(
-     width: 300,
+      width: 300,
       height: 480,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -32,7 +32,7 @@ class NoQuestionWidget extends StatelessWidget {
        
             const SizedBox(height: 30,),
             Text(
-              "Tidak ada Pertanyaan Tersedia",
+              "Tidak ada Mata Pelajaran Tersedia",
                 style: RegulerTextStyle.textTheme.bodyMedium?.copyWith(color: Colors.black),
                 textAlign: TextAlign.center,
             ),

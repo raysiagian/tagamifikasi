@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/regulerTextStyle.dart';
 
-class NoLevelWidget extends StatelessWidget {
-  const NoLevelWidget({super.key});
+class CustomErrorWidget extends StatelessWidget {
+  const CustomErrorWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +25,29 @@ class NoLevelWidget extends StatelessWidget {
               height: 296,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/component/HiFi-No Content.png'),
-                  fit: BoxFit.cover,
+                  image: AssetImage('assets/images/component/HiFi-Error.png'),
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
         
             const SizedBox(height: 30,),
             Text(
-              "Tidak ada Level Tersedia",
+              "404",
+              style: BoldTextStyle.textTheme.titleLarge?.copyWith(color: Colors.black),
+            ),
+            const SizedBox(height: 5,),
+            Text(
+              "Ups, ada yang salah!",
               style: RegulerTextStyle.textTheme.bodyMedium?.copyWith(color: Colors.black),
               textAlign: TextAlign.center,
             ),
-        
+            const SizedBox(height: 10,),
+             Text(
+              "Coba periksa koneksi internet atau coba lagi nanti",
+              style: RegulerTextStyle.textTheme.bodyMedium?.copyWith(color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vak_app/models/mataPelajaran.dart';
 import 'package:vak_app/screen/statisticScreen/main/detailStatisticPage.dart';
+import 'package:vak_app/screen/unknownScreen/widget/customerrorWidget.dart';
+import 'package:vak_app/screen/unknownScreen/widget/noSubjectWidget.dart';
 import 'package:vak_app/services/matapelajaran_services.dart';
 import 'package:vak_app/style/boldTextStyle.dart';
 import 'package:vak_app/style/localColor.dart';
@@ -29,9 +31,9 @@ class _SubjectListState extends State<SubjectList> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text("Error: ${snapshot.error}"));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text("Data tidak tersedia"));
+          return Center(child: CustomErrorWidget(),); 
+        }else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: NoSubjectWidget());
         }
 
         List<MataPelajaran> mataPelajaranList = snapshot.data!;

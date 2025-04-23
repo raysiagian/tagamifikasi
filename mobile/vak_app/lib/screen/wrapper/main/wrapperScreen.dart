@@ -76,6 +76,7 @@ class _WrapperScreenState extends State<WrapperScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: PageView(
         controller: pageViewController,
         onPageChanged: (index) {

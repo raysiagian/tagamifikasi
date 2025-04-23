@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vak_app/screen/unknownScreen/widget/customerrorWidget.dart';
+import 'package:vak_app/screen/unknownScreen/widget/noSubjectWidget.dart';
 import 'package:vak_app/screen/stageScreen/main/stageScreen.dart';
 import 'package:vak_app/style/localColor.dart';
 
@@ -32,9 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Center(child: Text("Error: ${snapshot.error}"));
+                 return Center(child: CustomErrorWidget(),); 
+                // return Center(child: Text("Error: ${snapshot.error}"));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text("Tidak ada data mata pelajaran"));
+                return const Center(child: NoSubjectWidget());
+                // return const Center(child: Text("Tidak ada data mata pelajaran"));
               }
 
               List<MataPelajaran> mataPelajaranList = snapshot.data!;

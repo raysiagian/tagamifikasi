@@ -153,38 +153,47 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
         ),
         const SizedBox(height: 8),
         Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () => _updateGenderSelection("laki-laki"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isMale ? LocalColor.primary : Colors.grey[200],
-                  foregroundColor: isMale ? Colors.white : Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () => _updateGenderSelection("laki-laki"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isMale ? LocalColor.primary : Colors.grey[200],
+                foregroundColor: isMale ? Colors.white : Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(
+                    color: isMale ? Colors.transparent : Colors.grey, // border saat belum dipilih
+                    width: 1.5,
                   ),
-                  elevation: isMale ? 2 : 0,
                 ),
-                child: const Text("Laki-laki"),
+                elevation: isMale ? 2 : 0,
               ),
+              child: const Text("Laki-laki"),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () => _updateGenderSelection("perempuan"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isFemale ? LocalColor.primary : Colors.grey[200],
-                  foregroundColor: isFemale ? Colors.white : Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () => _updateGenderSelection("perempuan"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isFemale ? LocalColor.primary : Colors.grey[200],
+                foregroundColor: isFemale ? Colors.white : Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(
+                    color: isFemale ? Colors.transparent : Colors.grey, // border saat belum dipilih
+                    width: 1.5,
                   ),
-                  elevation: isFemale ? 2 : 0,
                 ),
-                child: const Text("Perempuan"),
+                elevation: isFemale ? 2 : 0,
               ),
+              child: const Text("Perempuan"),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+
 
 
 
