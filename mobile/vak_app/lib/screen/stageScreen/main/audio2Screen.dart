@@ -217,4 +217,9 @@ class _Audio2ScreenState extends State<Audio2Screen> {
     ),
     );
   }
+  String _getHurufDariOpsi(String opsi) {
+    if (opsi == widget.soal.opsiA) return "A";
+    if (opsi == widget.soal.opsiB) return "B";
+    return opsi;
+  }
 }

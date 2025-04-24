@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:vak_app/constant/baseUrl.dart';
 import 'package:vak_app/services/auth_services.dart';
 import 'package:vak_app/models/users.dart';
-
 class SkorService {
   final AuthService _authService = AuthService();
 
@@ -30,10 +29,22 @@ class SkorService {
       },
     );
 
+    print(response.body);
+
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final data = jsonDecode(response.body);
+
+      if (data is Map<String, dynamic>) {
+        if (data['status'] == 'success') {
+          return data;
+        } else {
+          throw Exception('Gagal: ${data['message'] ?? 'Unknown error'}');
+        }
+      } else {
+        throw Exception('Format data tidak valid');
+      }
     } else {
-      throw Exception('Gagal mengambil skor akhir: ${response.body}');
+      throw Exception('Gagal mengambil skor akhir: ${response.statusCode}');
     }
   }
 }

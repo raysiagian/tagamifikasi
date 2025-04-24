@@ -93,14 +93,6 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
       _currentIndex++;
     });
   } else {
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text("Soal selesai!")),
-    // );
-    //  Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const AfterLevelScreen()),
-    // );
-
   Navigator.pushReplacement(
   context,
   MaterialPageRoute(

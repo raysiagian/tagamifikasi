@@ -203,7 +203,9 @@ class _AudioScreenState extends State<AudioScreen> {
           setState(() {
             selectedOption = label;
           });
-          widget.onAnswerSelected(text);
+          // widget.onAnswerSelected(text);
+          widget.onAnswerSelected(_getHurufDariOpsi(text));
+
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: isSelected ? Colors.blue : Colors.white,
@@ -220,6 +222,14 @@ class _AudioScreenState extends State<AudioScreen> {
         ),
       ),
     );
+  }
+
+  String _getHurufDariOpsi(String opsi) {
+    if (opsi == widget.soal.opsiA) return "A";
+    if (opsi == widget.soal.opsiB) return "B";
+    if (opsi == widget.soal.opsiC) return "C";
+    if (opsi == widget.soal.opsiD) return "D";
+    return opsi;
   }
 }
 
