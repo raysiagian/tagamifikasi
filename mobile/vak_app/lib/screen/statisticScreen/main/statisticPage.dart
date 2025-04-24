@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/screen/statisticScreen/widget/subjectListWidget.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
+import 'package:GamiLearn/screen/statisticScreen/widget/subjectListWidget.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 
 class StatisticScreen extends StatefulWidget {
   const StatisticScreen({super.key});

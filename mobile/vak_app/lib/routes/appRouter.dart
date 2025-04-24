@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/level.dart';
-import 'package:vak_app/routes/appRouteConstant.dart';
-import 'package:vak_app/screen/auth/forgetPasswordScreen/main/forgetPasswordScreen.dart';
-import 'package:vak_app/screen/auth/loginScreen/main/loginScreen.dart';
-import 'package:vak_app/screen/auth/registrationScreen/main/registrationScreen.dart';
-import 'package:vak_app/screen/homeScreen/main/homeScreen.dart';
-import 'package:vak_app/screen/onboardingScreen/main/onboardingScreen.dart';
-import 'package:vak_app/screen/splashScreen/main/splashScreen.dart';
-import 'package:vak_app/screen/stageScreen/main/afterLevelScreen.dart';
-import 'package:vak_app/screen/stageScreen/main/kinestetikScreen.dart';
-import 'package:vak_app/screen/stageScreen/main/levelScreen.dart';
-import 'package:vak_app/screen/stageScreen/main/stageScreen.dart';
-import 'package:vak_app/screen/statisticScreen/main/statisticPage.dart';
-import 'package:vak_app/screen/wrapper/main/wrapperScreen.dart';
+import 'package:GamiLearn/models/level.dart';
+import 'package:GamiLearn/routes/appRouteConstant.dart';
+import 'package:GamiLearn/screen/auth/forgetPasswordScreen/main/forgetPasswordScreen.dart';
+import 'package:GamiLearn/screen/auth/loginScreen/main/loginScreen.dart';
+import 'package:GamiLearn/screen/auth/registrationScreen/main/registrationScreen.dart';
+import 'package:GamiLearn/screen/homeScreen/main/homeScreen.dart';
+import 'package:GamiLearn/screen/onboardingScreen/main/onboardingScreen.dart';
+import 'package:GamiLearn/screen/splashScreen/main/splashScreen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/afterLevelScreen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/kinestetikScreen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/levelScreen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/stageScreen.dart';
+import 'package:GamiLearn/screen/statisticScreen/main/statisticPage.dart';
+import 'package:GamiLearn/screen/wrapper/main/wrapperScreen.dart';
 
 class AppRouter{
 static Route<dynamic>? onGenerateRoute(RouteSettings settings) {

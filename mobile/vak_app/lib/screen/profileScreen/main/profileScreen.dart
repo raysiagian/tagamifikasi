@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/users.dart';
-import 'package:vak_app/services/auth_services.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/models/users.dart';
+import 'package:GamiLearn/services/auth_services.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

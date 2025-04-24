@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/mataPelajaran.dart';
-import 'package:vak_app/screen/statisticScreen/main/detailStatisticPage.dart';
-import 'package:vak_app/screen/unknownScreen/widget/customerrorWidget.dart';
-import 'package:vak_app/screen/unknownScreen/widget/noSubjectWidget.dart';
-import 'package:vak_app/services/matapelajaran_services.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/models/mataPelajaran.dart';
+import 'package:GamiLearn/screen/statisticScreen/main/detailStatisticPage.dart';
+import 'package:GamiLearn/screen/unknownScreen/widget/customerrorWidget.dart';
+import 'package:GamiLearn/screen/unknownScreen/widget/noSubjectWidget.dart';
+import 'package:GamiLearn/services/matapelajaran_services.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 class SubjectList extends StatefulWidget {
   const SubjectList({super.key});

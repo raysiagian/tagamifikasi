@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/screen/unknownScreen/widget/customerrorWidget.dart';
-import 'package:vak_app/screen/unknownScreen/widget/noSubjectWidget.dart';
-import 'package:vak_app/screen/stageScreen/main/stageScreen.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/screen/unknownScreen/widget/customerrorWidget.dart';
+import 'package:GamiLearn/screen/unknownScreen/widget/noSubjectWidget.dart';
+import 'package:GamiLearn/screen/stageScreen/main/stageScreen.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 import '../../../models/mataPelajaran.dart';
 import '../../../services/matapelajaran_Services.dart';

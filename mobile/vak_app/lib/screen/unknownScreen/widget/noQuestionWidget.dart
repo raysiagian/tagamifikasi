@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 
 class NoQuestionWidget extends StatelessWidget {
   const NoQuestionWidget({super.key});

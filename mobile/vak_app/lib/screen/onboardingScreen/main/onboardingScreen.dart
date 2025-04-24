@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/routes/appRouteConstant.dart';
-import 'package:vak_app/style/localColor.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
+import 'package:GamiLearn/routes/appRouteConstant.dart';
+import 'package:GamiLearn/style/localColor.dart';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 
 void main() {
   runApp(MyApp());

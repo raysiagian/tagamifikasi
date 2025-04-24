@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 class LevelScoreList extends StatefulWidget {
   const LevelScoreList({super.key});

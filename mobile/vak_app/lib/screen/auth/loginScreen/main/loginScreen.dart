@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/screen/auth/loginScreen/widget/loginFormWidget.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
+import 'package:GamiLearn/screen/auth/loginScreen/widget/loginFormWidget.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

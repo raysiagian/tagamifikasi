@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 class MiniProfileWidget extends StatelessWidget implements PreferredSizeWidget {
   const MiniProfileWidget({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:vak_app/routes/appRouteConstant.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
-import 'package:vak_app/models/users.dart';
+import 'package:GamiLearn/routes/appRouteConstant.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
+import 'package:GamiLearn/models/users.dart';
 
 import '../../../../services/auth_services.dart'; // Import model Users
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/screen/auth/registrationScreen/widget/registrationFormWidget.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/screen/auth/registrationScreen/widget/registrationFormWidget.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});

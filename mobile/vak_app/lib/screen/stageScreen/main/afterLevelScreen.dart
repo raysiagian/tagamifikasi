@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/screen/stageScreen/widget/scoreBoardwidget.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/screen/stageScreen/widget/scoreBoardwidget.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 class AfterLevelScreen extends StatefulWidget {
   final int idMataPelajaran;

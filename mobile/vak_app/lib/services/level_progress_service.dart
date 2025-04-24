@@ -1,7 +1,7 @@
+import 'package:GamiLearn/constant/baseUrl.dart';
+import 'package:GamiLearn/services/auth_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:vak_app/constant/baseUrl.dart';
-import 'package:vak_app/services/auth_services.dart';
 
 class LevelProgressService {
   Future<Map<String, dynamic>> cekKelulusanLevel({
@@ -33,6 +33,7 @@ class LevelProgressService {
       // Mencetak status dan body untuk debugging
       print('Status: ${response.statusCode}');
       print('Body: ${response.body}');
+      
 
       // Mengecek apakah status code 200
       if (response.statusCode == 200) {

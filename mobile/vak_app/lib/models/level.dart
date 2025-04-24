@@ -53,7 +53,7 @@ List<Level> level = [
 //       'id_level': idLevel,
 //       'id_mataPelajaran': idMataPelajaran,
 //       'penjelasan_level': penjelasanLevel,
-//       'mata_pelajaran': mataPelajaran.toJson(), // ✅ Perbaikan di sini
+//       'mata_pelajaran': mataPelajaran.toJson(), //
 //     };
 //   }
 // }

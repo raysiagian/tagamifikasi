@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 
 class NoLevelWidget extends StatelessWidget {
   const NoLevelWidget({super.key});

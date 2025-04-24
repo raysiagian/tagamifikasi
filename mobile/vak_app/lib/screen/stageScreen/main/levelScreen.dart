@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/level.dart';
-import 'package:vak_app/models/soal.dart';
-import 'package:vak_app/screen/stageScreen/main/afterLevelScreen.dart';
-import 'package:vak_app/screen/stageScreen/main/audio2Screen.dart';
-import 'package:vak_app/screen/stageScreen/main/audioScreen.dart';
-import 'package:vak_app/screen/stageScreen/main/kinestetik2Screen.dart';
-import 'package:vak_app/screen/stageScreen/main/kinestetikScreen.dart';
-import 'package:vak_app/screen/stageScreen/main/visual2Screen.dart';
-import 'package:vak_app/screen/stageScreen/main/visualScreen.dart';
-import 'package:vak_app/screen/unknownScreen/widget/customErrorWidget.dart';
-import 'package:vak_app/screen/unknownScreen/widget/noQuestionWidget.dart';
-import 'package:vak_app/services/auth_services.dart';
-import 'package:vak_app/services/jawaban_services.dart';
-import 'package:vak_app/services/soal_services.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/models/level.dart';
+import 'package:GamiLearn/models/soal.dart';
+import 'package:GamiLearn/screen/stageScreen/main/afterLevelScreen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/audio2Screen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/audioScreen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/kinestetik2Screen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/kinestetikScreen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/visual2Screen.dart';
+import 'package:GamiLearn/screen/stageScreen/main/visualScreen.dart';
+import 'package:GamiLearn/screen/unknownScreen/widget/customErrorWidget.dart';
+import 'package:GamiLearn/screen/unknownScreen/widget/noQuestionWidget.dart';
+import 'package:GamiLearn/services/auth_services.dart';
+import 'package:GamiLearn/services/jawaban_services.dart';
+import 'package:GamiLearn/services/soal_services.dart';
+import 'package:GamiLearn/style/localColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LevelScreen extends StatefulWidget {

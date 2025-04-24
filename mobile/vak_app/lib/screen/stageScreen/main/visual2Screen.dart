@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/soal.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/models/soal.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class Visual2Screen extends StatefulWidget {
@@ -74,7 +74,7 @@ class _Visual2ScreenState extends State<Visual2Screen> {
                   padding: EdgeInsets.zero,
                   backgroundColor: Colors.white,
                   side: BorderSide(
-                    color: selectedOption == 'A' ? LocalColor.primary : Colors.white,
+                    color: selectedOption == 'A' ? Colors.green : Colors.transparent,
                     width: 3,
                   ),
                   shape: RoundedRectangleBorder(
@@ -151,7 +151,7 @@ class _Visual2ScreenState extends State<Visual2Screen> {
                   padding: EdgeInsets.zero,
                   backgroundColor: Colors.white,
                   side: BorderSide(
-                    color: selectedOption == 'B' ? LocalColor.primary : Colors.white,
+                    color: selectedOption == 'B' ? Colors.green : Colors.transparent,
                     width: 3,
                   ),
                   shape: RoundedRectangleBorder(

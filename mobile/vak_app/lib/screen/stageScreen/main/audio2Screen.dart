@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/soal.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/models/soal.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class Audio2Screen extends StatefulWidget {
@@ -129,7 +129,7 @@ class _Audio2ScreenState extends State<Audio2Screen> {
                 setState(() {
                   selectedOption = 'A';
                 });
-                widget.onAnswerSelected(options['A']);
+                  widget.onAnswerSelected('A');
                 _playPause('A');
               },
               style: ElevatedButton.styleFrom(
@@ -137,6 +137,10 @@ class _Audio2ScreenState extends State<Audio2Screen> {
                 fixedSize: const Size(150, 150),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
+                ),
+                side: BorderSide(
+                  color: selectedOption == 'A' ? Colors.green : Colors.transparent,
+                  width: 3,
                 ),
               ),
               child: const Icon(Icons.play_arrow, size: 40, color: Colors.white),
@@ -199,7 +203,7 @@ class _Audio2ScreenState extends State<Audio2Screen> {
                 setState(() {
                   selectedOption = 'B';
                 });
-                widget.onAnswerSelected(options['B']);
+                  widget.onAnswerSelected('B');
                 _playPause('B');
               },
               style: ElevatedButton.styleFrom(
@@ -207,6 +211,10 @@ class _Audio2ScreenState extends State<Audio2Screen> {
                 fixedSize: const Size(150, 150),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
+                ),
+                side: BorderSide(
+                  color: selectedOption == 'B' ? Colors.green : Colors.transparent,
+                  width: 3,
                 ),
               ),
               child: const Icon(Icons.play_arrow, size: 40, color: Colors.white),

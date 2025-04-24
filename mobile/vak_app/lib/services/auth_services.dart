@@ -129,7 +129,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vak_app/constant/baseUrl.dart';
+import 'package:GamiLearn/constant/baseUrl.dart';
 import '../models/users.dart';
 
 class AuthService {

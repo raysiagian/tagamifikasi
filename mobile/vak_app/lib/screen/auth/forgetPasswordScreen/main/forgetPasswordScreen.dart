@@ -1,5 +1,6 @@
+import 'package:GamiLearn/screen/auth/forgetPasswordScreen/widget/forgetPasswordWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:vak_app/screen/auth/forgetPasswordScreen/widget/forgetPasswordWidget.dart';
+import 'package:GamiLearn/screen/auth/forgetPasswordScreen/widget/forgetPasswordWidget.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});

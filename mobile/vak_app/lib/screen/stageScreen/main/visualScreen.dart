@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/soal.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/models/soal.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class VisualScreen extends StatefulWidget {

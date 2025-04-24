@@ -1,9 +1,10 @@
-import 'dart:convert';import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:vak_app/screen/stageScreen/main/stageScreen.dart';
-import 'package:vak_app/services/score_service.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/screen/stageScreen/main/stageScreen.dart';
+import 'package:GamiLearn/services/score_service.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 class ScoreBoardWidget extends StatelessWidget {
   final int idMataPelajaran;
@@ -16,17 +17,15 @@ class ScoreBoardWidget extends StatelessWidget {
   });
 
   // Mendapatkan data skor menggunakan FutureBuilder
-  Future<Map<String, dynamic>> fetchSkorAkhirLevel() {
-    return SkorService().fetchSkorAkhirLevel(
-      idMataPelajaran: idMataPelajaran,
-      idLevel: idLevel,
-    );
+  Future<Map<String, dynamic>> fetchSkorTerbaru() {
+    return SkorService().fetchSkorTerbaru(
+  );
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
-      future: fetchSkorAkhirLevel(),  // Mendapatkan skor dari service
+      future: fetchSkorTerbaru(),  // Mendapatkan skor dari service
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -37,19 +36,9 @@ class ScoreBoardWidget extends StatelessWidget {
         } else {
           // Ambil data dari response
           final data = snapshot.data!['data'];
-          final visual = data['total_visual'] ?? 0;
-          final auditori = data['total_auditori'] ?? 0;
-          final kinestetik = data['total_kinestetik'] ?? 0;
 
-          // Hitung total skor
-          final total = visual + auditori + kinestetik;
-
-          // Menentukan tipe dominan
-          String dominan = '-';
-          final max = [visual, auditori, kinestetik].reduce((a, b) => a > b ? a : b);
-          if (max == visual) dominan = "Visual";
-          else if (max == auditori) dominan = "Auditori";
-          else if (max == kinestetik) dominan = "Kinestetik";
+          // Ambil jumlah benar
+          final jumlahBenar = data['jumlah_benar'] ?? 0;
 
           return Padding(
             padding: const EdgeInsets.all(20.0),
@@ -74,7 +63,7 @@ class ScoreBoardWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(
-                          _getImageByScore(total),
+                          _getImageByScore(jumlahBenar),
                         ),
                         fit: BoxFit.contain,
                       ),
@@ -82,12 +71,11 @@ class ScoreBoardWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
+                // Tampilkan jumlah benar
                 Text(
-                  "Skor kamu: $total",
+                  "Jumlah benar: $jumlahBenar",
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 5),
-                Text("Tipe dominan: $dominan"),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -130,3 +118,4 @@ class ScoreBoardWidget extends StatelessWidget {
     }
   }
 }
+

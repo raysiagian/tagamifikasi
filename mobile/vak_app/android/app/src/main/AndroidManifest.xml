@@ -3,7 +3,7 @@
     
 
     <application
-        android:label="vak_app"
+        android:label="GamiLearn"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

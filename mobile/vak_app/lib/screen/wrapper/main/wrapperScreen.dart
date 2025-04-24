@@ -49,11 +49,11 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:vak_app/screen/homeScreen/main/homeScreen.dart';
-import 'package:vak_app/screen/profileScreen/main/profileScreen.dart';
-import 'package:vak_app/screen/statisticScreen/main/statisticPage.dart';
-import 'package:vak_app/screen/wrapper/widget/bottomNavbarWidget.dart';
-import 'package:vak_app/services/backgroundsound_service.dart'; // tambahkan ini
+import 'package:GamiLearn/screen/homeScreen/main/homeScreen.dart';
+import 'package:GamiLearn/screen/profileScreen/main/profileScreen.dart';
+import 'package:GamiLearn/screen/statisticScreen/main/statisticPage.dart';
+import 'package:GamiLearn/screen/wrapper/widget/bottomNavbarWidget.dart';
+import 'package:GamiLearn/services/backgroundsound_service.dart'; // tambahkan ini
 
 class WrapperScreen extends StatefulWidget {
   const WrapperScreen({super.key});

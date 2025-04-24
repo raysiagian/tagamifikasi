@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 
 class CustomErrorWidget extends StatelessWidget {
   const CustomErrorWidget({super.key});

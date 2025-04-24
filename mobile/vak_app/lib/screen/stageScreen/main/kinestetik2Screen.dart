@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/soal.dart';
+import 'package:GamiLearn/models/soal.dart';
 import 'dart:math';
 
-import 'package:vak_app/style/localColor.dart';
+import 'package:GamiLearn/style/localColor.dart';
 
 class Kinestetik2Screen extends StatefulWidget {
   final Soal soal;

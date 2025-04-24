@@ -1,5 +1,5 @@
-name: vak_app
-description: "A new Flutter project."
+name: GamiLearn
+description: "Belajar dengan menyenangkan"
 publish_to: 'none'
 version: 0.1.0
 
@@ -18,6 +18,7 @@ dependencies:
   pushable_button: ^0.0.4
   flutter_custom_clippers: ^2.1.0
   cupertino_icons: ^1.0.8
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -29,7 +30,16 @@ flutter:
   assets:
   - assets/images/background/
   - assets/images/component/
+  - assets/images/icon/
   - assets/audio/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/icon/appIcon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/icon/appIcon.png"
 
   fonts:
   - family: OpenSans

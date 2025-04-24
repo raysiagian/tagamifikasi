@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:vak_app/style/localColor.dart';
-import 'package:vak_app/screen/onboardingScreen/main/onboardingScreen.dart';
+import 'package:GamiLearn/style/localColor.dart';
+import 'package:GamiLearn/screen/onboardingScreen/main/onboardingScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

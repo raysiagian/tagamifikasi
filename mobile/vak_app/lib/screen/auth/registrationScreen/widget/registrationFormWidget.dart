@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 import 'package:flutter/material.dart';
-import 'package:vak_app/routes/appRouteConstant.dart';
-import 'package:vak_app/style/boldTextStyle.dart';
-import 'package:vak_app/style/localColor.dart';
-import 'package:vak_app/style/regulerTextStyle.dart';
-import 'package:vak_app/models/users.dart';
+import 'package:GamiLearn/routes/appRouteConstant.dart';
+import 'package:GamiLearn/style/boldTextStyle.dart';
+import 'package:GamiLearn/style/localColor.dart';
+import 'package:GamiLearn/style/regulerTextStyle.dart';
+import 'package:GamiLearn/models/users.dart';
 import '../../../../services/auth_services.dart';
 
 class RegistrationFormWidget extends StatefulWidget {
@@ -80,6 +81,20 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
       return;
     }
 
+    if (username.length < 8) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Username harus minimal 8 karakter.")),
+      );
+      return;
+    }
+
+    if (password.length < 8) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Password harus minimal 8 karakter.")),
+    );
+    return;
+    }
+
     try {
       Users? user = await _authService.register(
           name, username, password, gender, tanggalLahir);
@@ -97,7 +112,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
         );
       }
     } catch (error) {
-      print("Error saat registrasi: $error");
+      debugPrint("Error saat registrasi: $error");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Terjadi kesalahan: $error")),
       );
@@ -201,6 +216,11 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
 
         TextFormField(
           controller: _usernameController,
+           validator: (value) {
+            if (value == null || value.isEmpty) return 'Username wajib diisi';
+            if (value.length < 8) return 'Minimal 8 karakter';
+            return null;
+          },
           decoration: InputDecoration(
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -211,6 +231,11 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
 
         TextFormField(
           controller: _passwordController,
+           validator: (value) {
+            if (value == null || value.isEmpty) return 'password wajib diisi';
+            if (value.length < 8) return 'Minimal 8 karakter';
+            return null;
+          },
           obscureText: true,
           decoration: InputDecoration(
             border:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/mataPelajaran.dart';
-import 'package:vak_app/screen/statisticScreen/widget/levelScoreListWidget.dart';
+import 'package:GamiLearn/models/mataPelajaran.dart';
+import 'package:GamiLearn/screen/statisticScreen/widget/levelScoreListWidget.dart';
 
 class DetailStatisticPage extends StatefulWidget {
   final MataPelajaran mataPelajaran;

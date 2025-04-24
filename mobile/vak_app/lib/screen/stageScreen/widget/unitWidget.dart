@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:vak_app/models/level.dart';
-import 'package:vak_app/screen/stageScreen/main/levelScreen.dart';
-import 'package:vak_app/screen/unknownScreen/widget/noLevelWidget.dart';
-import 'package:vak_app/services/auth_services.dart';
-import 'package:vak_app/services/level_progress_service.dart';
+import 'package:GamiLearn/models/level.dart';
+import 'package:GamiLearn/screen/stageScreen/main/levelScreen.dart';
+import 'package:GamiLearn/screen/unknownScreen/widget/noLevelWidget.dart';
+import 'package:GamiLearn/services/auth_services.dart';
+import 'package:GamiLearn/services/level_progress_service.dart';
 import '../../../services/level_services.dart';
 
 class UnitWidget extends StatefulWidget {
@@ -115,23 +115,21 @@ class _UnitWidgetState extends State<UnitWidget> {
                       }
                     },
                     child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                              "assets/images/component/LoFi-Level Icon.png",
-                              width: iconSize,
-                              height: iconSize,
-                            ),
-                            Image.asset(
-                              isAccessible
-                                  ? "assets/images/component/HiFi-Star on Level Stage.png"
-                                  : "assets/images/component/HiFi-Lock on Level Stage.png",
-                              width: iconSize * 0.5,
-                              height: iconSize * 0.5,
-                            ),
-                          ],
+                    children: [
+                      Container(
+                        width: iconSize,
+                        height: iconSize,
+                        decoration: BoxDecoration(
+                          color: isAccessible ? Colors.green : Colors.grey, // Warna bg
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset(
+                          isAccessible
+                              ? "assets/images/component/HiFi-Star on Level Stage.png"
+                              : "assets/images/component/HiFi-Lock on Level Stage.png",
+                          width: iconSize * 0.5,
+                          height: iconSize * 0.5,
+                        ),
                         ),
                         const SizedBox(height: 5),
                         Text(
@@ -144,6 +142,7 @@ class _UnitWidgetState extends State<UnitWidget> {
                         ),
                       ],
                     ),
+
                   ),
                 );
               }).toList(),
