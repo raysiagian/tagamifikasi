@@ -6,41 +6,53 @@ import 'package:GamiLearn/services/score_service.dart';
 import 'package:GamiLearn/style/boldTextStyle.dart';
 import 'package:GamiLearn/style/localColor.dart';
 
-class ScoreBoardWidget extends StatelessWidget {
+class ScoreBoardWidget extends StatefulWidget {
   final int idMataPelajaran;
   final int idLevel;
 
   const ScoreBoardWidget({
-    super.key,
+    Key? key,
     required this.idMataPelajaran,
     required this.idLevel,
-  });
+  }) : super(key: key);
 
-  // Mendapatkan data skor menggunakan FutureBuilder
-  Future<Map<String, dynamic>> fetchSkorTerbaru() {
-    return SkorService().fetchSkorTerbaru(
-  );
+  @override
+  _ScoreBoardWidgetState createState() => _ScoreBoardWidgetState();
+}
+
+class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
+  int jumlahBenar = 0;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchJumlahBenar();
+  }
+
+  Future<void> _fetchJumlahBenar() async {
+    try {
+      final result = await SkorService().fetchJumlahBenarTerbaru(
+        widget.idMataPelajaran, 
+        widget.idLevel,
+      );
+      setState(() {
+        jumlahBenar = result;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching score: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, dynamic>>(
-      future: fetchSkorTerbaru(),  // Mendapatkan skor dari service
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data == null) {
-          return const Center(child: Text('Skor tidak tersedia'));
-        } else {
-          // Ambil data dari response
-          final data = snapshot.data!['data'];
-
-          // Ambil jumlah benar
-          final jumlahBenar = data['jumlah_benar'] ?? 0;
-
-          return Padding(
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,12 +60,14 @@ class ScoreBoardWidget extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   "Selamat",
-                  style: BoldTextStyle.textTheme.titleMedium!.copyWith(
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                     color: LocalColor.primary,
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text("Kamu telah menyelesaikan Level"),
+                Text("Kamu telah menyelesaikan level ini!"),
                 const SizedBox(height: 20),
                 ClipPath(
                   clipper: HexagonalClipper(reverse: true),
@@ -71,7 +85,6 @@ class ScoreBoardWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // Tampilkan jumlah benar
                 Text(
                   "Jumlah benar: $jumlahBenar",
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -80,14 +93,16 @@ class ScoreBoardWidget extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: LocalColor.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
                   ),
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => StageScreen(idMataPelajaran: idMataPelajaran),
+                        builder: (context) => StageScreen(idMataPelajaran: widget.idMataPelajaran),
                       ),
                       (Route<dynamic> route) => false,
                     );
@@ -100,12 +115,8 @@ class ScoreBoardWidget extends StatelessWidget {
               ],
             ),
           );
-        }
-      },
-    );
   }
 
-  // Mendapatkan gambar berdasarkan skor
   String _getImageByScore(int score) {
     if (score == 0) {
       return 'assets/images/component/HiFi-Score Zero Star.png';
@@ -118,4 +129,3 @@ class ScoreBoardWidget extends StatelessWidget {
     }
   }
 }
-

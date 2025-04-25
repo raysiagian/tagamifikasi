@@ -17,6 +17,7 @@ class SoalService {
           "Accept": "application/json",
         },
       );
+      print(response);
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
