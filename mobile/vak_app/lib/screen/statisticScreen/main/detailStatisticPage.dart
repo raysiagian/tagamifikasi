@@ -17,15 +17,17 @@ class _DetailStatisticPageState extends State<DetailStatisticPage> {
     return Scaffold(
       appBar: AppBar(title: Text("${widget.mataPelajaran.nama}")),
       body: Container(
-           decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/background/HiFi-Statistic Background.png"),
-              fit: BoxFit.cover,
-            ),
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/background/HiFi-Statistic Background.png"),
+            fit: BoxFit.cover,
           ),
+        ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 16),
-            child: LevelScoreList(),
+            child: LevelScoreList( mataPelajaran: widget.mataPelajaran,),
           ),
         ),
     );

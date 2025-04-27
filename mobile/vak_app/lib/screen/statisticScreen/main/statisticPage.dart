@@ -18,6 +18,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
     return SafeArea(
       child: Scaffold(
        body: Container(
+          width: double.infinity,
+          height: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/background/HiFi-Statistic Background.png"),

@@ -6,114 +6,114 @@ import 'package:GamiLearn/models/users.dart';
 class SkorService {
   final AuthService _authService = AuthService();
 
-    Future<Map<String, dynamic>> fetchSkorAkhirLevel({
-    required int idMataPelajaran,
-    required int idLevel,
-  }) async {
-    final token = await _authService.getToken();
-    final user = await _authService.getUser();
+  //   Future<Map<String, dynamic>> fetchSkorAkhirLevel({
+  //   required int idMataPelajaran,
+  //   required int idLevel,
+  // }) async {
+  //   final token = await _authService.getToken();
+  //   final user = await _authService.getUser();
 
-    if (token == null || user == null) {
-      throw Exception('Token atau data pengguna tidak ditemukan');
-    }
+  //   if (token == null || user == null) {
+  //     throw Exception('Token atau data pengguna tidak ditemukan');
+  //   }
 
-    final url = Uri.parse(
-      "$baseUrl/skor-akhir-level?id_mataPelajaran=$idMataPelajaran&id_level=$idLevel",
-    );
+  //   final url = Uri.parse(
+  //     "$baseUrl/skor-akhir-level?id_mataPelajaran=$idMataPelajaran&id_level=$idLevel",
+  //   );
 
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
-    );
+  //   final response = await http.get(
+  //     url,
+  //     headers: {
+  //       'Authorization': 'Bearer $token',
+  //       'Accept': 'application/json',
+  //     },
+  //   );
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Gagal mengambil skor akhir: ${response.body}');
-    }
-  }
-
-
- Future<Map<String, dynamic>> fetchSkorTerbaru() async {
-    final token = await _authService.getToken();
-    final user = await _authService.getUser();
-
-    if (token == null || user == null) {
-      throw Exception('Token atau data pengguna tidak ditemukan');
-    }
-
-    // Menggunakan token saja untuk autentikasi dan tidak menggunakan id_user di URL
-    final url = Uri.parse("$baseUrl/skor-terbaru");
-    // final url = Uri.parse("$baseUrl/skor-terbaru?id_user=${user.idUser}");
+  //   if (response.statusCode == 200) {
+  //     return jsonDecode(response.body);
+  //   } else {
+  //     throw Exception('Gagal mengambil skor akhir: ${response.body}');
+  //   }
+  // }
 
 
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
-    );
+//  Future<Map<String, dynamic>> fetchSkorTerbaru() async {
+//     final token = await _authService.getToken();
+//     final user = await _authService.getUser();
 
-    print(response.body);
+//     if (token == null || user == null) {
+//       throw Exception('Token atau data pengguna tidak ditemukan');
+//     }
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+//     // Menggunakan token saja untuk autentikasi dan tidak menggunakan id_user di URL
+//     final url = Uri.parse("$baseUrl/skor-terbaru");
+//     // final url = Uri.parse("$baseUrl/skor-terbaru?id_user=${user.idUser}");
 
-      if (data is Map<String, dynamic>) {
-        if (data['status'] == 'success') {
-          return data;
-        } else {
-          throw Exception('Gagal: ${data['message'] ?? 'Unknown error'}');
-        }
-      } else {
-        throw Exception('Format data tidak valid');
-      }
-    } else {
-      throw Exception('Gagal mengambil skor terbaru: ${response.statusCode}');
-    }
-  }
+
+//     final response = await http.get(
+//       url,
+//       headers: {
+//         'Authorization': 'Bearer $token',
+//         'Accept': 'application/json',
+//       },
+//     );
+
+//     print(response.body);
+
+//     if (response.statusCode == 200) {
+//       final data = jsonDecode(response.body);
+
+//       if (data is Map<String, dynamic>) {
+//         if (data['status'] == 'success') {
+//           return data;
+//         } else {
+//           throw Exception('Gagal: ${data['message'] ?? 'Unknown error'}');
+//         }
+//       } else {
+//         throw Exception('Format data tidak valid');
+//       }
+//     } else {
+//       throw Exception('Gagal mengambil skor terbaru: ${response.statusCode}');
+//     }
+//   }
 
   // fetch list nilai rekap
-  Future<Map<String, dynamic>> fetchListRekap({
-  required int idMataPelajaran,
-  required int idLevel,
-}) async {
-  final token = await _authService.getToken();
-  final user = await _authService.getUser();
+//   Future<Map<String, dynamic>> fetchListRekap({
+//   required int idMataPelajaran,
+//   required int idLevel,
+// }) async {
+//   final token = await _authService.getToken();
+//   final user = await _authService.getUser();
 
-  if (token == null || user == null) {
-    throw Exception('Token atau data pengguna tidak ditemukan');
-  }
+//   if (token == null || user == null) {
+//     throw Exception('Token atau data pengguna tidak ditemukan');
+//   }
 
-  final url = Uri.parse(
-    "$baseUrl/rekap-skor?id_user=${user.idUser}&id_mataPelajaran=$idMataPelajaran&id_level=$idLevel",
-  );
+//   final url = Uri.parse(
+//     "$baseUrl/rekap-skor?id_user=${user.idUser}&id_mataPelajaran=$idMataPelajaran&id_level=$idLevel",
+//   );
 
-  final response = await http.get(
-    url,
-    headers: {
-      'Authorization': 'Bearer $token',
-      'Accept': 'application/json',
-    },
-  );
+//   final response = await http.get(
+//     url,
+//     headers: {
+//       'Authorization': 'Bearer $token',
+//       'Accept': 'application/json',
+//     },
+//   );
 
-  print(response.body);
+//   print(response.body);
 
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    if (data['status'] == 'success') {
-      return data['data'];
-    } else {
-      throw Exception('Gagal: ${data['message'] ?? 'Unknown error'}');
-    }
-  } else {
-    throw Exception('Gagal mengambil rekap: ${response.statusCode}');
-  }
-}
+//   if (response.statusCode == 200) {
+//     final data = jsonDecode(response.body);
+//     if (data['status'] == 'success') {
+//       return data['data'];
+//     } else {
+//       throw Exception('Gagal: ${data['message'] ?? 'Unknown error'}');
+//     }
+//   } else {
+//     throw Exception('Gagal mengambil rekap: ${response.statusCode}');
+//   }
+// }
 
   Future<int> fetchJumlahBenarTerbaru(int idMataPelajaran, int idLevel) async {
     final token = await _authService.getToken();
@@ -140,6 +140,33 @@ class SkorService {
       throw Exception('Gagal mengambil skor akhir');
     }
   }
+
+  Future<List<dynamic>> fetchLevelScores(int mataPelajaranId) async {
+     final token = await _authService.getToken();
+     print("Token yang dikirim ke server: $token");
+
+    // Pastikan token tidak null atau kosong
+    if (token == null || token.isEmpty) {
+      throw Exception('Token tidak ditemukan');
+    }
+
+    final response = await http.get(
+    Uri.parse('$baseUrl/rekap-skor-user/$mataPelajaranId'),
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Accept': 'application/json', // Optional tapi baik ditambahkan
+    },
+    );
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Gagal memuat skor');
+    }
+}
+
 
 
 }

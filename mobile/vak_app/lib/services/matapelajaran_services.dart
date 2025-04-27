@@ -18,7 +18,7 @@ class MataPelajaranService {
         headers: {
           "Authorization": "Bearer $token",
           "Accept": "application/json",
-        },
+        }, 
       );
 
       print("Response Code: ${response.statusCode}");
