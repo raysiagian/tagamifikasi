@@ -19,6 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -34,32 +38,42 @@ class _HomeScreenState extends State<HomeScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                 return Center(child: CustomErrorWidget(),); 
-                // return Center(child: Text("Error: ${snapshot.error}"));
+                return const Center(child: CustomErrorWidget());
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Center(child: NoSubjectWidget());
-                // return const Center(child: Text("Tidak ada data mata pelajaran"));
               }
 
-              List<MataPelajaran> mataPelajaranList = snapshot.data!;
+              // Filter agar Bahasa Inggris tidak tampil
+              List<MataPelajaran> mataPelajaranList = snapshot.data!
+                  .where((e) => e.nama != "English")
+                  .toList();
               List<Widget> subjectIcons = [];
 
-              List<Map<String, dynamic>> iconPositions = [
-                {"top": 290.0, "left": 80.0},
-                {"top": 340.0, "right": 20.0},
-                {"bottom": 160.0, "left": 20.0},
-                {"bottom": 20.0, "left": 80.0},
-                {"bottom": 120.0, "right": 50.0},
+              // Gunakan persentase layar untuk posisi agar responsif
+              List<Map<String, double?>> iconPositions = [
+                {"top": screenHeight * 0.30, "left": screenWidth * 0.20},
+                {"top": screenHeight * 0.40, "right": screenWidth * 0.05},
+                {"bottom": screenHeight * 0.25, "left": screenWidth * 0.05},
+                {"bottom": screenHeight * 0.08, "left": screenWidth * 0.20},
+                {"bottom": screenHeight * 0.18, "right": screenWidth * 0.10},
               ];
 
               for (int i = 0; i < mataPelajaranList.length; i++) {
                 MataPelajaran mataPelajaran = mataPelajaranList[i];
+                var position = iconPositions[i];
+
+                // Debug info
+                print("Mata Pelajaran: ${mataPelajaran.nama}");
+                print("Icon Path: ${mataPelajaran.iconPath}");
+                print(
+                    "Posisi => top: ${position["top"]}, bottom: ${position["bottom"]}, left: ${position["left"]}, right: ${position["right"]}");
+
                 subjectIcons.add(
                   _buildSubjectIcon(
-                    top: iconPositions[i]["top"],
-                    bottom: iconPositions[i]["bottom"],
-                    left: iconPositions[i]["left"],
-                    right: iconPositions[i]["right"],
+                    top: position["top"],
+                    bottom: position["bottom"],
+                    left: position["left"],
+                    right: position["right"],
                     imagePath: mataPelajaran.iconPath,
                     idMataPelajaran: mataPelajaran.id,
                   ),

@@ -13,9 +13,8 @@ class MataPelajaran {
     // Mapping ikon berdasarkan nama mata pelajaran
     const Map<String, String> iconMapping = {
       "Komunikasi": "assets/images/component/HiFi-Komunikasi Subject Icon.png",
-      "Bahasa Indonesia":
-          "assets/images/component/HiFi-Bahasa Indonesia Subject Icon.png",
-      "English": "assets/images/component/HiFi-Bahasa Inggris Subject Icon.png",
+      "Bahasa Indonesia":"assets/images/component/HiFi-Bahasa Indonesia Subject Icon.png",
+      // "English": "assets/images/component/HiFi-Bahasa Inggris Subject Icon.png",
       "Sains": "assets/images/component/HiFi-Sains Subject Icon.png",
       "Matematika": "assets/images/component/HiFi-Matematika Subject Icon.png",
     };
