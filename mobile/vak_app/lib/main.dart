@@ -36,23 +36,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-
-
-// import 'package:flutter/material.dart';
-// import 'package:vak_app/screen/stageScreen/main/kinestetikScreen2.dart';
-
-// class MainApp extends StatelessWidget {
-//   const MainApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         useMaterial3: true,
-//       ),
-//       title: "Aplikasi Belajar",
-//       home: KinestetikPage2(), // Panggil langsung di sini
-//     );
-//   }
-// }

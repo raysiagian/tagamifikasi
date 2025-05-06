@@ -6,18 +6,18 @@ import 'package:GamiLearn/style/regulerTextStyle.dart';
 
 class SubjectCarouselWidget extends StatelessWidget {
   final bool isActive;
-  final int idMataPelajaran; // Tambahkan idMataPelajaran
+  final int idMataPelajaran;
 
   const SubjectCarouselWidget({
     super.key,
     required this.isActive,
-    required this.idMataPelajaran, // Wajib diisi saat memanggil widget ini
+    required this.idMataPelajaran,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: isActive ? 320 : 280, // Kurangi ukuran saat tidak aktif
+      width: isActive ? 320 : 280,
       padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
@@ -31,8 +31,8 @@ class SubjectCarouselWidget extends StatelessWidget {
             child: AnimatedContainer(
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              width: isActive ? 294 : 240, // Ukuran dinamis
-              height: isActive ? 299 : 220, // Ukuran dinamis
+              width: isActive ? 294 : 240,
+              height: isActive ? 299 : 220,
               child: FittedBox(
                 fit: BoxFit.cover,
                 child:
@@ -53,7 +53,7 @@ class SubjectCarouselWidget extends StatelessWidget {
               child: Container(
                 height: isActive
                     ? 44
-                    : 36, // Sesuaikan tinggi dengan keadaan aktif/tidak
+                    : 36,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -68,7 +68,7 @@ class SubjectCarouselWidget extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       AppRouteConstant.stageScreen,
-                      arguments: idMataPelajaran, // Kirim ID dari API
+                      arguments: idMataPelajaran,
                     );
                   },
                   child: Text(

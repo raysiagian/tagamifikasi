@@ -122,23 +122,6 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
         padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 29),
         child: Row(
           children: [
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: LocalColor.primary,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(8),
-            //     ),
-            //     padding: const EdgeInsets.all(16),
-            //   ),
-            //   onPressed: () {
-            //     print("Audio dimainkan: ${widget.soal.audioPertanyaan}");
-            //   },
-            //   child: Image.asset(
-            //     "assets/images/component/HiFi-Speaker.png",
-            //     width: 40,
-            //     height: 40,
-            //   ),
-            // ),
             ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: LocalColor.primary,
@@ -194,56 +177,6 @@ class _KinestetikScreenState extends State<KinestetikScreen> {
       ],
     );
   }
-
-  // Widget _buildTargetBox(String label) {
-  //   return DragTarget<String>(
-  //     onAccept: (data) {
-  //       setState(() {
-  //         targetSlots[label] = data;
-  //         if (targetSlots.values.every((val) => val != null)) {
-  //           final jawaban = _buildJawaban();
-  //           widget.onJawabanSelesai?.call(jawaban);
-  //         }
-  //       });
-  //     },
-  //     builder: (context, candidateData, rejectedData) {
-  //       final data = targetSlots[label];
-  //       final isImage = data != null && (data.endsWith(".png") || data.endsWith(".jpg"));
-  //         return ClipRRect(
-  //           borderRadius: BorderRadius.circular(8),
-  //           child: Container(
-  //             width: 150,
-  //             height: 100,
-  //             decoration: BoxDecoration(
-  //               border: Border.all(color: Colors.black, width: 1.5),
-  //               color: data != null ? Colors.green[200] : Colors.white,
-  //             ),
-  //             child: data == null
-  //                 ? Center(
-  //                     child: Text(
-  //                       label,
-  //                       textAlign: TextAlign.center,
-  //                       style: const TextStyle(fontSize: 14),
-  //                     ),
-  //                   )
-  //                 : isImage
-  //                     ? (data.startsWith("http")
-  //                         ? Image.network(data, fit: BoxFit.cover,width: double.infinity, height: double.infinity)
-  //                         : Image.asset(data, fit: BoxFit.cover,width: double.infinity, height: double.infinity))
-  //                     : Center(
-  //                         child: Text(
-  //                           data,
-  //                           textAlign: TextAlign.center,
-  //                           style: const TextStyle(fontSize: 14),
-  //                         ),
-  //                       ),
-  //           ),
-  //         );
-
-  //     },
-  //   );
-  // }
-
   Widget _buildTargetBox(String label) {
   return DragTarget<String>(
     onAccept: (data) {

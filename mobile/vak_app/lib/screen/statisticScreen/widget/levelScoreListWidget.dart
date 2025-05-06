@@ -1,82 +1,3 @@
-// import 'package:GamiLearn/models/mataPelajaran.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:GamiLearn/style/localColor.dart';
-
-// // class LevelScoreList extends StatefulWidget {
-// //   const LevelScoreList({super.key});
-
-// //   @override
-// //   State<LevelScoreList> createState() => _LevelScoreListState();
-// // }
-
-// class LevelScoreList extends StatefulWidget {
-//   final MataPelajaran mataPelajaran;
-
-//   const LevelScoreList({super.key, required this.mataPelajaran});
-
-//   @override
-//   State<LevelScoreList> createState() => _LevelScoreListState();
-// }
-
-
-// class _LevelScoreListState extends State<LevelScoreList> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(8),
-//       ),
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-//         child: Column(
-//           // ganti ketika sudah memiliki data
-//           children: [
-//             Container(
-//               decoration: BoxDecoration(
-//                 border: Border(
-//                   bottom: BorderSide(color: LocalColor.primary, width: 2),
-//                 ),
-//               ),
-//               child: Padding(
-//                 padding: const EdgeInsets.only(bottom: 8),
-//                 child: Row(
-//                   children: [
-//                     Text("Nama Level"),
-//                     const SizedBox(width: 40),
-//                     Container(
-//                       child: Row(
-//                         children: [
-//                           Icon(
-//                             CupertinoIcons.star,
-//                             color: Colors.amber,
-//                             size: 30.0,
-//                           ),
-//                            Icon(
-//                             CupertinoIcons.star,
-//                             color: Colors.amber,
-//                             size: 30.0,
-//                           ),
-//                            Icon(
-//                             CupertinoIcons.star,
-//                             color: Colors.amber,
-//                             size: 30.0,
-//                           )
-//                         ],
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:GamiLearn/services/score_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -95,8 +16,7 @@ class LevelScoreList extends StatefulWidget {
 
 class _LevelScoreListState extends State<LevelScoreList> {
   late Future<List<dynamic>> _levelScores;
-  final SkorService _skorService = SkorService(); // Panggil dari service
-
+  final SkorService _skorService = SkorService();
   @override
   void initState() {
     super.initState();

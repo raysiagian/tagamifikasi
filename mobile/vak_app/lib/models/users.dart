@@ -4,7 +4,7 @@ class Users {
   final String name;
   final String username;
   final String gender;
-  final String tanggalLahir; // Tambahkan ini
+  final String tanggalLahir;
 
   Users({
     required this.idUser,
@@ -12,7 +12,7 @@ class Users {
     required this.name,
     required this.username,
     required this.gender,
-    required this.tanggalLahir, // Tambahkan ini
+    required this.tanggalLahir,
   });
 
   factory Users.fromJson(Map<String, dynamic> json) {
@@ -22,7 +22,7 @@ class Users {
       name: json['name'],
       username: json['username'],
       gender: json['gender'],
-      tanggalLahir: json['tanggal_lahir'], // Parsing tanggal lahir
+      tanggalLahir: json['tanggal_lahir'],
     );
   }
 }

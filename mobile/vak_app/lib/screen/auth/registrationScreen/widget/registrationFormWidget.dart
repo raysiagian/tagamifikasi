@@ -45,7 +45,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
     }
   }
 
-  // Update pilihan jenis kelamin agar hanya bisa memilih satu
+  // Pemilihan Gender
   void _updateGenderSelection(String gender) {
     setState(() {
       if (gender == "laki-laki") {
@@ -58,11 +58,12 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
     });
   }
 
-  // Fungsi untuk menangani registrasi
+  
   void _register() async {
     String name = _nameController.text;
     String username = _usernameController.text;
     String password = _passwordController.text;
+    // masukan kedalam database
     String gender = isMale
         ? "laki-laki"
         : isFemale

@@ -5,8 +5,7 @@ import 'package:GamiLearn/style/localColor.dart';
 import 'package:GamiLearn/style/regulerTextStyle.dart';
 
 class SubjectCardWidget extends StatelessWidget {
-  final int idMataPelajaran; // Tambahkan ID Mata Pelajaran
-
+  final int idMataPelajaran;
   const SubjectCardWidget({super.key,  required this.idMataPelajaran});
 
   @override
@@ -61,7 +60,7 @@ class SubjectCardWidget extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => StageScreen(
                       idMataPelajaran:
-                          idMataPelajaran), // Kirim ID ke StageScreen
+                          idMataPelajaran),
                 ),
               );
             },

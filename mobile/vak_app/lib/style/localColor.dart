@@ -98,6 +98,9 @@ class LocalColor{
     },
   );
 
+  // Next Update
+  // static const int _yellowBackground = 0xFFE6B800;
+
   // Merah Background
   static const int _redBackground = 0xFFFFE5454;
   static const MaterialColor redBackground = MaterialColor(
@@ -107,6 +110,9 @@ class LocalColor{
     },
   );
 
+  // Next Update
+  // static const int _redBackground = 0xFF5CBF00;
+
   // Hijau Background
   static const int _greenBackground = 0xFFF70DA8E;
   static const MaterialColor greenBackground = MaterialColor(
@@ -115,6 +121,9 @@ class LocalColor{
       500: Color(LocalColor._greenBackground),
     },
   );
+  
+  // Next Update
+  // static const int _greenBackground = 0xFFE04343;
   
   
   

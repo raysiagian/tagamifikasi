@@ -27,10 +27,8 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         return MaterialPageRoute(builder: (_) => RegistrationScreen());
       case AppRouteConstant.forgetPasswordScreen:
         return MaterialPageRoute(builder: (_) => ForgetPasswordScreen());
-      //Perbaiki Konstruktor ketika sudah ada logika yg tepat 
       case AppRouteConstant.homeScreen:
         return MaterialPageRoute(builder: (_) => HomeScreen());
-      //Perbaiki Konstruktor ketika sudah ada logika yg tepat 
       case AppRouteConstant.wrapperScreen:
         return MaterialPageRoute(builder: (_) => WrapperScreen());
       // case AppRouteConstant.afterLevelScreen:
@@ -65,20 +63,6 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
       case AppRouteConstant.statisticScreen:
         return MaterialPageRoute(builder: (_) =>StatisticScreen());
-      // case AppRouteConstant.stageScreen:
-      //   return MaterialPageRoute(builder: (_) =>StageScreen());
-      // // case AppRouteConstant.levelScreen:
-      // //   return MaterialPageRoute(builder: (_) =>LevelScreen());
-      // case AppRouteConstant.levelScreen:
-      //   if (settings.arguments is Level) {
-      //     final level = settings.arguments as Level;
-      //     return MaterialPageRoute(
-      //       builder: (_) => LevelScreen(level: level),
-      //     );
-      //   }
-        
-      // case AppRouteConstant.kinesteticScreen:
-      //   return MaterialPageRoute(builder: (_) =>KinestetikScreen());
       case AppRouteConstant.stageScreen:
         if (settings.arguments is int) {
           final idMataPelajaran = settings.arguments as int;

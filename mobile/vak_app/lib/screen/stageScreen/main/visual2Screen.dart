@@ -67,7 +67,7 @@ class _Visual2ScreenState extends State<Visual2Screen> {
                   setState(() {
                     selectedOption = 'A';
                   });
-                  widget.onAnswerSelected('A'); // Mengirimkan huruf 'A'
+                  widget.onAnswerSelected('A');
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 190),

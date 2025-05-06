@@ -1,3 +1,4 @@
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:GamiLearn/models/soal.dart';
@@ -56,6 +57,37 @@ class _AudioScreenState extends State<AudioScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+          // Tips
+          // Update selanjutnya
+          // Container(
+          //   width: double.infinity,
+          //   height: 100,
+          //   decoration: BoxDecoration(
+          //     color: LocalColor.brown,
+          //     borderRadius: BorderRadius.circular(10),
+          //   ),
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Row(
+          //       children: [
+          //         Icon(Icons.lightbulb_circle_outlined),
+          //         Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //              Text(
+          //               "Tips",
+          //               style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: Colors.white)
+          //             ),
+          //              Text("Pilih 1 Jawaban yang benar",
+          //               style: RegulerTextStyle.textTheme.titleLarge!.copyWith(color: Colors.white), 
+          //               ),
+          //           ],
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          const SizedBox(height: 20,),
             const SizedBox(height: 20),
             Center(
               child: Listener(
@@ -208,7 +240,11 @@ class _AudioScreenState extends State<AudioScreen> {
 
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? Colors.blue : Colors.white,
+          backgroundColor: Colors.white,
+            side: BorderSide(
+              color: isSelected ? Colors.green : Colors.white, // Warna border dinamis
+              width: 2, // Ketebalan border
+            ),
           foregroundColor: LocalColor.primary,
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(

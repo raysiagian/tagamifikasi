@@ -1,3 +1,4 @@
+import 'package:GamiLearn/style/regulerTextStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:GamiLearn/models/soal.dart';
 import 'package:GamiLearn/style/boldTextStyle.dart';
@@ -48,6 +49,37 @@ class _VisualScreenState extends State<VisualScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
         children: [
+          // Tips
+          // Update Selanjutnya
+          // Container(
+          //   width: double.infinity,
+          //   height: 100,
+          //   decoration: BoxDecoration(
+          //     color: LocalColor.brown,
+          //     borderRadius: BorderRadius.circular(10),
+          //   ),
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Row(
+          //       children: [
+          //         Icon(Icons.lightbulb_circle_outlined),
+          //         Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //              Text(
+          //               "Tips",
+          //               style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: Colors.white)
+          //             ),
+          //              Text("Pilih 1 Jawaban yang benar",
+          //               style: RegulerTextStyle.textTheme.titleLarge!.copyWith(color: Colors.white), 
+          //               ),
+          //           ],
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          const SizedBox(height: 20,),
           // Gambar dari soal
           Container(
             height: 250,
@@ -152,7 +184,11 @@ class _VisualScreenState extends State<VisualScreen> {
           widget.onAnswerSelected(label);  // Kirim huruf (A, B, C, D)
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? Colors.blue : Colors.white,
+          backgroundColor:Colors.white,
+            side: BorderSide(
+              color: isSelected ? Colors.green : Colors.white, // Warna border dinamis
+              width: 2, // Ketebalan border
+            ),
           foregroundColor: LocalColor.primary,
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
@@ -168,6 +204,8 @@ class _VisualScreenState extends State<VisualScreen> {
     );
   }
 
+
+  // mengurimkan Huruf pada database
   String _getHurufDariOpsi(String opsi) {
     if (opsi == widget.soal.opsiA) return "A";
     if (opsi == widget.soal.opsiB) return "B";

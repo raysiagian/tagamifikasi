@@ -53,7 +53,6 @@ class _Audio2ScreenState extends State<Audio2Screen> {
 
   print("Audio yang akan diputar: $audioToPlay");
 
-  // Kalau sedang muter audio yang sama, pause
   if (_currentlyPlayingUrl == audioToPlay && isPlaying) {
     await _audioPlayer.pause();
     setState(() {
@@ -69,43 +68,6 @@ class _Audio2ScreenState extends State<Audio2Screen> {
     });
   }
 }
-
-
-  // Future<void> _playPause(String option) async {
-  //   String? audioToPlay;
-
-  //   if (option == 'A') {
-  //     audioToPlay = widget.soal.opsiA;
-  //   } else if (option == 'B') {
-  //     audioToPlay = widget.soal.opsiB;
-  //   } else {
-  //     audioToPlay = widget.soal.audioPertanyaan;
-  //   }
-
-  //   if (audioToPlay == null || audioToPlay.isEmpty) {
-  //     print("URL audio kosong atau null");
-  //     return;
-  //   }
-
-  //   print("Audio yang akan diputar: $audioToPlay");
-
-  //   // Kalau sedang muter audio yang sama, pause
-  //   if (_currentlyPlayingUrl == audioToPlay && isPlaying) {
-  //     await _audioPlayer.pause();
-  //     setState(() {
-  //       isPlaying = false;
-  //     });
-  //   } else {
-  //     await _audioPlayer.stop();
-  //     await _audioPlayer.setSource(UrlSource(audioToPlay));
-  //     await _audioPlayer.resume();
-  //     await _audioPlayer.play(UrlSource(widget.soal.audioPertanyaan!));
-  //     setState(() {
-  //       isPlaying = true;
-  //       _currentlyPlayingUrl = audioToPlay;
-  //     });
-  //   }
-  // }
 
   @override
   void dispose() {

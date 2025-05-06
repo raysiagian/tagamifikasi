@@ -56,6 +56,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       _currentPage = index;
                     });
                   },
+                  // konten pada tampilan onboarding
                   children: [
                     _buildPage(
                         "assets/images/component/HiFI-Dummy.png",
@@ -102,7 +103,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Padding(
             padding: const EdgeInsets.all(0),
             child: Container(
-              width: double.infinity, // Agar memenuhi lebar parent
+              width: double.infinity,
               height: 400,
               child: Image.asset(
                 imagePath,
@@ -127,13 +128,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               height: 44,
               width: double.infinity,
               child: ElevatedButton(
-                // ganti ketika logika loginnya sudah ada
                 onPressed: () => Navigator.pushNamed(context, AppRouteConstant.registrationScreen),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: LocalColor.primary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 ),
-                // Ubah text jika sudah memiliki style
                 child: Text(
                   "Daftar",
                   style: RegulerTextStyle.textTheme.bodyLarge!.copyWith(
@@ -188,7 +187,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                 )
-              : SizedBox(width: 48), // Memberikan ruang agar posisi tetap rapi
+              : SizedBox(width: 48),
           _currentPage < 2
               ? Container(
                   decoration: BoxDecoration(
@@ -203,7 +202,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                 )
-              : SizedBox(), // Menghilangkan tombol next di halaman terakhir
+              : SizedBox(),
         ],
       ),
     );

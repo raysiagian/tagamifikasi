@@ -27,7 +27,6 @@ class _StatisticScreenState extends State<StatisticScreen> {
             ),
           ),
           child: Padding(
-            // padding: EdgeInsets.symmetric(horizontal: screenWidth*0.08),
             padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 16),
             child: Column(
               children: [

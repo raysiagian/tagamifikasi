@@ -130,7 +130,7 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
           _soalList = snapshot.data!;
           final soal = _soalList[_currentIndex];
 
-          // Tentukan warna background berdasarkan tipe soal
+          // Background pada level
           Color backgroundColor;
           switch (soal.tipeSoal.toLowerCase()) {
             case 'visual1':

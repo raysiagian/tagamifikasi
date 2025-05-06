@@ -6,8 +6,7 @@ import 'package:GamiLearn/style/localColor.dart';
 import 'package:GamiLearn/style/regulerTextStyle.dart';
 import 'package:GamiLearn/models/users.dart';
 
-import '../../../../services/auth_services.dart'; // Import model Users
-
+import '../../../../services/auth_services.dart';
 class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({super.key});
 
@@ -18,7 +17,7 @@ class LoginFormWidget extends StatefulWidget {
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isLoading = false; // Tambahkan indikator loading
+  bool _isLoading = false;
 
   Future<void> _login() async {
     setState(() {
@@ -36,10 +35,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     });
 
     if (user != null) {
-      // Jika login berhasil, navigasi ke halaman utama
       Navigator.pushNamed(context, AppRouteConstant.wrapperScreen);
     } else {
-      // Jika login gagal, tampilkan pesan kesalahan
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content:
@@ -53,20 +50,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Column(
-        //   children: [
-        //      const SizedBox(height: 10),
-        // Text(
-        //   "Selamat",
-        //   style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
-        // ),
-        // const SizedBox(height: 5),
-        // Text(
-        //   "Datang",
-        //   style: BoldTextStyle.textTheme.titleLarge!.copyWith(color: LocalColor.primary),
-        // ),
-        //   ],
-        // ),
         const SizedBox(height: 10),
         TextFormField(
           controller: _usernameController,
@@ -81,7 +64,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         const SizedBox(height: 20),
         TextFormField(
           controller: _passwordController,
-          obscureText: true, // Tambahkan agar password tidak terlihat
+          obscureText: true,
           decoration: InputDecoration(
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
