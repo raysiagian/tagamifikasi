@@ -36,7 +36,9 @@ class _SubjectListState extends State<SubjectList> {
           return const Center(child: NoSubjectWidget());
         }
 
-        List<MataPelajaran> mataPelajaranList = snapshot.data!;
+        List<MataPelajaran> mataPelajaranList = snapshot.data!
+          .where((mataPelajaran) => mataPelajaran.nama != "English")
+          .toList();
 
         return Container(
           width: double.infinity,
