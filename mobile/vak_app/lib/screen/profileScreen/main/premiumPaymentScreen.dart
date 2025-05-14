@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:GamiLearn/screen/profileScreen/widget/chooseImageWidget.dart';
 import 'package:GamiLearn/screen/profileScreen/widget/copyPaymenNUmberWidget.dart';
+import 'package:GamiLearn/screen/profileScreen/widget/copyTotalPriceWidget.dart';
 import 'package:GamiLearn/style/boldTextStyle.dart';
 import 'package:GamiLearn/style/localColor.dart';
 import 'package:GamiLearn/style/regulerTextStyle.dart';
@@ -16,54 +17,13 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentState extends State<PaymentScreen> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-
-  String? _emailError;
-  String? _usernameError;
   String? _imageError;
   File? _imageFile;
 
-  bool isEmailValid(String email) {
-    final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return regex.hasMatch(email);
-  }
 
   void _pembayaran(BuildContext context) async {
-    String username = _usernameController.text;
-    String email = _emailController.text;
 
     bool hasError = false;
-
-    // Validasi nama
-    if (username.isEmpty) {
-      setState(() {
-        _usernameError = "Nama tidak boleh kosong";
-      });
-      hasError = true;
-    } else {
-      setState(() {
-        _usernameError = null;
-      });
-    }
-
-    // Validasi email
-    if (email.isEmpty) {
-      setState(() {
-        _emailError = "Email tidak boleh kosong";
-      });
-      hasError = true;
-    } else if (!isEmailValid(email)) {
-      setState(() {
-        _emailError = "Email tidak valid";
-      });
-      hasError = true;
-    } else {
-      setState(() {
-        _emailError = null;
-      });
-    }
-
     // Validasi gambar
     if (_imageFile == null) {
       setState(() {
@@ -78,8 +38,6 @@ class _PaymentState extends State<PaymentScreen> {
 
     if (!hasError) {
       // Kirim data ke backend
-      print("Username: $username");
-      print("Email: $email");
       print("Gambar: ${_imageFile!.path}");
 
       // Tampilkan modal popup
@@ -112,8 +70,6 @@ class _PaymentState extends State<PaymentScreen> {
       );
 
       // Reset form jika diperlukan
-      _usernameController.clear();
-      _emailController.clear();
       setState(() {
         _imageFile = null;
       });
@@ -124,43 +80,39 @@ class _PaymentState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(title: const Text("Pembayaran")),
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Premium", style: BoldTextStyle.textTheme.displaySmall?.copyWith(color: Colors.black)),
-              const SizedBox(height: 5),
-              Text("Mainkan level sepuasnya", style: RegulerTextStyle.textTheme.bodyMedium?.copyWith(color: Colors.black)),
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      height: 80,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        image: DecorationImage(
+                         image: AssetImage("assets/images/component/dana.png"),
+                        ),
+                      ),
+                    ),
+                    Text("Dana Indonesia", style: RegulerTextStyle.textTheme.titleMedium?.copyWith(color: Colors.black)),
+                  ],
+                ),
+              ),
               const SizedBox(height: 20),
-              Text("Nomor Pembayaran Dana", style: RegulerTextStyle.textTheme.bodyMedium?.copyWith(color: Colors.black)),
               const CopyPaymentNumberWidget(
                 label: "Kirim ke",
                 number: "081234567890", // Ganti ke nomor tujuan yang sebenarnya
               ),
-
               const SizedBox(height: 20),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-                  labelText: 'Email',
-                  labelStyle: RegulerTextStyle.textTheme.bodySmall?.copyWith(color: Colors.black),
-                  errorText: _emailError,
-                  errorStyle: const TextStyle(color: LocalColor.red),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-                  labelText: 'Username',
-                  labelStyle: RegulerTextStyle.textTheme.bodySmall?.copyWith(color: Colors.black),
-                  errorText: _usernameError,
-                  errorStyle: const TextStyle(color: LocalColor.red),
-                ),
+              const CopyTotalPriceWidget(
+                label: "Total Harga", 
+                number: "16000",
               ),
               const SizedBox(height: 20),
               ChooseImageWidget(
