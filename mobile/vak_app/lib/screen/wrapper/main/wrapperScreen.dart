@@ -1,3 +1,4 @@
+import 'package:GamiLearn/screen/stageScreen/main/stageScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:GamiLearn/screen/homeScreen/main/homeScreen.dart';
 import 'package:GamiLearn/screen/profileScreen/main/profileScreen.dart';
@@ -35,8 +36,9 @@ class _WrapperScreenState extends State<WrapperScreen> {
           });
         },
         children: const [
-          HomeScreen(),
-          // StatisticScreen(),
+          // HomeScreen(),
+          StageScreen(),
+          StatisticScreen(),
           ProfileScreen(),
         ],
       ),

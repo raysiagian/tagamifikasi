@@ -58,9 +58,7 @@ class SubjectCardWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => StageScreen(
-                      idMataPelajaran:
-                          idMataPelajaran),
+                  builder: (context) => StageScreen(),
                 ),
               );
             },

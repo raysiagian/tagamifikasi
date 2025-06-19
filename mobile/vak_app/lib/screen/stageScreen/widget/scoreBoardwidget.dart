@@ -7,125 +7,105 @@ import 'package:GamiLearn/style/boldTextStyle.dart';
 import 'package:GamiLearn/style/localColor.dart';
 
 class ScoreBoardWidget extends StatefulWidget {
-  final int idMataPelajaran;
   final int idLevel;
 
-  const ScoreBoardWidget({
-    Key? key,
-    required this.idMataPelajaran,
-    required this.idLevel,
-  }) : super(key: key);
+  const ScoreBoardWidget({super.key, required this.idLevel});
 
   @override
   _ScoreBoardWidgetState createState() => _ScoreBoardWidgetState();
 }
 
 class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
-  int jumlahBenar = 0;
-  bool isLoading = true;
+  late Future<Map<String, dynamic>> _levelResults;
+  final SkorService _skorService = SkorService();
 
   @override
   void initState() {
     super.initState();
-    _fetchJumlahBenar();
-  }
-
-  Future<void> _fetchJumlahBenar() async {
-    try {
-      final result = await SkorService().fetchJumlahBenarTerbaru(
-        widget.idMataPelajaran, 
-        widget.idLevel,
-      );
-      setState(() {
-        jumlahBenar = result;
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      print('Error fetching score: $e');
-    }
+    _levelResults = _skorService.fetchJumlahBenarTerbaru(widget.idLevel);
   }
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? const Center(child: CircularProgressIndicator())
-        : Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                Text(
-                  "Selamat",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: LocalColor.primary,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text("Kamu telah menyelesaikan level ini!"),
-                const SizedBox(height: 20),
-                ClipPath(
-                  clipper: HexagonalClipper(reverse: true),
-                  child: Container(
-                    height: 150,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          _getImageByScore(jumlahBenar),
-                        ),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "Jumlah benar: $jumlahBenar",
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: LocalColor.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-                  ),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StageScreen(idMataPelajaran: widget.idMataPelajaran),
-                      ),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  child: const Text(
-                    "Kembali",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          );
-  }
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _levelResults,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-  String _getImageByScore(int score) {
-    if (score == 0) {
-      return 'assets/images/component/HiFi-Score Zero Star.png';
-    } else if (score <= 3) {
-      return 'assets/images/component/HiFi-Score One Star.png';
-    } else if (score <= 8) {
-      return 'assets/images/component/HiFi-Score Two Star.png';
-    } else {
-      return 'assets/images/component/HiFi-Score Three Star.png';
-    }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        final results = snapshot.data!;
+        final stars = results['stars'] as int;
+        final correctAnswers = results['correctAnswers'] as int;
+        final levelExplanation = results['levelExplanation'] as String;
+
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Level Selesai!",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: LocalColor.primary,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(levelExplanation),
+              const SizedBox(height: 30),
+              // Star Display
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(3, (index) {
+                  return Icon(
+                    index < stars ? Icons.star : Icons.star_border,
+                    color: Colors.amber,
+                    size: 40,
+                  );
+                }),
+              ),
+              const SizedBox(height: 20),
+              // Correct Answers Display
+              Text(
+                "Jawaban Benar: $correctAnswers",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: LocalColor.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12, 
+                    horizontal: 30
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Lanjut",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

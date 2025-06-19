@@ -7,9 +7,8 @@ import 'package:GamiLearn/services/level_progress_service.dart';
 import '../../../services/level_services.dart';
 
 class UnitWidget extends StatefulWidget {
-  final int idMataPelajaran;
 
-  const UnitWidget({super.key, required this.idMataPelajaran});
+  const UnitWidget({super.key});
 
   @override
   _UnitWidgetState createState() => _UnitWidgetState();
@@ -23,7 +22,7 @@ class _UnitWidgetState extends State<UnitWidget> {
   void initState() {
     super.initState();
     futureLevels =
-        LevelService().fetchLevelsByMataPelajaran(widget.idMataPelajaran);
+        LevelService().fetchLevels();
   }
 
   Future<void> _cekAksesLevel(List<Level> levels) async {
@@ -36,7 +35,6 @@ class _UnitWidgetState extends State<UnitWidget> {
       } else {
         final result = await LevelProgressService().cekKelulusanLevel(
           idUser: idUser!,
-          idMataPelajaran: widget.idMataPelajaran,
           idLevel: levels[i - 1].id_level,
         );
         aksesLevel[i] = result['boleh_lanjut'] == true;
@@ -50,7 +48,6 @@ class _UnitWidgetState extends State<UnitWidget> {
       context,
       MaterialPageRoute(
         builder: (context) => LevelScreen(
-          idMataPelajaran: widget.idMataPelajaran,
           level: level,
         ),
       ),

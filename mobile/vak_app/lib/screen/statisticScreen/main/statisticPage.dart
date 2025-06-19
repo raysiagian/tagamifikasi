@@ -1,5 +1,6 @@
+import 'package:GamiLearn/screen/statisticScreen/main/detailStatisticPage.dart';
+import 'package:GamiLearn/screen/statisticScreen/widget/levelScoreListWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:GamiLearn/screen/statisticScreen/widget/subjectListWidget.dart';
 import 'package:GamiLearn/style/boldTextStyle.dart';
 import 'package:GamiLearn/style/localColor.dart';
 import 'package:GamiLearn/style/regulerTextStyle.dart';
@@ -69,7 +70,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   ],
                 ),
                 const SizedBox(height: 30,),
-                SubjectList(),
+                LevelScoreList(),
               ],
             ),
           ),

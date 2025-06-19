@@ -103,32 +103,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Text(user.username),
                             Text("Gender: ${user.gender}"),
                             Text("Tanggal Lahir: ${user.tanggalLahir}"),
-                            const SizedBox(height: 40),
+                            // const SizedBox(height: 40),
 
-                            // Pembayaran Tekno
-                            const SizedBox(height: 40),
-                            SizedBox(
-                              height: 44,
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: (){
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context)=> PaymentScreen()),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: LocalColor.greenBackground,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                ),
-                                child: Text(
-                                  "Coba Premium",
-                                  style:
-                                      TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ),
+                            // // Pembayaran Tekno
+                            // const SizedBox(height: 40),
+                            // SizedBox(
+                            //   height: 44,
+                            //   width: double.infinity,
+                            //   child: ElevatedButton(
+                            //     onPressed: (){
+                            //       Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(builder: (context)=> PaymentScreen()),
+                            //       );
+                            //     },
+                            //     style: ElevatedButton.styleFrom(
+                            //       backgroundColor: LocalColor.greenBackground,
+                            //       shape: RoundedRectangleBorder(
+                            //           borderRadius: BorderRadius.circular(20)),
+                            //     ),
+                            //     child: Text(
+                            //       "Coba Premium",
+                            //       style:
+                            //           TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                            //     ),
+                            //   ),
+                            // ),
                             const SizedBox(height: 20),
                             // 
                             SizedBox(

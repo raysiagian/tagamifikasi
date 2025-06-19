@@ -49,7 +49,6 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           
           return MaterialPageRoute(
             builder: (_) => AfterLevelScreen(
-              idMataPelajaran: idMataPelajaran,
               idLevel: idLevel,
             ),
           );
@@ -67,7 +66,7 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         if (settings.arguments is int) {
           final idMataPelajaran = settings.arguments as int;
           return MaterialPageRoute(
-            builder: (_) => StageScreen(idMataPelajaran: idMataPelajaran),
+            builder: (_) => StageScreen(),
           );
         }
         return MaterialPageRoute(
@@ -82,7 +81,6 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           final args = settings.arguments as Map<String, dynamic>;
           return MaterialPageRoute(
             builder: (_) => LevelScreen(
-              idMataPelajaran: args['idMataPelajaran'],
               level: args['level'],
             ),
           );

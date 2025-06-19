@@ -6,7 +6,7 @@ import 'dart:convert';
 class LevelProgressService {
   Future<Map<String, dynamic>> cekKelulusanLevel({
     required int idUser,
-    required int idMataPelajaran,
+    // required int idMataPelajaran,
     required int idLevel,
   }) async {
     final url = Uri.parse(baseUrl + "/cek-kelulusan-level");
@@ -25,7 +25,7 @@ class LevelProgressService {
         },
         body: jsonEncode({
           'id_user': idUser,
-          'id_mataPelajaran': idMataPelajaran,
+          // 'id_mataPelajaran': idMataPelajaran,
           'id_level': idLevel,
         }),
       );

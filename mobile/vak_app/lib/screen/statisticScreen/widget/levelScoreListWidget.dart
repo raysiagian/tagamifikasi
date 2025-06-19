@@ -1,14 +1,10 @@
-import 'package:GamiLearn/services/score_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:GamiLearn/models/mataPelajaran.dart';
+import 'package:GamiLearn/services/score_service.dart';
 import 'package:GamiLearn/style/localColor.dart';
 
-
 class LevelScoreList extends StatefulWidget {
-  final MataPelajaran mataPelajaran;
-
-  const LevelScoreList({super.key, required this.mataPelajaran});
+  const LevelScoreList({super.key});
 
   @override
   State<LevelScoreList> createState() => _LevelScoreListState();
@@ -17,10 +13,11 @@ class LevelScoreList extends StatefulWidget {
 class _LevelScoreListState extends State<LevelScoreList> {
   late Future<List<dynamic>> _levelScores;
   final SkorService _skorService = SkorService();
+
   @override
   void initState() {
     super.initState();
-    _levelScores = _skorService.fetchLevelScores(widget.mataPelajaran.id);
+    _levelScores = _skorService.fetchAllLevelScores();
   }
 
   @override
@@ -35,54 +32,63 @@ class _LevelScoreListState extends State<LevelScoreList> {
         child: FutureBuilder<List<dynamic>>(
           future: _levelScores,
           builder: (context, snapshot) {
+            // Handle loading state
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
+            }
+
+            // Handle error state
+            if (snapshot.hasError) {
               return Text("Terjadi kesalahan: ${snapshot.error}");
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            }
+
+            // Handle empty or null data
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text("Belum ada skor yang tersedia.");
             }
 
+            // Process and display scores
             return Column(
-              children: snapshot.data!.asMap().map((index, skor) {
-                final totalSkor = skor['total_skor'] as int;
-                final levelName = 'Level ${index + 1}'; // Nama level dibuat berdasarkan urutan list
+              children: snapshot.data!.map((score) {
+                final jumlahBintang = score['jumlah_bintang'] as int;
+                final levelName = score['penjelasan_level'] ?? 
+                                score['level']?['penjelasan_level'] ?? 
+                                'Level ${score['id_level']}';
 
-                return MapEntry(
-                  index,
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      border: const Border(
-                        bottom: BorderSide(color: LocalColor.primary, width: 1.5),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(levelName), // Menampilkan "Level 1", "Level 2", dll
-                          Row(
-                            children: List.generate(
-                              3,
-                              (i) => Icon(
-                                i < (totalSkor / 10).clamp(0, 3).round()
-                                    ? CupertinoIcons.star_fill
-                                    : CupertinoIcons.star,
-                                color: Colors.amber,
-                                size: 24.0,
-                              ),
-                            ),
-                          ),
-                        ],
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: LocalColor.primary,
+                        width: 1.5,
                       ),
                     ),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(levelName),
+                        Row(
+                          children: List.generate(
+                            3,
+                            (i) => Icon(
+                              i < jumlahBintang
+                                  ? CupertinoIcons.star_fill
+                                  : CupertinoIcons.star,
+                              color: Colors.amber,
+                              size: 24.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
-              }).values.toList(),
+              }).toList(),
             );
-
           },
         ),
       ),

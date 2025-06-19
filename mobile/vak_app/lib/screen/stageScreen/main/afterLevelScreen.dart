@@ -3,10 +3,9 @@ import 'package:GamiLearn/screen/stageScreen/widget/scoreBoardwidget.dart';
 import 'package:GamiLearn/style/localColor.dart';
 
 class AfterLevelScreen extends StatefulWidget {
-  final int idMataPelajaran;
   final int idLevel;
 
-  const AfterLevelScreen({super.key, required this.idMataPelajaran,required this.idLevel,});
+  const AfterLevelScreen({super.key, required this.idLevel,});
 
   @override
   State<AfterLevelScreen> createState() => _AfterLevelScreenState();
@@ -36,7 +35,7 @@ class _AfterLevelScreenState extends State<AfterLevelScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-               child: ScoreBoardWidget(idMataPelajaran: widget.idMataPelajaran, idLevel: widget.idLevel,),
+               child: ScoreBoardWidget( idLevel: widget.idLevel,),
               ),
           ),
         ),

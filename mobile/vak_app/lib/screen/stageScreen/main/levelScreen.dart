@@ -18,9 +18,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LevelScreen extends StatefulWidget {
   final Level level;
-  final int idMataPelajaran;
 
-  const LevelScreen({super.key, required this.level, required this.idMataPelajaran});
+  const LevelScreen({super.key, required this.level,});
 
   @override
   _LevelScreenState createState() => _LevelScreenState();
@@ -42,8 +41,9 @@ class _LevelScreenState extends State<LevelScreen> {
   }
 
   Future<List<Soal>> _fetchSoal() async {
-    return SoalService().fetchSoalByLevel(widget.idMataPelajaran);
+    return SoalService().fetchSoalByLevel(widget.level.id_level);
   }
+
 
    Future<void> _simpanProgressIndex(int index) async {
     final prefs = await SharedPreferences.getInstance();
@@ -96,7 +96,7 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
   Navigator.pushReplacement(
   context,
   MaterialPageRoute(
-    builder: (context) => AfterLevelScreen(idMataPelajaran: widget.idMataPelajaran, idLevel: widget.level.id_level,),
+    builder: (context) => AfterLevelScreen(idLevel: widget.level.id_level,),
   ),
 );
 
