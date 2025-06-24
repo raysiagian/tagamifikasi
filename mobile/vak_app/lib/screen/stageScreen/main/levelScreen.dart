@@ -34,8 +34,6 @@ class _LevelScreenState extends State<LevelScreen> {
 
   @override
   void initState() {
-    // super.initState();
-    // futureSoal = _fetchSoal(); // Memanggil soal berdasarkan idMataPelajaran & idLevel
     debugPrint("Level: ${widget.level.penjelasan_level}");
     futureSoal = SoalService().fetchSoalByLevel(widget.level.id_level);
   }
@@ -44,66 +42,63 @@ class _LevelScreenState extends State<LevelScreen> {
     return SoalService().fetchSoalByLevel(widget.level.id_level);
   }
 
-
-   Future<void> _simpanProgressIndex(int index) async {
+  Future<void> _simpanProgressIndex(int index) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'progress_${widget.level.id_level}';
     await prefs.setInt(key, index);
   }
 
+  Future<void> submitJawaban(int idSoal, String jawaban) async {
+    final token = await AuthService().getToken();
 
-Future<void> submitJawaban(int idSoal, String jawaban) async {
-  final token = await AuthService().getToken();
+    if (token == null) {
+      throw Exception("Token tidak ditemukan. Pastikan user sudah login.");
+    }
 
-  if (token == null) {
-    throw Exception("Token tidak ditemukan. Pastikan user sudah login.");
+    await JawabanService().kirimJawaban(
+      id_soal: idSoal,
+      jawaban_siswa: jawaban,
+      token: token,
+    );
   }
-
-  await JawabanService().kirimJawaban(
-    id_soal: idSoal,
-    jawaban_siswa: jawaban,
-    token: token,
-  );
-}
 
   void _nextQuestion() async {
-  final soal = _soalList[_currentIndex];
-  final jawaban = jawabanSiswa[soal.id_soal];
+    final soal = _soalList[_currentIndex];
+    final jawaban = jawabanSiswa[soal.id_soal];
 
-  if (jawaban != null) {
-    try {
-      await submitJawaban(soal.id_soal, jawaban);
-      debugPrint("Jawaban dikirim :$jawaban, id soal: ${soal.id_soal}");
-      print(jawaban);
-    } catch (e) {
-      debugPrint("Gagal mengirim jawaban: $e");
+    if (jawaban != null) {
+      try {
+        await submitJawaban(soal.id_soal, jawaban);
+        debugPrint("Jawaban dikirim :$jawaban, id soal: ${soal.id_soal}");
+        print(jawaban);
+      } catch (e) {
+        debugPrint("Gagal mengirim jawaban: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Gagal mengirim jawaban untuk soal ${soal.id_soal}")),
+        );
+      }
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Gagal mengirim jawaban untuk soal ${soal.id_soal}")),
+        const SnackBar(content: Text("Silakan pilih jawaban terlebih dahulu")),
+      );
+      return;
+    }
+
+    if (_currentIndex < _soalList.length - 1) {
+      setState(() {
+        _currentIndex++;
+      });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AfterLevelScreen(idLevel: widget.level.id_level,),
+        ),
       );
     }
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Silakan pilih jawaban terlebih dahulu")),
-    );
-    return; // Jangan lanjut ke soal berikutnya kalau belum dijawab
   }
 
-  if (_currentIndex < _soalList.length - 1) {
-    setState(() {
-      _currentIndex++;
-    });
-  } else {
-  Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(
-    builder: (context) => AfterLevelScreen(idLevel: widget.level.id_level,),
-  ),
-);
-
-  }
-}
-
- void _prevQuestion() {
+  void _prevQuestion() {
     if (_currentIndex > 0) {
       setState(() {
         _currentIndex--;
@@ -111,6 +106,22 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
     }
   }
 
+  // Method to get background image based on question type
+  String _getBackgroundImage(String tipeSoal) {
+    switch (tipeSoal.toLowerCase()) {
+      case 'visual1':
+      case 'visual2':
+        return 'assets/images/background/HiFi-After Level Background.png'; // Replace with your image path
+      case 'auditori1':
+      case 'auditori2':
+        return 'assets/images/background/HiFi-After Level Background.png'; // Replace with your image path
+      case 'kinestetik1':
+      case 'kinestetik2':
+        return 'assets/images/background/HiFi-After Level Background.png'; // Replace with your image path
+      default:
+        return 'assets/images/background/HiFi-After Level Background.png'; // Replace with your default image path
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,80 +130,72 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
       body: FutureBuilder<List<Soal>>(
         future: futureSoal,
         builder: (context, snapshot) {
-           if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          }else if (snapshot.hasError) {
+          } else if (snapshot.hasError) {
             return Center(child: CustomErrorWidget(),); 
-          }else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: NoQuestionWidget());
           }
 
           _soalList = snapshot.data!;
           final soal = _soalList[_currentIndex];
 
-          // Background pada level
-          Color backgroundColor;
-          switch (soal.tipeSoal.toLowerCase()) {
-            case 'visual1':
-              backgroundColor = LocalColor.redBackground;
-              break;
-            case 'visual2':
-              backgroundColor = LocalColor.redBackground;
-              break;
-            // case 'visual2':
-            //   backgroundColor = LocalColor.redBackground;
-            //   break;
-            case 'auditori1':
-              backgroundColor = LocalColor.greenBackground;
-              break;
-            case 'auditori2':
-              backgroundColor = LocalColor.greenBackground;
-              break;
-            // case 'auditory2':
-            //   backgroundColor = LocalColor.greenBackground;
-            //   break;
-            case 'kinestetik1':
-              backgroundColor = LocalColor.yellowBackground;
-              break;
-            case 'kinestetik2':
-              backgroundColor = LocalColor.yellowBackground;
-              break;
-            default:
-              backgroundColor = Colors.white;
-          }
-
-          return Container(
-            color: backgroundColor,
-            child: Column(
-              children: [
-                 const SizedBox(height: 16),
-                Text(
-                  'Soal ke ${_currentIndex + 1} dari ${_soalList.length}',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                Expanded(child: _buildSoalScreen(soal)),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                       if (_currentIndex > 0)
-                        ElevatedButton(
-                          onPressed: _prevQuestion,
-                          child: const Text("Kembali"),
-                        )
-                      else
-                        const SizedBox(width: 100), // Placeholder biar sejajar
-                      ElevatedButton(
-                        onPressed: _nextQuestion,
-                        child: const Text("Selanjutnya"),
-                      ),
-                    ],
+          return Stack(
+            children: [
+              // Background image
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(_getBackgroundImage(soal.tipeSoal)),
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ],
-            ),
+              ),
+              Column(
+                children: [
+                  const SizedBox(height: 16),
+                  Text(
+                    'Soal ke ${_currentIndex + 1} dari ${_soalList.length}',
+                    style: const TextStyle(
+                      fontSize: 18, 
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white, // Adjust text color for visibility
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5), // Semi-transparent overlay
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: const EdgeInsets.all(16),
+                      child: _buildSoalScreen(soal),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (_currentIndex > 0)
+                          ElevatedButton(
+                            onPressed: _prevQuestion,
+                            child: const Text("Kembali"),
+                          )
+                        else
+                          const SizedBox(width: 100),
+                        ElevatedButton(
+                          onPressed: _nextQuestion,
+                          child: const Text("Selanjutnya"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           );
         },
       ),
@@ -201,7 +204,7 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
 
   Widget _buildSoalScreen(Soal soal) {
     switch (soal.tipeSoal.toLowerCase()) {
-     case 'visual1':
+      case 'visual1':
         return VisualScreen(
           soal: soal,
           onAnswerSelected: (jawaban) {
@@ -219,8 +222,6 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
             }
           },
         );
-      // case 'kinestetik1':
-      //   return KinestetikScreen(soal: soal);
       case 'kinestetik1':
         return KinestetikScreen(
           soal: soal,
@@ -229,7 +230,6 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
             print("Jawaban kinestetik1: $jawaban");
           },
         );
-
       case 'kinestetik2':
         return Kinestetik2Screen(
           soal: soal,
@@ -239,16 +239,7 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
           },
         );
       case 'auditori1':
-       return AudioScreen(
-          soal: soal,
-          onAnswerSelected: (jawaban) {
-            if (jawaban != null) {
-              jawabanSiswa[soal.id_soal] = jawaban;
-            }
-            },
-          );
-      case 'auditori2':
-       return Audio2Screen(
+        return AudioScreen(
           soal: soal,
           onAnswerSelected: (jawaban) {
             if (jawaban != null) {
@@ -256,7 +247,15 @@ Future<void> submitJawaban(int idSoal, String jawaban) async {
             }
           },
         );
-      
+      case 'auditori2':
+        return Audio2Screen(
+          soal: soal,
+          onAnswerSelected: (jawaban) {
+            if (jawaban != null) {
+              jawabanSiswa[soal.id_soal] = jawaban;
+            }
+          },
+        );
       default:
         return const Center(child: Text("Tipe soal tidak dikenali"));
     }
