@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:GamiLearn/models/topik.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:GamiLearn/screen/stageScreen/main/stageScreen.dart';
 import 'package:GamiLearn/services/score_service.dart';
@@ -7,9 +8,9 @@ import 'package:GamiLearn/style/boldTextStyle.dart';
 import 'package:GamiLearn/style/localColor.dart';
 
 class ScoreBoardWidget extends StatefulWidget {
-  final int idLevel;
+  final Topik topik;
 
-  const ScoreBoardWidget({super.key, required this.idLevel});
+  const ScoreBoardWidget({super.key, required this.topik});
 
   @override
   _ScoreBoardWidgetState createState() => _ScoreBoardWidgetState();
@@ -22,7 +23,7 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
   @override
   void initState() {
     super.initState();
-    _levelResults = _skorService.fetchJumlahBenarTerbaru(widget.idLevel);
+    _levelResults = _skorService.fetchJumlahBenarTerbaru(widget.topik.id_topik);
   }
 
   @override
@@ -79,29 +80,7 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 40),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: LocalColor.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12, 
-                    horizontal: 30
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Lanjut",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
+             
             ],
           ),
         );

@@ -5,9 +5,9 @@ import '../models/soal.dart';
 import '../services/auth_services.dart';
 
 class SoalService {
-  Future<List<Soal>> fetchSoalByLevel(int idLevel) async {
-    final url = Uri.parse("$baseUrl/soal/level/$idLevel");
-    final token = await AuthService().getToken(); // Ambil token dari AuthService
+  Future<List<Soal>> fetchSoalByTopik(int id_topik) async {
+    final url = Uri.parse("$baseUrl/soal/topik/$id_topik");
+    final token = await AuthService().getToken();
 
     try {
       final response = await http.get(
@@ -15,25 +15,26 @@ class SoalService {
         headers: {
           "Authorization": "Bearer $token",
           "Accept": "application/json",
+          "Content-Type": "application/json",
         },
       );
-      print(response);
 
       if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
+        final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         
-        // Cek apakah data memiliki key "soal"
-        if (jsonData.containsKey("soal")) {
-          List<dynamic> soalList = jsonData["soal"];
-          return soalList.map((item) => Soal.fromJson(item)).toList();
+        if (jsonData['success'] == true && jsonData['data'] is List) {
+          return (jsonData['data'] as List)
+              .map((item) => Soal.fromJson(item as Map<String, dynamic>))
+              .toList();
         } else {
-          throw Exception("Format data tidak sesuai: Key 'soal' tidak ditemukan");
+          throw Exception("Format response tidak valid");
         }
       } else {
-        throw Exception("Gagal mengambil soal. Status: ${response.statusCode}, Response: ${response.body}");
+        final error = jsonDecode(response.body)?['message'] ?? 'Unknown error';
+        throw Exception("Gagal mengambil soal: $error");
       }
     } catch (e) {
-      throw Exception("Error saat fetch soal: $e");
+      throw Exception("Error saat fetch soal: ${e.toString()}");
     }
   }
 }

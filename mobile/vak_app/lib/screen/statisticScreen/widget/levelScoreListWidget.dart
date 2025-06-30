@@ -51,8 +51,8 @@ class _LevelScoreListState extends State<LevelScoreList> {
             return Column(
               children: snapshot.data!.map((score) {
                 final jumlahBintang = score['jumlah_bintang'] as int;
-                final levelName = score['penjelasan_level'] ?? 
-                                score['level']?['penjelasan_level'] ?? 
+                final levelName = score['nama_level'] ?? 
+                                score['level']?['nama_level'] ?? 
                                 'Level ${score['id_level']}';
 
                 return Container(

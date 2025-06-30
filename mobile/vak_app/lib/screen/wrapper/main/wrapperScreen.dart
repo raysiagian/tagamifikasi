@@ -38,7 +38,7 @@ class _WrapperScreenState extends State<WrapperScreen> {
         children: const [
           // HomeScreen(),
           StageScreen(),
-          StatisticScreen(),
+          // StatisticScreen(),
           ProfileScreen(),
         ],
       ),

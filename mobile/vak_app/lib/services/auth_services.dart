@@ -1,131 +1,3 @@
-// import 'dart:convert';
-// import 'package:http/http.dart' as http;
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:vak_app/constant/baseUrl.dart';
-// import '../models/users.dart';
-
-// class AuthService {
-
-//   Future<Users?> register(String name, String username, String password,
-//       String gender, String tanggalLahir) async {
-//     final url = Uri.parse("$baseUrl/register");
-//     final response = await http.post(
-//       url,
-//       body: {
-//         'name': name,
-//         'username': username,
-//         'password': password,
-//         'gender': gender,
-//         'role': 'user', // Default role sebagai user
-//         'tanggal_lahir': tanggalLahir, // Tambahkan tanggal lahir
-//       },
-//     );
-
-//     if (response.statusCode == 201) {
-//       // Perbaikan dari status 200 ke 201
-//       final data = json.decode(response.body);
-//       final token = data['access_token'];
-//       final user = Users.fromJson(data['user']);
-
-//       // Simpan token ke SharedPreferences
-//       final prefs = await SharedPreferences.getInstance();
-//       await prefs.setString('token', token);
-
-//       return user;
-//     } else {
-//       return null;
-//     }
-//   }
-
-//   Future<Users?> login(String username, String password) async {
-//     final url = Uri.parse("$baseUrl/login");
-//     final response = await http.post(
-//       url,
-//       body: {
-//         'username': username,
-//         'password': password,
-//       },
-//     );
-
-//     if (response.statusCode == 200) {
-//       final data = json.decode(response.body);
-//       final token = data['access_token'];
-//       final user = Users.fromJson(data['user']);
-
-//       // Simpan token ke SharedPreferences
-//       final prefs = await SharedPreferences.getInstance();
-//       await prefs.setString('token', token);
-      
-
-//       return user;
-//     } else {
-//       return null;
-//     }
-//   }
-
-//   Future<String?> getToken() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     return prefs.getString('token');
-//   }
-
-//   Future<void> logout() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     await prefs.remove('token');
-//   }
-
-//   Future<Users?> getUser() async {
-//   final prefs = await SharedPreferences.getInstance();
-//   final token = prefs.getString('token');
-
-//   if (token != null) {
-//     final response = await http.get(
-//       Uri.parse('$baseUrl/user'),
-//       headers: {
-//         'Authorization': 'Bearer $token',
-//         'Accept': 'application/json',
-//       },
-//     );
-
-//     if (response.statusCode == 200) {
-//       final data = json.decode(response.body);
-//       return Users.fromJson(data);
-//     } else {
-//       throw Exception('Failed to load user: ${response.body}');
-//     }
-//   } else {
-//     throw Exception('Token not found');
-//   }
-// }
-
-//   Future<bool> resetPassword({
-//   required String username,
-//   required String tanggalLahir,
-//   required String passwordBaru,
-//   required String passwordBaruConfirmation,
-// }) async {
-//   final url = Uri.parse(baseUrl + "/lupa-password");
-
-//   final response = await http.post(
-//     url,
-//     headers: {"Content-Type": "application/json"},
-//     body: jsonEncode({
-//       "username": username,
-//       "tanggal_lahir": tanggalLahir,
-//       "password_baru": passwordBaru,
-//       "password_baru_confirmation": passwordBaru,
-//     }),
-//   );
-
-//   if (response.statusCode == 200) {
-//     return true; // Password berhasil diubah
-//   } else {
-//     return false; // Gagal
-//   }
-// }
-
-
-// }
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -133,100 +5,132 @@ import 'package:GamiLearn/constant/baseUrl.dart';
 import '../models/users.dart';
 
 class AuthService {
+  static const String _tokenKey = 'token';
+  static const String _userIdKey = 'id_user';
+
   Future<Users?> register(String name, String username, String password,
       String gender, String tanggalLahir) async {
-    final url = Uri.parse("$baseUrl/register");
-    final response = await http.post(
-      url,
-      body: {
-        'name': name,
-        'username': username,
-        'password': password,
-        'gender': gender,
-        'role': 'user', // Default role sebagai user
-        'tanggal_lahir': tanggalLahir,
-      },
-    );
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/register"),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': name,
+          'username': username,
+          'password': password,
+          'gender': gender,
+          'role': 'user',
+          'tanggal_lahir': tanggalLahir,
+        }),
+      ).timeout(const Duration(seconds: 10));
 
-    if (response.statusCode == 201) {
-      final data = json.decode(response.body);
-      final token = data['access_token'];
-      final user = Users.fromJson(data['user']);
+      if (response.statusCode == 201) {
+        final data = json.decode(response.body);
+        final token = data['access_token'] as String?;
+        final userJson = data['user'] as Map<String, dynamic>?;
+        
+        if (token == null || userJson == null) {
+          throw Exception('Invalid response format');
+        }
 
-      // Simpan token & user ID ke SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-      await prefs.setInt('userId', user.idUser!); // << SIMPAN ID USER
-
-      return user;
-    } else {
+        final user = Users.fromJson(userJson);
+        await _saveAuthData(token, user.id_user);
+        return user;
+      }
       return null;
+    } catch (e) {
+      throw Exception('Registration failed: $e');
     }
   }
 
   Future<Users?> login(String username, String password) async {
-    final url = Uri.parse("$baseUrl/login");
-    final response = await http.post(
-      url,
-      body: {
-        'username': username,
-        'password': password,
-      },
-    );
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/login"),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username,
+          'password': password,
+        }),
+      ).timeout(const Duration(seconds: 10));
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final token = data['access_token'];
-      final user = Users.fromJson(data['user']);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final token = data['access_token'] as String?;
+        final userJson = data['user'] as Map<String, dynamic>?;
+        
+        if (token == null || userJson == null) {
+          throw Exception('Invalid response format');
+        }
 
-      // Simpan token & user ID ke SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-      await prefs.setInt('userId', user.idUser!); // << SIMPAN ID USER
-
-      return user;
-    } else {
+        final user = Users.fromJson(userJson);
+        await _saveAuthData(token, user.id_user);
+        return user;
+      }
       return null;
+    } catch (e) {
+      throw Exception('Login failed: $e');
     }
   }
 
-  Future<String?> getToken() async {
+  Future<void> _saveAuthData(String token, int? userId) async {
+    if (userId == null) {
+      throw Exception('User ID cannot be null');
+    }
+    
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
+    await prefs.setString(_tokenKey, token);
+    await prefs.setInt(_userIdKey, userId);
+  }
+
+  Future<String?> getToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(_tokenKey);
+    } catch (e) {
+      throw Exception('Failed to get token: $e');
+    }
   }
 
   Future<int?> getUserId() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt('userId');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getInt(_userIdKey); // Now using consistent key
+    } catch (e) {
+      throw Exception('Failed to get user ID: $e');
+    }
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    await prefs.remove('userId'); // Hapus userId juga
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_tokenKey);
+      await prefs.remove(_userIdKey);
+    } catch (e) {
+      throw Exception('Logout failed: $e');
+    }
   }
 
   Future<Users?> getUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    try {
+      final token = await getToken();
+      if (token == null) return null;
 
-    if (token != null) {
       final response = await http.get(
         Uri.parse('$baseUrl/user'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
         },
-      );
+      ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return Users.fromJson(data);
+        return Users.fromJson(json.decode(response.body));
       } else {
-        throw Exception('Failed to load user: ${response.body}');
+        throw Exception('Failed to load user: ${response.statusCode}');
       }
-    } else {
-      throw Exception('Token not found');
+    } catch (e) {
+      throw Exception('Get user failed: $e');
     }
   }
 
@@ -236,20 +140,21 @@ class AuthService {
     required String passwordBaru,
     required String passwordBaruConfirmation,
   }) async {
-    final url = Uri.parse(baseUrl + "/lupa-password");
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/lupa-password'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "username": username,
+          "tanggal_lahir": tanggalLahir,
+          "password_baru": passwordBaru,
+          "password_baru_confirmation": passwordBaruConfirmation,
+        }),
+      ).timeout(const Duration(seconds: 10));
 
-    final response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "username": username,
-        "tanggal_lahir": tanggalLahir,
-        "password_baru": passwordBaru,
-        "password_baru_confirmation": passwordBaruConfirmation,
-      }),
-    );
-
-    return response.statusCode == 200;
+      return response.statusCode == 200;
+    } catch (e) {
+      throw Exception('Password reset failed: $e');
+    }
   }
 }
-

@@ -29,15 +29,15 @@ class BottomNavbarWidget extends StatelessWidget {
           ),
           label: 'Home',
         ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-             "assets/images/component/HiFi-Statistic Icon.png",
-            height: 30,
-            width: 30,
-            fit: BoxFit.cover,
-          ),
-          label: 'Statistik',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Image.asset(
+        //      "assets/images/component/HiFi-Statistic Icon.png",
+        //     height: 30,
+        //     width: 30,
+        //     fit: BoxFit.cover,
+        //   ),
+        //   label: 'Statistik',
+        // ),
         BottomNavigationBarItem(
           icon: Image.asset(
             "assets/images/component/HiFi-Profile Icon.png",

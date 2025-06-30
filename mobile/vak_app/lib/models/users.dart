@@ -1,5 +1,5 @@
 class Users {
-  final int idUser;
+  final int id_user;
   final String role;
   final String name;
   final String username;
@@ -7,7 +7,7 @@ class Users {
   final String tanggalLahir;
 
   Users({
-    required this.idUser,
+    required this.id_user,
     required this.role,
     required this.name,
     required this.username,
@@ -17,7 +17,7 @@ class Users {
 
   factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
-      idUser: json['id_user'],
+      id_user: json['id_user'],
       role: json['role'],
       name: json['name'],
       username: json['username'],

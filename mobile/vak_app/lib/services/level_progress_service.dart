@@ -5,54 +5,50 @@ import 'dart:convert';
 
 class LevelProgressService {
   Future<Map<String, dynamic>> cekKelulusanLevel({
-    required int idUser,
-    // required int idMataPelajaran,
-    required int idLevel,
+    required int id_user,
+    required int id_level,
   }) async {
-    final url = Uri.parse(baseUrl + "/cek-kelulusan-level");
-
-    // Mengambil token untuk autentikasi
-    final token = await AuthService().getToken(); 
+    final url = Uri.parse('$baseUrl/cek-kelulusan-level');
+    final token = await AuthService().getToken();
 
     try {
-      // Mengirim request POST
       final response = await http.post(
         url,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token', // Mengirimkan token
+          'Authorization': 'Bearer $token',
           'Accept': 'application/json',
         },
         body: jsonEncode({
-          'id_user': idUser,
-          // 'id_mataPelajaran': idMataPelajaran,
-          'id_level': idLevel,
+          'id_user': id_user,
+          'id_level': id_level,
         }),
       );
 
-      // Mencetak status dan body untuk debugging
-      print('Status: ${response.statusCode}');
-      print('Body: ${response.body}');
-      
+      final data = jsonDecode(response.body);
 
-      // Mengecek apakah status code 200
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        // Validasi jika data yang diperlukan ada
-        if (data['boleh_lanjut'] != null && data['jumlah_benar'] != null) {
-          return data;
-        } else {
-          throw Exception('Data yang diperlukan tidak ada dalam respons');
-        }
+        return {
+          'status': data['status'] ?? 'failed',
+          'boleh_lanjut': data['boleh_lanjut_level'] ?? false,
+          'message': data['message'] ?? 'Tidak ada pesan dari server',
+          'topik_terakhir': data['topik_terakhir'],
+          'jumlah_bintang': data['jumlah_bintang'] ?? 0,
+          'is_error': false,
+        };
       } else {
-        // Jika status bukan 200, lempar error dengan pesan respons
-        throw Exception('Gagal mengecek kelulusan level: ${response.body}');
+        return {
+          'status': 'error',
+          'message': data['message'] ?? 'Terjadi kesalahan server',
+          'is_error': true,
+        };
       }
     } catch (e) {
-      // Menangani error jika terjadi
-      print('Error: $e');
-      rethrow;  // Memunculkan kembali error jika perlu ditangani lebih lanjut di tempat lain
+      return {
+        'status': 'error',
+        'message': 'Terjadi kesalahan jaringan: $e',
+        'is_error': true,
+      };
     }
   }
 }

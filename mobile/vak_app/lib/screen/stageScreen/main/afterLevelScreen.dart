@@ -1,11 +1,12 @@
+import 'package:GamiLearn/models/topik.dart';
 import 'package:flutter/material.dart';
 import 'package:GamiLearn/screen/stageScreen/widget/scoreBoardwidget.dart';
 import 'package:GamiLearn/style/localColor.dart';
 
 class AfterLevelScreen extends StatefulWidget {
-  final int idLevel;
+  final Topik topik;
 
-  const AfterLevelScreen({super.key, required this.idLevel,});
+  const AfterLevelScreen({super.key, required this.topik,});
 
   @override
   State<AfterLevelScreen> createState() => _AfterLevelScreenState();
@@ -35,7 +36,34 @@ class _AfterLevelScreenState extends State<AfterLevelScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-               child: ScoreBoardWidget( idLevel: widget.idLevel,),
+               child: Column(
+                 children: [
+                   ScoreBoardWidget(topik: widget.topik,),
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: LocalColor.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12, 
+                          horizontal: 30
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        "Lanjut",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                 ],
+               ),
               ),
           ),
         ),

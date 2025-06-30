@@ -13,6 +13,7 @@ import 'package:GamiLearn/screen/stageScreen/main/levelScreen.dart';
 import 'package:GamiLearn/screen/stageScreen/main/stageScreen.dart';
 import 'package:GamiLearn/screen/statisticScreen/main/statisticPage.dart';
 import 'package:GamiLearn/screen/wrapper/main/wrapperScreen.dart';
+import 'package:GamiLearn/models/topik.dart';
 
 class AppRouter{
 static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -41,15 +42,33 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       //     );
       //   }
 
+      // case AppRouteConstant.afterLevelScreen:
+      //   if (settings.arguments is Map<String, dynamic>) {
+      //     final args = settings.arguments as Map<String, dynamic>;
+      //     final int idMataPelajaran = args['idMataPelajaran'];
+      //     final int idLevel = args['idLevel'];
+          
+      //     return MaterialPageRoute(
+      //       builder: (_) => AfterLevelScreen(
+      //         topik : id_
+      //       ),
+      //     );
+      //   }
+
+      //   return MaterialPageRoute(
+      //     builder: (_) => Scaffold(
+      //       body: Center(child: Text('Error: Argument tidak lengkap untuk AfterLevelScreen')),
+      //     ),
+      //   );
+
       case AppRouteConstant.afterLevelScreen:
         if (settings.arguments is Map<String, dynamic>) {
           final args = settings.arguments as Map<String, dynamic>;
-          final int idMataPelajaran = args['idMataPelajaran'];
-          final int idLevel = args['idLevel'];
+          final Topik topik = args['topik']; // Assuming you're passing a Topik object
           
           return MaterialPageRoute(
             builder: (_) => AfterLevelScreen(
-              idLevel: idLevel,
+              topik: topik,
             ),
           );
         }

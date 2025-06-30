@@ -86,7 +86,7 @@ class _Kinestetik2ScreenState extends State<Kinestetik2Screen> {
               ),
             ),
             const SizedBox(height: 20),
-            Text("Urutkan Kata"),
+            Text("Urutkan huruf kedalam kotak kosong berdasarkan gambar diatas"),
             const SizedBox(height: 24),
              Row(
                 mainAxisAlignment: MainAxisAlignment.center,

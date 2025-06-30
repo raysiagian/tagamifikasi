@@ -27,15 +27,15 @@ class _UnitWidgetState extends State<UnitWidget> {
 
   Future<void> _cekAksesLevel(List<Level> levels) async {
     aksesLevel = List.generate(levels.length, (index) => false);
-    final idUser = await AuthService().getUserId();
+    final id_user = await AuthService().getUserId();
 
     for (int i = 0; i < levels.length; i++) {
       if (i == 0) {
         aksesLevel[i] = true; // Level pertama selalu bisa diakses
       } else {
         final result = await LevelProgressService().cekKelulusanLevel(
-          idUser: idUser!,
-          idLevel: levels[i - 1].id_level,
+          id_user: id_user!,
+          id_level: levels[i - 1].id_level,
         );
         aksesLevel[i] = result['boleh_lanjut'] == true;
       }
@@ -130,7 +130,7 @@ class _UnitWidgetState extends State<UnitWidget> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          currentLevel.penjelasan_level,
+                          currentLevel.nama_level,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,

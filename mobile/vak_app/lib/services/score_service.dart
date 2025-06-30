@@ -6,9 +6,9 @@ import 'package:GamiLearn/services/auth_services.dart';
 class SkorService {
   final AuthService _authService = AuthService();
 
-Future<Map<String, dynamic>> fetchJumlahBenarTerbaru(int idLevel) async {
+Future<Map<String, dynamic>> fetchJumlahBenarTerbaru(int id_topik) async {
     try {
-      print('[DEBUG] Starting fetchJumlahBenarTerbaru for level $idLevel');
+      print('[DEBUG] Starting fetchJumlahBenarTerbaru for level $id_topik');
       
       final token = await _authService.getToken();
       final user = await _authService.getUser();
@@ -19,7 +19,7 @@ Future<Map<String, dynamic>> fetchJumlahBenarTerbaru(int idLevel) async {
         throw Exception('Token atau data pengguna tidak ditemukan');
       }
 
-      final url = Uri.parse('$baseUrl/bintang-saya/$idLevel');
+      final url = Uri.parse('$baseUrl/bintang-saya/$id_topik');
       print('[DEBUG] Request URL: $url');
 
       final response = await http.get(
@@ -41,7 +41,7 @@ Future<Map<String, dynamic>> fetchJumlahBenarTerbaru(int idLevel) async {
           return {
             'stars': body['jumlah_bintang'] ?? 0,
             'correctAnswers': body['jumlah_benar'] ?? 0,
-            'levelExplanation': body['penjelasan_level'] ?? '',
+            'levelExplanation': body['nama_level'] ?? '',
           };
         } else {
           print('[ERROR] API returned error status: ${body['message']}');
