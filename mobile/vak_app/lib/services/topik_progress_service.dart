@@ -39,7 +39,7 @@ class TopikProgressService {
         final data = jsonDecode(response.body);
 
         // Validasi jika data yang diperlukan ada
-        if (data['boleh_lanjut'] != null && data['jumlah_benar'] != null) {
+        if (data['boleh_lanjut'] != null && data['jumlah_bintang'] != null) {
           return data;
         } else {
           throw Exception('Data yang diperlukan tidak ada dalam respons');

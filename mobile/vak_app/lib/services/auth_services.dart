@@ -5,6 +5,8 @@ import 'package:GamiLearn/constant/baseUrl.dart';
 import '../models/users.dart';
 
 class AuthService {
+
+  // menyimpan token dan id user ketika login
   static const String _tokenKey = 'token';
   static const String _userIdKey = 'id_user';
 
