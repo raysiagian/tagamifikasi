@@ -39,9 +39,9 @@ Future<Map<String, dynamic>> fetchJumlahBenarTerbaru(int id_topik) async {
         if (body['status'] == 'success') {
           print('[DEBUG] Successfully parsed response');
           return {
-            'stars': body['jumlah_bintang'] ?? 0,
-            'correctAnswers': body['jumlah_benar'] ?? 0,
-            'levelExplanation': body['nama_level'] ?? '',
+            'jumlah_bintang': body['jumlah_bintang'] ?? 0,
+            'jumlah_benar': body['jumlah_benar'] ?? 0,
+            'nama_topik': body['nama_topik'] ?? '',
           };
         } else {
           print('[ERROR] API returned error status: ${body['message']}');

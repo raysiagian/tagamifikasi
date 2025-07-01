@@ -111,15 +111,15 @@ class _TopikScreenState extends State<TopikScreen> {
     switch (tipeSoal.toLowerCase()) {
       case 'visual1':
       case 'visual2':
-        return 'assets/images/background/HiFi-After Level Background.png'; // Replace with your image path
+        return 'assets/images/background/HiFi-Visual Background.png';
       case 'auditori1':
       case 'auditori2':
-        return 'assets/images/background/HiFi-After Level Background.png'; // Replace with your image path
+        return 'assets/images/background/HiFi-Auditori Background.png';
       case 'kinestetik1':
       case 'kinestetik2':
-        return 'assets/images/background/HiFi-After Level Background.png'; // Replace with your image path
+        return 'assets/images/background/HiFi-Kinestetik Background.png';
       default:
-        return 'assets/images/background/HiFi-After Level Background.png'; // Replace with your default image path
+        return 'assets/images/background/HiFi-After Level Background.png';
     }
   }
 
@@ -160,7 +160,7 @@ class _TopikScreenState extends State<TopikScreen> {
                     style: const TextStyle(
                       fontSize: 18, 
                       fontWeight: FontWeight.bold,
-                      color: Colors.white, // Adjust text color for visibility
+                      color: Colors.black, // Adjust text color for visibility
                     ),
                   ),
                   const SizedBox(height: 16),

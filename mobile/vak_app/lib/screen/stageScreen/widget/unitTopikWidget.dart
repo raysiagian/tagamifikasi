@@ -50,9 +50,9 @@ class _UnitTopikWidgetState extends State<UnitTopikWidget> {
       
       try {
         final skorData = await _skorService.fetchJumlahBenarTerbaru(topiks[i].id_topik);
-        starCounts[i] = skorData['stars'] ?? 0;
+        starCounts[i] = skorData['jumlah_bintang'] ?? 0;
       } catch (e) {
-        print('Error fetching stars: $e');
+        print('Error fetching jumlah_bintang: $e');
         starCounts[i] = 0;
       }
     }

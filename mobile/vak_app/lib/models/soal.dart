@@ -1,60 +1,3 @@
-// class Soal {
-//   final int id_soal;
-//   final int id_topik;
-//   final String tipeSoal;
-//   final String? media;
-//   final String? pertanyaan;
-//   final String? audioPertanyaan;
-//   final String? opsiA;
-//   final String? opsiB;
-//   final String? opsiC;
-//   final String? opsiD;
-//   final String? pasanganA;
-//   final String? pasanganB;
-//   final String? pasanganC;
-//   final String? pasanganD;
-//   final String? jawabanBenar;
-
-//   Soal({
-//     required this.id_soal,
-//     required this.id_topik,
-//     required this.tipeSoal,
-//     this.media,
-//     this.pertanyaan,
-//     this.audioPertanyaan,
-//     this.opsiA,
-//     this.opsiB,
-//     this.opsiC,
-//     this.opsiD,
-//     this.pasanganA,
-//     this.pasanganB,
-//     this.pasanganC,
-//     this.pasanganD,
-//     this.jawabanBenar,
-//   });
-
-//   factory Soal.fromJson(Map<String, dynamic> json) {
-//   return Soal(
-//     id_soal: json['id_soal'],
-//     id_topik: json['id_topik'],
-//     tipeSoal: json['tipeSoal'],
-//     media: json['media'],
-//     pertanyaan: json['pertanyaan'],
-//     audioPertanyaan: json['audioPertanyaan'],
-//     opsiA: json['opsiA'] ?? "Opsi A",
-//     opsiB: json['opsiB'] ?? "Opsi B",
-//     opsiC: json['opsiC'] ?? "Opsi C",
-//     opsiD: json['opsiD'] ?? "Opsi D",
-//     pasanganA: json['pasanganA'] ?? "Pasangan A",
-//     pasanganB: json['pasanganB'] ?? "Pasangan B",
-//     pasanganC: json['pasanganC'] ?? "Pasangan C",
-//     pasanganD: json['pasanganD'] ?? "Pasangan D",
-//     jawabanBenar: json['jawabanBenar'],
-//   );
-// }
-
-// }
-
 class Soal {
   final int id_soal;
   final int id_topik;
@@ -62,7 +5,7 @@ class Soal {
   final String? media;
   final String? pertanyaan;
   final String? audioPertanyaan;
-  final dynamic opsiA; // Diubah menjadi dynamic karena bisa String atau Map
+  final dynamic opsiA;
   final dynamic opsiB;
   final dynamic opsiC;
   final dynamic opsiD;
@@ -70,7 +13,7 @@ class Soal {
   final String? pasanganB;
   final String? pasanganC;
   final String? pasanganD;
-  final String jawabanBenar; // Diubah menjadi non-nullable
+  final String jawabanBenar;
 
   Soal({
     required this.id_soal,
@@ -91,10 +34,22 @@ class Soal {
   });
 
   factory Soal.fromJson(Map<String, dynamic> json) {
+    // Handle potential null values for jawabanBenar
+    final jawaban = json['jawabanBenar'];
+    final String jawabanBenar;
+    
+    if (jawaban == null) {
+      jawabanBenar = '';
+    } else if (jawaban is String) {
+      jawabanBenar = jawaban;
+    } else {
+      jawabanBenar = jawaban.toString();
+    }
+
     return Soal(
-      id_soal: json['id_soal'] as int,
-      id_topik: json['id_topik'] as int,
-      tipeSoal: json['tipeSoal'] as String,
+      id_soal: json['id_soal'] as int? ?? 0, // Provide default if null
+      id_topik: json['id_topik'] as int? ?? 0,
+      tipeSoal: (json['tipeSoal'] as String?) ?? 'unknown',
       media: json['media'] as String?,
       pertanyaan: json['pertanyaan'] as String?,
       audioPertanyaan: json['audioPertanyaan'] as String?,
@@ -106,7 +61,20 @@ class Soal {
       pasanganB: json['pasanganB'] as String?,
       pasanganC: json['pasanganC'] as String?,
       pasanganD: json['pasanganD'] as String?,
-      jawabanBenar: json['jawabanBenar'] as String,
+      jawabanBenar: jawabanBenar,
     );
+  }
+
+  // Helper method to safely get options as String
+  String getOptionA() => _convertOptionToString(opsiA);
+  String getOptionB() => _convertOptionToString(opsiB);
+  String getOptionC() => _convertOptionToString(opsiC);
+  String getOptionD() => _convertOptionToString(opsiD);
+
+  String _convertOptionToString(dynamic option) {
+    if (option == null) return '';
+    if (option is String) return option;
+    if (option is Map) return option.toString();
+    return option.toString();
   }
 }

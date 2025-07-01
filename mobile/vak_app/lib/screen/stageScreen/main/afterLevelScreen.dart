@@ -36,33 +36,35 @@ class _AfterLevelScreenState extends State<AfterLevelScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-               child: Column(
-                 children: [
-                   ScoreBoardWidget(topik: widget.topik,),
-                    const SizedBox(height: 40),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: LocalColor.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12, 
-                          horizontal: 30
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        "Lanjut",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                 ],
+               child: Center(
+                 child: Column(
+                   children: [
+                     ScoreBoardWidget(topik: widget.topik,),
+                      const SizedBox(height: 40),
+                      // ElevatedButton(
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor: LocalColor.primary,
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(20),
+                      //     ),
+                      //     padding: const EdgeInsets.symmetric(
+                      //       vertical: 12, 
+                      //       horizontal: 30
+                      //     ),
+                      //   ),
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      //   child: const Text(
+                      //     "Lanjut",
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: 16,
+                      //     ),
+                      //   ),
+                      // ),
+                   ],
+                 ),
                ),
               ),
           ),

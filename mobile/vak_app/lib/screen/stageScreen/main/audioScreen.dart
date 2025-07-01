@@ -88,7 +88,6 @@ class _AudioScreenState extends State<AudioScreen> {
           //   ),
           // ),
           const SizedBox(height: 20,),
-            const SizedBox(height: 20),
             Center(
               child: Listener(
                 onPointerDown: (_) => setState(() => isPressed = true),
@@ -99,8 +98,8 @@ class _AudioScreenState extends State<AudioScreen> {
                       ? Matrix4.translationValues(0, 4, 0)
                       : Matrix4.identity(),
                   child: SizedBox(
-                    width: 120,
-                    height: 120,
+                    width: 150,
+                    height: 150,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
@@ -121,7 +120,7 @@ class _AudioScreenState extends State<AudioScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Container(
               width: double.infinity,
               height: 102,
