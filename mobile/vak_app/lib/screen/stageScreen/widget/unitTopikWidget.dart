@@ -111,7 +111,7 @@ class _UnitTopikWidgetState extends State<UnitTopikWidget> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TopikScreen(topik: currentTopik),
+                            builder: (context) => TopikScreen(topik: currentTopik, level: widget.level,),
                           ),
                         );
                       }
@@ -191,7 +191,7 @@ class _UnitTopikWidgetState extends State<UnitTopikWidget> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => TopikScreen(topik: currentTopik),
+                                          builder: (context) => TopikScreen(topik: currentTopik, level: widget.level,),
                                         ),
                                       );
                                     }

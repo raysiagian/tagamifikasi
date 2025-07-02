@@ -1,12 +1,15 @@
+import 'package:GamiLearn/models/level.dart';
 import 'package:GamiLearn/models/topik.dart';
+import 'package:GamiLearn/screen/stageScreen/main/levelScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:GamiLearn/screen/stageScreen/widget/scoreBoardwidget.dart';
 import 'package:GamiLearn/style/localColor.dart';
 
 class AfterLevelScreen extends StatefulWidget {
   final Topik topik;
+  final Level level;
 
-  const AfterLevelScreen({super.key, required this.topik,});
+  const AfterLevelScreen({super.key, required this.topik, required this.level});
 
   @override
   State<AfterLevelScreen> createState() => _AfterLevelScreenState();
@@ -41,28 +44,33 @@ class _AfterLevelScreenState extends State<AfterLevelScreen> {
                    children: [
                      ScoreBoardWidget(topik: widget.topik,),
                       const SizedBox(height: 40),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     backgroundColor: LocalColor.primary,
-                      //     shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(20),
-                      //     ),
-                      //     padding: const EdgeInsets.symmetric(
-                      //       vertical: 12, 
-                      //       horizontal: 30
-                      //     ),
-                      //   ),
-                      //   onPressed: () {
-                      //     Navigator.pop(context);
-                      //   },
-                      //   child: const Text(
-                      //     "Lanjut",
-                      //     style: TextStyle(
-                      //       color: Colors.white,
-                      //       fontSize: 16,
-                      //     ),
-                      //   ),
-                      // ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: LocalColor.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12, 
+                            horizontal: 30
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LevelScreen(level: widget.level,),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Lanjut",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
                    ],
                  ),
                ),

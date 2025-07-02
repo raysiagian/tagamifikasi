@@ -1,3 +1,4 @@
+import 'package:GamiLearn/models/level.dart';
 import 'package:GamiLearn/models/topik.dart';
 import 'package:flutter/material.dart';
 import 'package:GamiLearn/models/soal.dart';
@@ -18,8 +19,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class TopikScreen extends StatefulWidget {
   final Topik topik;
+  final Level level;
 
-  const TopikScreen({super.key, required this.topik,});
+  const TopikScreen({super.key, required this.topik, required this.level});
 
   @override
   _TopikScreenState createState() => _TopikScreenState();
@@ -92,7 +94,7 @@ class _TopikScreenState extends State<TopikScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => AfterLevelScreen(topik: widget.topik,),
+          builder: (context) => AfterLevelScreen(topik: widget.topik, level: widget.level),
         ),
       );
     }

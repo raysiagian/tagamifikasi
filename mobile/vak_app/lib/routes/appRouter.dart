@@ -61,23 +61,23 @@ static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       //     ),
       //   );
 
-      case AppRouteConstant.afterLevelScreen:
-        if (settings.arguments is Map<String, dynamic>) {
-          final args = settings.arguments as Map<String, dynamic>;
-          final Topik topik = args['topik']; // Assuming you're passing a Topik object
+      // case AppRouteConstant.afterLevelScreen:
+      //   if (settings.arguments is Map<String, dynamic>) {
+      //     final args = settings.arguments as Map<String, dynamic>;
+      //     final Topik topik = args['topik']; // Assuming you're passing a Topik object
           
-          return MaterialPageRoute(
-            builder: (_) => AfterLevelScreen(
-              topik: topik,
-            ),
-          );
-        }
+      //     return MaterialPageRoute(
+      //       builder: (_) => AfterLevelScreen(
+      //         topik: topik,
+      //       ),
+      //     );
+      //   }
 
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(child: Text('Error: Argument tidak lengkap untuk AfterLevelScreen')),
-          ),
-        );
+      //   return MaterialPageRoute(
+      //     builder: (_) => Scaffold(
+      //       body: Center(child: Text('Error: Argument tidak lengkap untuk AfterLevelScreen')),
+      //     ),
+      //   );
 
       case AppRouteConstant.statisticScreen:
         return MaterialPageRoute(builder: (_) =>StatisticScreen());
