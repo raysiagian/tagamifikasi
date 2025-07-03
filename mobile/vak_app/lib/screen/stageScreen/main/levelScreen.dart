@@ -2,21 +2,6 @@ import 'package:GamiLearn/routes/appRouteConstant.dart';
 import 'package:GamiLearn/screen/stageScreen/widget/unitTopikWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:GamiLearn/models/level.dart';
-import 'package:GamiLearn/models/soal.dart';
-import 'package:GamiLearn/screen/stageScreen/main/afterLevelScreen.dart';
-import 'package:GamiLearn/screen/stageScreen/main/audio2Screen.dart';
-import 'package:GamiLearn/screen/stageScreen/main/audioScreen.dart';
-import 'package:GamiLearn/screen/stageScreen/main/kinestetik2Screen.dart';
-import 'package:GamiLearn/screen/stageScreen/main/kinestetikScreen.dart';
-import 'package:GamiLearn/screen/stageScreen/main/visual2Screen.dart';
-import 'package:GamiLearn/screen/stageScreen/main/visualScreen.dart';
-import 'package:GamiLearn/screen/unknownScreen/widget/customErrorWidget.dart';
-import 'package:GamiLearn/screen/unknownScreen/widget/noQuestionWidget.dart';
-import 'package:GamiLearn/services/auth_services.dart';
-import 'package:GamiLearn/services/jawaban_services.dart';
-import 'package:GamiLearn/services/soal_services.dart';
-import 'package:GamiLearn/style/localColor.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LevelScreen extends StatefulWidget {
   final Level level;

@@ -82,7 +82,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
       return;
     }
 
-    if (username.length < 8) {
+    if (username.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Username harus minimal 8 karakter.")),
       );

@@ -124,21 +124,6 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                // const SizedBox(height: 32),
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: ElevatedButton(
-                //     style: ElevatedButton.styleFrom(
-                //       backgroundColor: LocalColor.primary,
-                //       padding: const EdgeInsets.symmetric(vertical: 16),
-                //     ),
-                //     onPressed: () => Navigator.pop(context),
-                //     child: const Text(
-                //       "Kembali",
-                //       style: TextStyle(color: Colors.white),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
